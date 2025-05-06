@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="main.css">
     <style>
             .Logo-txt {
-                font-size: 1rem; 
+                font-size: 1.75rem; 
                 font-weight: bold;
                 background: linear-gradient(to right, #3DE5B1, #42B1F6);
                 -webkit-background-clip: text;
@@ -39,14 +39,21 @@
                 background-color: #42B8EA !important;
             }
 
-            @media (max-width: 200px){
+            .navbar-brand{
+                    display: flex;
+            }
+
+            @media (max-width: 299px){
                 .navbar-brand{
                     display: none;
                 }
             }
 
-            @media (max-width: 500px){
+            @media (max-width: 600px){
                 .Logo-txt{
+                    display: none;
+                }
+                .Profile-name{
                     display: none;
                 }
             }
@@ -59,44 +66,55 @@
             <div id="content">
                 
                 <nav class="p-0 navbar navbar-expand navbar-light topbar mb-4 static-top shadow" style="background-color: #ffff;">
-                    <nav class="navbar bg-body-white p-0">
-                        <div class="container-fluid">
-                            
-                          <a href="#" class="navbar-brand">
-                            <img src="assets/Logo.png" width="30" height="24" class="d-inline-block align-text-top">
+                    <nav class="navbar bg-body-white p-0 w-100">
+                      <div class="container-fluid d-flex justify-content-between align-items-center">
+                  
+                        <div class="d-flex align-items-center">
+                          <a href="#" class="p-0 navbar-brand me-3 border-0 align-items-center">
+                            <img src="assets/Logo.png" width="64" height="60" class="border-0 d-inline-block align-text-top">
                             <span class="Logo-txt"> FlutterTask </span>
                           </a>
-
-                          <ul class="nav nav-pills flex-row">
-                            
-                            <li class="nav-item" title="Tasks">
+                  
+                            <ul class="nav nav-pills flex-row border-0" style="padding-left: 1rem;">
+                                <li class="nav-item" title="Tasks">
                                 <a href="#" class="nav-link active py-3 rounded-0" data-bs-toggle="tab">
                                     <i class="bi bi-list-task"></i>
                                 </a>
-                            </li>
-
-                            <li class="nav-item" title="Calendar">
+                                </li>
+                                <li class="nav-item" title="Calendar">
                                 <a href="#" class="nav-link py-3 rounded-0" data-bs-toggle="tab">
                                     <i class="bi bi-calendar"></i>
                                 </a>
-                            </li>
-
-                          </ul>
-
+                                </li>
+                            </ul>
+                        </div>
+                  
+                        <!-- Profile -->
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="me-2 Profile-name" style="font-size: 1rem;">Yanagi Masaru</span>
                           <div class="dropdown">
-                            <button class="btn border-white d-flex justify-content-center align-items-center" style="overflow: hidden; width: 2rem; height: 2rem; border-radius: 50%;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="assets/default.png" alt="..." width="35rem" height="35rem">
+                            <button class="btn border-white d-flex justify-content-center align-items-center"
+                              style="overflow: hidden; width: 2.5rem; height: 2.5rem; border-radius: 50%;" type="button"
+                              data-bs-toggle="dropdown" aria-expanded="false">
+                              <img src="assets/default.png" alt="..." width="40rem" height="40rem">
                             </button>
-                            <ul class="dropdown-menu">
-                              <li><button class="dropdown-item" type="button">Action</button></li>
-                              <li><button class="dropdown-item" type="button">Another action</button></li>
-                              <li><button class="dropdown-item" type="button">Something else here</button></li>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                              <form method="POST">
+                                <li><button class="dropdown-item" type="submit">Profile</button></li>
+                                <li><button class="dropdown-item" type="submit">Account settings</button></li>
+
+                                <hr class="dropdown-divider">
+                                <li><button class="dropdown-item" type="submit">Sign out</button></li>
+                              </form>
                             </ul>
                           </div>
-
                         </div>
+                  
+                      </div>
                     </nav>
-                </nav>
+                  </nav>
+                  
+                  
 
                 <div class="container-fluid">
 
