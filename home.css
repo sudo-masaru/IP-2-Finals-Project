@@ -1,193 +1,44 @@
-
-.Logo-txt {
-    font-size: 1.75rem; 
-    font-weight: bold;
-    background: linear-gradient(to right, #3DE5B1, #42B1F6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent; 
-    background-clip: text;
-    text-fill-color: transparent;
+body{
+    overflow: hidden;
 }
 
-.active{
-    border: 1px solid #42B8EA !important;
-    background-color: #42B8EA !important;
-}
-
-.nav-link i {
-    color: #42B8EA !important;
-}
-
-.nav-link.active i {
-    color: #ffffff !important;
-}
-
-.nav-link.active {
-    border: 1px solid #42B8EA !important;
-    background-color: #42B8EA !important;
-}
-
-.navbar-brand{
-        display: flex;
-}
-
-
-.dropdown-submenu {
-    position: relative;
-}
-
-.dropdown-submenu > .dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-left: 0.1rem;
-    margin-right: 0.1rem;
-    display: none;
-    position: absolute;
-}
-
-
-.dropdown-submenu:hover > .dropdown-menu {
-    display: block;
-}
-
-.dropdown-button{
+.my-row{
     display: flex;
+    flex-direction: row-reverse;
 }
 
-.dropdown-button{
-    justify-content: space-between;
-    align-items: center;
+.my-sidebar{
+    width: 6rem;
 }
 
-
-.btn-outline-primary {
-    color: #42B1F6;
-    border-color: #42B1F6;
+.my-main-content{
+    overflow-x: auto;
+    height: 100vh;
 }
 
-.btn-outline-primary:hover {
-    background-color: #42B1F6;
-    color: #fff;
-    border-color: #42B1F6;
-}
-
-.btn-outline-primary:focus,
-.btn-outline-primary:active {
-    background-color: #42B1F6;
-    color: #fff;
-    border-color: #42B1F6;
-    box-shadow: 0 0 0 0.25rem rgba(66, 177, 246, 0.5);
-}
-
-
-@media (max-width: 299px){
-    .navbar-brand{
-        display: none;
-    }
-}
-
-.dropdown-toggle::after {
-    border-top-color: #202020; 
-}
-
-.date-custom {
-    border: 1px solid #42B1F6;
-    border-radius: 4px;
-    padding: 4px 8px;
-    color: #202020;
-    font-size: 0.9rem;
-    background-color: #fff;
-}
-
-.date-custom:focus {
-    outline: none;
-    border-color: #42B1F6;
-    box-shadow: 0 0 0 0.2rem rgba(66, 177, 246, 0.25);
-}
-
-.date-custom::-webkit-calendar-picker-indicator {
-    filter: invert(42%) sepia(80%) saturate(428%) hue-rotate(174deg) brightness(97%) contrast(92%);
-}
-
-option{
-    font-family: Montserrat-Regular;
-}
-
-
-@media (max-width: 600px){
-    .Logo-txt{
-        display: none;
-    }
-    .Profile-name{
-        display: none;
-    }
-
-    .my-col-1{
-        display: none;
-    }
-}
-
-.task-button-txt {
-    position: relative;
-}
-.task-button-txt::after{
-    content: "Create task";
-}
-@media (max-width: 800px) {
-    .dropdown-btn {
+@media (max-width: 750px){
+    .my-row{
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-direction:column;
+    }
+    .my-sidebar{
+        height: 3rem;
         width: 100%;
+
+        position: fixed;
+        bottom: 0;
     }
 
-    .dropdown-txt {
+    .my-main-content
+    {
+        overflow: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .my-main-content::-webkit-scrollbar 
+    {
         display: none;
     }
 
-    .dropdown-btn i {
-        margin: 0 auto;
-    }
-
-    .task-button-txt {
-        color: transparent; 
-        font-size: 1rem;
-    }
-
-    .task-button-txt::after {
-        content: "+";
-        color: white;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        text-align: center;
-    }
-
-    .task-btn{
-        width: 2rem;
-        height: 2rem;
-    }
 }
-
-select:focus{
-    outline-style: none;
-}
-
-tr, th{
-    font-family: Montserrat-Medium;
-    font-weight: 500;
-}
-
-tr, td{
-    font-weight: 500;
-}
-
-tr, td, span{
-    font-weight: 0;
-}
-
-
-
-
