@@ -1,0 +1,1 @@
+Testing responsiveness in mobile size web.
