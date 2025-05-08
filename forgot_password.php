@@ -84,15 +84,6 @@
                                 <!-- email -->
                                 <input type="email" name="email" placeholder="Email" style="width: 100%;">
                             </div>
-
-                            <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
-                                <div class="col-auto d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem;">
-                                    <img src="assets/user.png" alt="..." width="20rem" height="20rem">
-                                </div>
-    
-                                <!-- username -->
-                                <input type="text" name="username" placeholder="Username" style="width: 100%;">
-                            </div>
     
                             <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
                                 <div class="col-auto d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem;">
@@ -104,7 +95,7 @@
                                 </div>
     
                                 <!-- password -->
-                                <input type="password" name="password" placeholder="Password" style="width: 100%;">
+                                <input type="password" name="password" placeholder="New password" style="width: 100%;">
                             </div>
 
                             <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
@@ -117,20 +108,18 @@
                                 </div>
     
                                 <!-- password -->
-                                <input type="password" name="cpassword" placeholder="Password" style="width: 100%;">
+                                <input type="password" name="cpassword" placeholder="Confirm password" style="width: 100%;">
                             </div>
                         </div>
-    
-                        <div class="col pt-3 pb-5 d-flex justify-content-end align-items-center">
-                                <span style="font-size: 0.8rem;"> Forgot Pass? <a href="#"> Click here. </a> </span>
-                        </div>
+
+                        <br>
     
                         <div class="BUTTON col pb-2 d-flex justify-content-center align-items-center">
-                            <button type="submit" name="sign-up" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> CREATE ACCOUNT </b> </button>
+                            <button type="submit" name="sign-up" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> CHANGE PASSWORD </b> </button>
                         </div>
     
                         <div class="col pt-3 pb-5 d-flex justify-content-center align-items-center">
-                            <span style="font-size: 0.8rem;"> Already have an account? <a href="index.php"> Login here. </a> </span>
+                            <span style="font-size: 0.8rem;"> Change your mind? <a href="index.php"> Click here. </a> </span>
                         </div>
     
                     </div>
