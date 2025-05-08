@@ -6,7 +6,6 @@ body{
     display: flex;
     flex-direction: row-reverse;
 }
-
 .my-main-content{
     overflow-x: auto;
     height: 100vh;
@@ -29,7 +28,6 @@ select:focus-within{
 .card-headline{
     display: flex;
 }
-
 
 .card-header-grid{
     display: flex;
