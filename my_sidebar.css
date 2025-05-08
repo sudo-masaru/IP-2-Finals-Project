@@ -38,11 +38,21 @@ body{
 }
 .inactive:hover{
     transition: 0.3s ease-in-out;
-    background-color: #42B8EA;
+    background-color: #ececec;
 }
 .inactive:hover i{
     transition: 0.3s ease-in-out;
+    /* color: #ffffff; */
+}
+.sidebar-nav span{
+    font-size: 0.4rem;
+}
+
+.active span{
     color: #ffffff;
+}
+.inactive span{
+    color: #202020;
 }
 
 .nav-name{
