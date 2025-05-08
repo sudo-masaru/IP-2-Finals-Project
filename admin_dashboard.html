@@ -10,86 +10,8 @@
 
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="my_sidebar.css">
-    <style>
-        body{
-            overflow: hidden;
-        }
-
-        .my-row{
-            display: flex;
-            flex-direction: row-reverse;
-        }
-
-        .my-main-content{
-            overflow-x: auto;
-            height: 100vh;
-        }
-
-        .Logo-txt {
-            font-size: 1.25rem; 
-            font-weight: bold;
-            background: linear-gradient(to right, #3DE5B1, #42B1F6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent; 
-            background-clip: text;
-            text-fill-color: transparent;
-        }
-
-        select:focus-within{
-            outline-style: none;
-        }
-
-        .card-headline{
-            display: flex;
-        }
-
-
-        .card-header-grid{
-            display: flex;
-        }
-
-        @media (max-width: 780px){
-            .my-row{
-                display: flex;
-                flex-direction:column;
-            }
-
-            .my-main-content
-            {
-                overflow: auto;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
-            }
-
-            .my-main-content::-webkit-scrollbar 
-            {
-                display: none;
-            }
-
-            select:focus-within{
-                outline-style: none;
-            }
-
-            .card-headline{
-                display: none;
-            }
-
-            .card-header-grid-2{
-                display: none;
-            }
-        }
-
-        @media (max-width: 600px){ 
-            .card-header-grid-1{
-                display: none;
-            }
-        }
-
-        @media (max-width: 500px){ 
-            .btn-txt{
-                display: none;
-            }
-        }
+    <link rel="stylesheet" href="admin_dashboard.css">
+        
     </style>
 </head>
 <body>
@@ -154,13 +76,38 @@
                             
                             
                             <!-- content -->
-                            <div class="card border pt-3 pb-3 ps-2 pe-2 rounded-0">
+                            <div class="card my-card border-0 pt-3 pb-3 rounded-0 d-flex justify-content-center align-items-center" style="gap: 1rem;">
 
-                                <form method="POST">
+                                <div class="sub-card border rounded-2">
+                                    <div class="card-header bg-white border-0">
+                                        <i class="bi bi-person-fill"></i>
+                                        users
+                                    </div>
 
-                                    
-
-                                </form>
+                                    <div class="card-body">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="sub-card border rounded-2">
+                                    <div class="card-header bg-white border-0">
+                                        *
+                                    </div>
+                                </div>
+                                <div class="sub-card border rounded-2">
+                                    <div class="card-header bg-white border-0">
+                                        *
+                                    </div>
+                                </div>
+                                <div class="sub-card border rounded-2">
+                                    <div class="card-header bg-white border-0">
+                                        *
+                                    </div>
+                                </div>
+                                <div class="sub-card border rounded-2">
+                                    <div class="card-header bg-white border-0">
+                                        *
+                                    </div>
+                                </div>
 
                             </div>
 
