@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fluttertask - edit task</title>
+    <title>Fluttertask - create user</title>
     <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNC4yNSAyLjVhLjI1LjI1IDAgMCAwLS4yNS0uMjVIN0EyLjc1IDIuNzUgMCAwIDAgNC4yNSA1djE0QTIuNzUgMi43NSAwIDAgMCA3IDIxLjc1aDEwQTIuNzUgMi43NSAwIDAgMCAxOS43NSAxOVY5LjE0N2EuMjUuMjUgMCAwIDAtLjI1LS4yNUgxNWEuNzUuNzUgMCAwIDEtLjc1LS43NXptLjc1IDkuNzVhLjc1Ljc1IDAgMCAxIDAgMS41SDlhLjc1Ljc1IDAgMCAxIDAtMS41em0wIDRhLjc1Ljc1IDAgMCAxIDAgMS41SDlhLjc1Ljc1IDAgMCAxIDAtMS41eiIgY2xpcC1ydWxlPSJldmVub2RkIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1Ljc1IDIuODI0YzAtLjE4NC4xOTMtLjMwMS4zMzYtLjE4NnEuMTgyLjE0Ny4zMjMuMzQybDMuMDEzIDQuMTk3Yy4wNjguMDk2LS4wMDYuMjItLjEyNC4yMkgxNmEuMjUuMjUgMCAwIDEtLjI1LS4yNXoiLz48L3N2Zz4=" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="my_sidebar.css">
-    <link rel="stylesheet" href="user_edit.css">
+    <link rel="stylesheet" href="admin_dashboard.css">
+        
 </head>
 <body>
 
@@ -81,72 +82,40 @@
                                     <div class="p-1 card-header bg-white d-flex flex-row justify-content-start align-items-center">
 
                                         <div class="border-0 w-100 d-flex justify-content-start">
-                                            TASK
+                                            USER
                                         </div>
-                                        <div class="border-0 w-100 d-flex justify-content-end pe-3">
-                                            <button type="submit" name="edit-task" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1); color: #FF0022;">
-                                                <i class="bi bi-backspace-fill"></i>
-                                                <span class="btn-txt" style="color: #FF0022;">Go back</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-header border-0 bg-white p-0 pt-2 pb-2 d-flex flex-row">
-                                        <div class="border-0 w-100 d-flex flex-row justify-content-start align-items-center">
-                                            <div class="border-0 w-50 d-flex justify-content-start align-items-center" style="height: 2rem;">DUE DATE</div>
-                                            <div class="border-0 w-100" style="height: 2rem;">
-                                                <input disabled type="input" class="w-100 h-100">
-                                            </div>
-                                        </div>
-                                        <div class="card-header-grid-1 border-0 w-100 pt-2 pb-2 justify-content-start align-items-center"></div>
-                                        <div class="card-header-grid-2 border-0 w-100 pt-2 pb-2 justify-content-start align-items-center"></div>
-                                    </div>
-                                    <div class="card-header border-0 bg-white p-0 pt-2 pb-2 d-flex flex-row">
-                                        <div class="border-0 w-100 d-flex flex-row justify-content-start align-items-center">
-                                            <div class="border-0 w-50 d-flex justify-content-start align-items-center" style="height: 2rem;">STATUS</div>
-                                            <div class="border-0 w-100" style="height: 2rem;">
-                                                <select name="status" class="w-100 h-100">
-                                                    <option value="default">STATUS</option>
-                                                    <option value="todo">todo</option>
-                                                    <option value="in-progress">in-progress</option>
-                                                    <option value="completed">completed</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="card-header-grid-1 border-0 w-100 pt-2 pb-2 justify-content-start align-items-center"></div>
-                                        <div class="card-header-grid-2 border-0 w-100 pt-2 pb-2 justify-content-start align-items-center"></div>
-                                    </div>
-                                    <div class="card-header bg-white p-0 pt-2 pb-2 d-flex flex-row">
-                                        <div class="border-0 w-100 d-flex flex-row justify-content-start align-items-center">
-                                            <div class="border-0 w-50 d-flex justify-content-start align-items-center" style="height: 2rem;">PRIORITY</div>
-                                            <div class="border-0 w-100" style="height: 2rem;">
-                                                <select name="status" class="w-100 h-100">
-                                                    <option value="default">PRIORITY</option>
-                                                    <option value="todo">low</option>
-                                                    <option value="in-progress">medium</option>
-                                                    <option value="completed">high</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="card-header-grid-1 border-0 w-100 pt-2 pb-2 justify-content-start align-items-center"></div>
-                                        <div class="card-header-grid-2 border-0 w-100 pt-2 pb-2 justify-content-start align-items-center"></div>
                                     </div>
 
                                     <div class="card-body p-0 pt-3 pb-3 d-flex flex-column justify-content-center align-self-center" style="gap: 1rem;">
                                         
-                                        <div class="border" style="height: 3rem;">
-                                            <input disabled type="text" placeholder="Title" name="title" class="h-100 w-100 border-0">
+                                        <div class="border d-flex flex-row" style="height: 3rem;">
+                                            <div class="border-0 d-flex justify-content-center align-items-center" style="width: 3rem;">
+                                                <img src="assets/user.png" alt="..." width="20rem" height="20rem">
+                                            </div>
+                                            <input type="text" placeholder="Username" name="username" class="h-100 w-100 border-0">
                                         </div>
 
-                                        <div class="border" style="height: 3rem;">
-                                            <input disabled type="text" placeholder="Description" name="description" class="h-100 w-100 border-0">
+                                        <div class="border d-flex flex-row" style="height: 3rem;">
+                                            <div class="border-0 d-flex justify-content-center align-items-center" style="width: 3rem;">
+                                                <i class="bi bi-envelope-at"></i>
+                                            </div>
+                                            <input type="text" placeholder="Email" name="email" class="h-100 w-100 border-0">
+                                        </div>
+
+                                        <div class="border d-flex flex-row" style="height: 3rem;">
+                                            <div class="border-0 d-flex justify-content-center align-items-center" style="width: 3rem;">
+                                                <button onclick="togglePassword()" type="button" class="d-flex justify-content-center align-items-center" style="border: none; background: none;">
+                                                    <img id="pslock-state" src="assets/lock.png" alt="..." width="20rem" height="20rem">
+                                                </button>
+                                            </div>
+                                            <input type="password" placeholder="Password" name="password" class="h-100 w-100 border-0">
                                         </div>
 
                                         <br>
 
                                         <div class="border-0" style="height: 3rem;">
-                                            <button type="submit" name="update-task" class="w-100 h-100 p-0" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
-                                                Update task
+                                            <button type="submit" name="create-new-task" class="w-100 h-100 p-0" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
+                                                Create new user
                                             </button>
                                         </div>
 
@@ -168,15 +137,13 @@
                         <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
                     </div>
 
-                    <button title="Task" type="submit" name="redirect-to-task-page" class="active sidebar-nav border-0 d-flex justify-content-center">
-                        <i class="bi bi-list-task align-self-center"></i>
+                    <button title="Dashboard" type="submit" name="redirect-to-task-page" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                        <i class="bi bi-speedometer2 align-self-center"></i>
+                        <span> <b>Dashboard</b> </span>
                     </button>
-                    <button title="Calendar" type="submit" name="redirect-to-task-page" class="inactive sidebar-nav border-0 d-flex justify-content-center">
-                        <i class="bi bi-calendar-minus align-self-center"></i>
-                    </button>
-
-                    <button title="Create new task" type="submit" name="redirect-to-create-task-page" class="inactive sidebar-nav border-0 d-flex justify-content-center">
-                        <i class="bi bi-plus-square align-self-center"></i>
+                    <button title="Users" type="submit" name="redirect-to-task-page" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
+                        <i class="bi bi-table align-self-center"></i>
+                        <span> <b>Users</b> </span>
                     </button>
                     
 
@@ -190,6 +157,29 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
        
+        <script>
+
+            let default_lock = "assets/lock.png";
+            let open_lock = "assets/unlock.png";
+            
+            let pass = document.querySelector("input[name='password']");
+            let pslock = document.getElementById("pslock-state");
+
+            function togglePassword() 
+            {
+                if(pass.type === "password") 
+                {
+                    pass.type = "text";
+                    pslock.src = open_lock;
+                } 
+                else 
+                {
+                    pass.type = "password";
+                    pslock.src = default_lock;
+                }
+            }
+
+        </script>
         
 </body>
 </html>

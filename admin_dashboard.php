@@ -126,7 +126,7 @@
                         <i class="bi bi-speedometer2 align-self-center"></i>
                         <span> <b>Dashboard</b> </span>
                     </button>
-                    <button title="Calendar" type="submit" name="redirect-to-task-page" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                    <button title="Users" type="submit" name="redirect-to-task-page" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
                         <i class="bi bi-table align-self-center"></i>
                         <span> <b>Users</b> </span>
                     </button>

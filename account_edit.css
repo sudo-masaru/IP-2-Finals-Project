@@ -1,0 +1,95 @@
+body{
+    overflow: hidden;
+}
+
+.my-row{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.my-main-content{
+    overflow-x: auto;
+    height: 100vh;
+}
+
+.Logo-txt {
+    font-size: 1.25rem; 
+    font-weight: bold;
+    background: linear-gradient(to right, #3DE5B1, #42B1F6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+select:focus-within{
+    outline-style: none;
+}
+
+.card-headline{
+    display: flex;
+}
+
+
+.card-header-grid{
+    display: flex;
+}
+
+.my-card{
+    flex-direction: row;
+}
+
+.sub-card{
+    width: 15rem;
+    height: 8rem;
+
+    background-color: #ffffff;
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2); 
+}
+
+@media (max-width: 780px){
+    .my-row{
+        display: flex;
+        flex-direction:column;
+    }
+
+    .my-main-content
+    {
+        overflow: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .my-main-content::-webkit-scrollbar 
+    {
+        display: none;
+    }
+
+    select:focus-within{
+        outline-style: none;
+    }
+
+    .card-headline{
+        display: none;
+    }
+
+    .card-header-grid-2{
+        display: none;
+    }
+
+    .my-card{
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 600px){ 
+    .card-header-grid-1{
+        display: none;
+    }
+}
+
+@media (max-width: 500px){ 
+    .btn-txt{
+        display: none;
+    }
+}

@@ -77,7 +77,7 @@
     
                             <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
                                 <div class="col-auto d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem;">
-                                    <img src="assets/user.png" alt="..." width="20rem" height="20rem">
+                                    <i class="bi bi-envelope-at"></i>
                                 </div>
     
                                 <!-- email -->
@@ -89,7 +89,7 @@
                                     <img src="assets/user.png" alt="..." width="20rem" height="20rem">
                                 </div>
     
-                                <!-- email -->
+                                <!-- username -->
                                 <input type="text" name="username" placeholder="Username" style="width: 100%;">
                             </div>
     
