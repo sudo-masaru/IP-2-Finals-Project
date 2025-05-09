@@ -1,36 +1,80 @@
 <?php
 
+
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-
     require 'vendor/autoload.php';
-
+        
     $mail = new PHPMailer(true);
 
-    try {
-        // SMTP configuration
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; // Use your SMTP provider
-        $mail->SMTPAuth = true;
-        $mail->Username = 'kajocaw490@gmail.com';       // Your Gmail address
-        $mail->Password = 'yvow bviz nbko ikmb';          // App password, NOT Gmail password
-        $mail->SMTPSecure = 'tls';
-        $mail->Port = 587;
+    $code = array();
 
-        // Email settings
-        $mail->setFrom('kajocaw490@gmail.com', 'BSMIR Task System');
-        $mail->addAddress('red.kajo490@gmail.com'); // Receiver's email
+    if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['send-email-verification']))
+    {
+        $sender = $_POST['email'];
+        $receiver = $_POST['email'];
 
-        $verificationCode = rand(100000, 999999); // Generate a code
-        $mail->Subject = 'Your Verification Code';
-        $mail->Body    = "Your verification code is: $verificationCode";
+        try {
+            // SMTP configuration
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com'; // Use your SMTP provider
+            $mail->SMTPAuth = true;
+            $mail->Username = 'kajocaw490@gmail.com';       // Your Gmail address
+            $mail->Password = 'yvow bviz nbko ikmb';          // App password, NOT Gmail password
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
 
-        $mail->send();
-        echo 'Verification code sent successfully.';
-    } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            // Email settings
+            $mail->setFrom('kajocaw490@gmail.com', 'BSMIR Task System');
+            $mail->addAddress($receiver); // Receiver's email
+
+            $verificationCode = rand(100000, 999999); // Generate a code
+            $mail->Subject = 'Your Verification Code';
+            $mail->Body    = "Your verification code is: $verificationCode";
+
+            $mail->send();
+            // echo 'Verification code sent successfully.'.$verificationCode;
+            
+            $code[0] = $verificationCode;
+
+            //echo "<script> alert('Verification code sent successfully. Please check your spam folder or primary messages.') </script>";
+            echo "
+            <script>
+                if (Notification.permission === \"granted\") {
+                    new Notification(\"Verification Code Sent!\", {
+                        body: \"Check your inbox or spam folder.\",
+                        icon: \"icon.png\"
+                    });
+                } else if (Notification.permission !== \"denied\") {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === \"granted\") {
+                            new Notification(\"Verification Code Sent!\", {
+                                body: \"Check your inbox or spam folder.\",
+                                icon: \"icon.png\"
+                            });
+                        }
+                    });
+                }
+            </script>";
+        } catch (Exception $e) {
+            //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            //echo "<script> alert('Message could not be sent.') </script>";
+            echo "
+            <script>
+                new Notification(\"Dear user,\", {
+                        body: \"Message could not be sent.\",
+                        icon: \"icon.png\"
+                    });
+            </script>";
+        }
     }
-  
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['change-password']))
+    {
+        // include_once("conn_db.php");
+        // require_once 'conn_db.php';
+
+        echo "code".$code[0];
+    }
 
 ?>
 <!DOCTYPE html>
@@ -118,7 +162,7 @@
     
                                 <!-- email -->
                                 <input type="email" name="email" placeholder="Email" style="width: 100%;">
-                                <button type="submit" name="send-email" class="d-flex justify-content-center bg-white border-0" style="width: 3rem;">
+                                <button type="submit" name="send-email-verification" class="d-flex justify-content-center bg-white border-0" style="width: 3rem;">
                                     <i class="bi bi-arrow-right-circle-fill align-self-center text-primary" style="font-size: 1.75rem;"></i>
                                 </button>
                             </div>
@@ -162,7 +206,7 @@
                         <br>
     
                         <div class="BUTTON col pb-2 d-flex justify-content-center align-items-center">
-                            <button type="submit" name="sign-up" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> CHANGE PASSWORD </b> </button>
+                            <button type="submit" name="change-password" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> CHANGE PASSWORD </b> </button>
                         </div>
     
                         <div class="col pt-3 pb-5 d-flex justify-content-center align-items-center">
