@@ -99,7 +99,7 @@
                         </div>
     
                         <div class="col pt-3 pb-5 d-flex justify-content-end align-items-center">
-                                <span style="font-size: 0.8rem;"> Forgot Pass? <a href="#"> Click here. </a> </span>
+                                <span style="font-size: 0.8rem;"> Forgot Pass? <a href="forgot_password.php"> Click here. </a> </span>
                         </div>
     
                         <div class="col pt-2 pb-2 d-flex justify-content-center align-items-center">

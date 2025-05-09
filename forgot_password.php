@@ -1,3 +1,38 @@
+<?php
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+
+    require 'vendor/autoload.php';
+
+    $mail = new PHPMailer(true);
+
+    try {
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; // Use your SMTP provider
+        $mail->SMTPAuth = true;
+        $mail->Username = 'kajocaw490@gmail.com';       // Your Gmail address
+        $mail->Password = 'yvow bviz nbko ikmb';          // App password, NOT Gmail password
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        // Email settings
+        $mail->setFrom('kajocaw490@gmail.com', 'BSMIR Task System');
+        $mail->addAddress('red.kajo490@gmail.com'); // Receiver's email
+
+        $verificationCode = rand(100000, 999999); // Generate a code
+        $mail->Subject = 'Your Verification Code';
+        $mail->Body    = "Your verification code is: $verificationCode";
+
+        $mail->send();
+        echo 'Verification code sent successfully.';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+  
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
