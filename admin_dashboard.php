@@ -1,3 +1,6 @@
+<?php
+    include_once("fethc_users_data.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,7 +47,8 @@
                                     <button class="btn border-white d-flex justify-content-center align-items-center"
                                       style="overflow: hidden; width: 2.5rem; height: 2.5rem; border-radius: 50%;" type="button"
                                       data-bs-toggle="dropdown" aria-expanded="false">
-                                      <img src="assets/default.png" alt="..." width="40rem" height="40rem">
+                                      <!-- <img src="assets/def.jpeg" alt="..." width="40rem" height="40rem"> -->
+                                       <?php  ?>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                       <form method="POST">
@@ -75,7 +79,7 @@
                             
                             
                             <!-- content -->
-                            <div class="card my-card border-0 pt-1 pb-3 rounded-0 d-flex justify-content-center align-items-center" style="gap: 1rem;">
+                            <div class="card my-card border-0 pt-1 pb-3 rounded-0 d-flex flex-wrap justify-content-start align-items-center" style="gap: 1rem;">
 
                                 <div class="sub-card border rounded-2">
                                     <div class="card-header bg-white border-0">

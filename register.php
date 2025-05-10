@@ -31,7 +31,7 @@
         {
             if(!empty($this->email))
             {
-                if(str_contains($this->email, "404authadmin"))
+                if(str_contains($this->email, "404authadm"))
                 {
                     echo "
                         <script>

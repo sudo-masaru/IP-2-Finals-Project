@@ -78,7 +78,7 @@
                                     body: \"Email verification error.\",
                                     icon: \"icon.png\"
                                 });
-                                window.location.href=\"forgot_password_step_2.php\";
+                                window.location.href=\"forgot_password_step_1.php\";
                                 } else if (Notification.permission !== \"denied\") {
                                     Notification.requestPermission().then(permission => {
                                         if (permission === \"granted\") {
@@ -128,7 +128,7 @@
                                                     body: \"Password has been changed.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"forgot_password_step_1.php\";
+                                                window.location.href=\"index.php\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {

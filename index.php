@@ -61,31 +61,48 @@
                     }
                     else
                     {
+                        $id = $row['id'];
+
                         // echo "hello world";
                         if(password_verify($this->password, $row['password_hash']))
                         {
-                            if(str_contains($this->email, "404authadmin"))
+                            if(str_contains($this->email, "404authadm"))
                             {
-                                if($this->cookies === 365)
+                                if($this->cookies == 365)
                                 {
-                                    setcookie("autolog", true, time()+(86400 * $this->cookies), "/");
+                                    setcookie("autolog", "true", time()+(86400 * $this->cookies), "/");
                                     $_SESSION["email"]=$this->email;
                                     $_SESSION["password"]=$this->password;
 
                                     $conn->close();
-                                    header("Location: admin_dashboard.php");
+                                    header("Location: admin_dashboard.php?id=".$id);
                                 }
                                 else
                                 {
-                                    setcookie("autolog", false, time()+(86400 * $this->cookies), "/");
+                                    setcookie("autolog", "false", time()+(86400 * $this->cookies), "/");
 
                                     $conn->close();
-                                    header("Location: admin_dashboard.php");
+                                    header("Location: admin_dashboard.php?id=".$id);
                                 }
                             }
                             else
                             {
+                                if($this->cookies == 365)
+                                {
+                                    setcookie("autolog", "true", time()+(86400 * $this->cookies), "/");
+                                    $_SESSION["email"]=$this->email;
+                                    $_SESSION["password"]=$this->password;
 
+                                    $conn->close();
+                                    header("Location: index.php?id=".$id);
+                                }
+                                else
+                                {
+                                    setcookie("autolog", "false", time()+(86400 * $this->cookies), "/");
+
+                                    $conn->close();
+                                    header("Location: index.php?id=".$id);
+                                }
                             }
                         }
                         else
