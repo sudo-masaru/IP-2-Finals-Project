@@ -62,25 +62,25 @@
                     else
                     {
                         // echo "hello world";
-                        if(password_verify($this->password, $row['password']))
+                        if(password_verify($this->password, $row['password_hash']))
                         {
-                            if(str_contains($this->email, "@admin.com"))
+                            if(str_contains($this->email, "404authadmin"))
                             {
-                                // setcookie("username", $row['username'], time()+(86400 * $this->cookies), "/");
-                                // setcookie("user", "User", time()+(86400 * 2), "/");
-
-                                // $conn->close();
-                                // header("Location: admin_dashboard.php?id=".$row['id']);
-
                                 if($this->cookies === 365)
                                 {
                                     setcookie("autolog", true, time()+(86400 * $this->cookies), "/");
                                     $_SESSION["email"]=$this->email;
                                     $_SESSION["password"]=$this->password;
+
+                                    $conn->close();
+                                    header("Location: admin_dashboard.php");
                                 }
                                 else
                                 {
                                     setcookie("autolog", false, time()+(86400 * $this->cookies), "/");
+
+                                    $conn->close();
+                                    header("Location: admin_dashboard.php");
                                 }
                             }
                             else

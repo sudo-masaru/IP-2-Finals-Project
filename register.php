@@ -31,131 +31,188 @@
         {
             if(!empty($this->email))
             {
-                if(!empty($this->username))
+                if(str_contains($this->email, "404authadmin"))
                 {
-                    if(strlen($this->username) >= 3)
+                    echo "
+                        <script>
+                            if (Notification.permission === \"granted\") {
+                                new Notification(\"\", {
+                                    body: \"Something went wrong.\",
+                                    icon: \"icon.png\"
+                                });
+                                window.location.href=\"register.php\";
+                                } else if (Notification.permission !== \"denied\") {
+                                    Notification.requestPermission().then(permission => {
+                                        if (permission === \"granted\") {
+                                            new Notification(\"\", {
+                                            body: \"Something went wrong.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                            }
+                        </script>";
+                }
+                else
+                {
+                    if(!empty($this->username))
                     {
-                        if(empty($this->password))
+                        if(strlen($this->username) >= 3)
                         {
-                            echo "
-                            <script>
-                                if (Notification.permission === \"granted\") {
-                                    new Notification(\"Dear user,\", {
-                                        body: \"Pls fill in your password.\",
-                                        icon: \"icon.png\"
-                                    });
-                                    window.location.href=\"register.php\";
-                                    } else if (Notification.permission !== \"denied\") {
-                                        Notification.requestPermission().then(permission => {
-                                            if (permission === \"granted\") {
-                                                new Notification(\"Dear user\", {
-                                                body: \"Pls fill in your password.\",
-                                                icon: \"icon.png\"
-                                            });
-                                        }
-                                    });
-                                }
-                            </script>";
-                        }
-                        else if(empty($this->cpassword))
-                        {
-                            echo "
-                            <script>
-                                if (Notification.permission === \"granted\") {
-                                    new Notification(\"Dear user,\", {
-                                        body: \"Pls fill in your password.\",
-                                        icon: \"icon.png\"
-                                    });
-                                    window.location.href=\"register.php\";
-                                    } else if (Notification.permission !== \"denied\") {
-                                        Notification.requestPermission().then(permission => {
-                                            if (permission === \"granted\") {
-                                                new Notification(\"Dear user\", {
-                                                body: \"Pls fill in your password.\",
-                                                icon: \"icon.png\"
-                                            });
-                                        }
-                                    });
-                                }
-                            </script>";
-                        }
-                        else
-                        {
-                            if(!empty($this->password) && !empty($this->cpassword))
+                            if(empty($this->password))
                             {
-                                if(strlen($this->password) >=8 && strlen($this->cpassword) >= 8)
+                                echo "
+                                <script>
+                                    if (Notification.permission === \"granted\") {
+                                        new Notification(\"Dear user,\", {
+                                            body: \"Pls fill in your password.\",
+                                            icon: \"icon.png\"
+                                        });
+                                        window.location.href=\"register.php\";
+                                        } else if (Notification.permission !== \"denied\") {
+                                            Notification.requestPermission().then(permission => {
+                                                if (permission === \"granted\") {
+                                                    new Notification(\"Dear user\", {
+                                                    body: \"Pls fill in your password.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                            }
+                                        });
+                                    }
+                                </script>";
+                            }
+                            else if(empty($this->cpassword))
+                            {
+                                echo "
+                                <script>
+                                    if (Notification.permission === \"granted\") {
+                                        new Notification(\"Dear user,\", {
+                                            body: \"Pls fill in your password.\",
+                                            icon: \"icon.png\"
+                                        });
+                                        window.location.href=\"register.php\";
+                                        } else if (Notification.permission !== \"denied\") {
+                                            Notification.requestPermission().then(permission => {
+                                                if (permission === \"granted\") {
+                                                    new Notification(\"Dear user\", {
+                                                    body: \"Pls fill in your password.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                            }
+                                        });
+                                    }
+                                </script>";
+                            }
+                            else
+                            {
+                                if(!empty($this->password) && !empty($this->cpassword))
                                 {
-                                    if(preg_match('/^(?=.*[A-Z])(?=.*\d).+$/', $this->cpassword))
+                                    if(strlen($this->password) >=8 && strlen($this->cpassword) >= 8)
                                     {
-                                        if($this->cpassword === $this->password)
+                                        if(preg_match('/^(?=.*[A-Z])(?=.*\d).+$/', $this->cpassword))
                                         {
-                                            $hash = password_hash($this->password, PASSWORD_DEFAULT);
-
-                                            $sql = "SELECT * FROM users WHERE email='".$this->email."'";
-                                            $result = mysqli_query($conn, $sql);
-                                            $count_user = mysqli_num_rows($result);
-                                            
-                                            $sql2 = "SELECT * FROM users WHERE username='".$this->username."'";
-                                            $result2 = mysqli_query($conn, $sql2);
-                                            $count_user2 = mysqli_num_rows($result2);
-                
-                                            if($count_user === 0 && $count_user2 === 0)
+                                            if($this->cpassword === $this->password)
                                             {
-                                                $sql3 = "INSERT INTO `users`(id, username, email, password_hash, created_at) VALUES (null,'".$this->username."','".$this->email."','$hash',CURRENT_DATE())";
-                                                $result3 = mysqli_query($conn, $sql3);
-                                            
-                                                if($result3===false)
-                                                {
-                                                    echo"<script> alert('Database query failed.') </script>";
-                                                }
-                                                $conn->close();
-                                                //header("Location: login.php?message=User+has+been+added+successfully!");
+                                                $hash = password_hash($this->password, PASSWORD_DEFAULT);
 
-                                                // echo "
-                                                //     <script>
-                                                //         new Notification(\"Dear user,\", {
-                                                //                 body: \"Account has been created.\",
-                                                //                 icon: \"icon.png\"
-                                                //             });
-                                                //         window.location.href=\"index.php\"
-                                                //     </script>
-                                                // ";
-                                                echo "
-                                                <script>
-                                                    if (Notification.permission === \"granted\") {
-                                                        new Notification(\"Dear user,\", {
-                                                            body: \"Account has been created.\",
-                                                            icon: \"icon.png\"
-                                                        });
-                                                        window.location.href=\"index.php\";
-                                                        } else if (Notification.permission !== \"denied\") {
-                                                            Notification.requestPermission().then(permission => {
-                                                                if (permission === \"granted\") {
-                                                                    new Notification(\"Dear user\", {
-                                                                    body: \"Account has been created.\",
-                                                                    icon: \"icon.png\"
-                                                                });
-                                                            }
-                                                        });
+                                                $sql = "SELECT * FROM users WHERE email='".$this->email."'";
+                                                $result = mysqli_query($conn, $sql);
+                                                $count_user = mysqli_num_rows($result);
+                                                
+                                                $sql2 = "SELECT * FROM users WHERE username='".$this->username."'";
+                                                $result2 = mysqli_query($conn, $sql2);
+                                                $count_user2 = mysqli_num_rows($result2);
+                    
+                                                if($count_user === 0 && $count_user2 === 0)
+                                                {
+                                                    $sql3 = "INSERT INTO `users`(id, username, email, password_hash, created_at) VALUES (null,'".$this->username."','".$this->email."','$hash',CURRENT_DATE())";
+                                                    $result3 = mysqli_query($conn, $sql3);
+                                                
+                                                    if($result3===false)
+                                                    {
+                                                        echo"<script> alert('Database query failed.') </script>";
                                                     }
-                                                </script>";
+                                                    $conn->close();
+                                                    //header("Location: login.php?message=User+has+been+added+successfully!");
+
+                                                    // echo "
+                                                    //     <script>
+                                                    //         new Notification(\"Dear user,\", {
+                                                    //                 body: \"Account has been created.\",
+                                                    //                 icon: \"icon.png\"
+                                                    //             });
+                                                    //         window.location.href=\"index.php\"
+                                                    //     </script>
+                                                    // ";
+                                                    echo "
+                                                    <script>
+                                                        if (Notification.permission === \"granted\") {
+                                                            new Notification(\"Dear user,\", {
+                                                                body: \"Account has been created.\",
+                                                                icon: \"icon.png\"
+                                                            });
+                                                            window.location.href=\"index.php\";
+                                                            } else if (Notification.permission !== \"denied\") {
+                                                                Notification.requestPermission().then(permission => {
+                                                                    if (permission === \"granted\") {
+                                                                        new Notification(\"Dear user\", {
+                                                                        body: \"Account has been created.\",
+                                                                        icon: \"icon.png\"
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+                                                    </script>";
+                                                }
+                                                else
+                                                {
+                                                    // echo "
+                                                    //     <script>
+                                                    //         new Notification(\"Dear user,\", {
+                                                    //                 body: \"User already exists.\",
+                                                    //                 icon: \"icon.png\"
+                                                    //             });
+                                                    //         window.location.href=\"register.php\"
+                                                    //     </script>
+                                                    // ";'
+                                                    echo "
+                                                    <script>
+                                                        if (Notification.permission === \"granted\") {
+                                                            new Notification(\"Dear user,\", {
+                                                                body: \"User already exists.\",
+                                                                icon: \"icon.png\"
+                                                            });
+                                                            window.location.href=\"register.php\";
+                                                            } else if (Notification.permission !== \"denied\") {
+                                                                Notification.requestPermission().then(permission => {
+                                                                    if (permission === \"granted\") {
+                                                                        new Notification(\"Dear user\", {
+                                                                        body: \"User already exists.\",
+                                                                        icon: \"icon.png\"
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+                                                    </script>";
+                                                }
+
                                             }
                                             else
                                             {
                                                 // echo "
                                                 //     <script>
                                                 //         new Notification(\"Dear user,\", {
-                                                //                 body: \"User already exists.\",
+                                                //                 body: \"Password does not match.\",
                                                 //                 icon: \"icon.png\"
                                                 //             });
                                                 //         window.location.href=\"register.php\"
                                                 //     </script>
-                                                // ";'
+                                                // ";
                                                 echo "
                                                 <script>
                                                     if (Notification.permission === \"granted\") {
                                                         new Notification(\"Dear user,\", {
-                                                            body: \"User already exists.\",
+                                                            body: \"Password does not match.\",
                                                             icon: \"icon.png\"
                                                         });
                                                         window.location.href=\"register.php\";
@@ -163,7 +220,7 @@
                                                             Notification.requestPermission().then(permission => {
                                                                 if (permission === \"granted\") {
                                                                     new Notification(\"Dear user\", {
-                                                                    body: \"User already exists.\",
+                                                                    body: \"Password does not match.\",
                                                                     icon: \"icon.png\"
                                                                 });
                                                             }
@@ -171,14 +228,13 @@
                                                     }
                                                 </script>";
                                             }
-
                                         }
                                         else
                                         {
                                             // echo "
                                             //     <script>
                                             //         new Notification(\"Dear user,\", {
-                                            //                 body: \"Password does not match.\",
+                                            //                 body: \"Password must have atleast include capital letter, number and special character.\",
                                             //                 icon: \"icon.png\"
                                             //             });
                                             //         window.location.href=\"register.php\"
@@ -188,7 +244,7 @@
                                             <script>
                                                 if (Notification.permission === \"granted\") {
                                                     new Notification(\"Dear user,\", {
-                                                        body: \"Password does not match.\",
+                                                        body: \"Password must include atleast one capital letter, number and special character.\",
                                                         icon: \"icon.png\"
                                                     });
                                                     window.location.href=\"register.php\";
@@ -196,7 +252,7 @@
                                                         Notification.requestPermission().then(permission => {
                                                             if (permission === \"granted\") {
                                                                 new Notification(\"Dear user\", {
-                                                                body: \"Password does not match.\",
+                                                                body: \"Password must include atleast one capital letter, number and special character.\",
                                                                 icon: \"icon.png\"
                                                             });
                                                         }
@@ -210,17 +266,18 @@
                                         // echo "
                                         //     <script>
                                         //         new Notification(\"Dear user,\", {
-                                        //                 body: \"Password must have atleast include capital letter, number and special character.\",
+                                        //                 body: \"Password must be maximum of 8 characters.\",
                                         //                 icon: \"icon.png\"
                                         //             });
                                         //         window.location.href=\"register.php\"
                                         //     </script>
                                         // ";
+
                                         echo "
                                         <script>
                                             if (Notification.permission === \"granted\") {
                                                 new Notification(\"Dear user,\", {
-                                                    body: \"Password must include atleast one capital letter, number and special character.\",
+                                                    body: \"Password must be maximum of 8 characters.\",
                                                     icon: \"icon.png\"
                                                 });
                                                 window.location.href=\"register.php\";
@@ -228,7 +285,7 @@
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
                                                             new Notification(\"Dear user\", {
-                                                            body: \"Password must include atleast one capital letter, number and special character.\",
+                                                            body: \"Password must be maximum of 8 characters.\",
                                                             icon: \"icon.png\"
                                                         });
                                                     }
@@ -242,65 +299,65 @@
                                     // echo "
                                     //     <script>
                                     //         new Notification(\"Dear user,\", {
-                                    //                 body: \"Password must be maximum of 8 characters.\",
+                                    //                 body: \"Please fill in the password field.\",
                                     //                 icon: \"icon.png\"
                                     //             });
                                     //         window.location.href=\"register.php\"
                                     //     </script>
                                     // ";
-
                                     echo "
-                                    <script>
-                                        if (Notification.permission === \"granted\") {
-                                            new Notification(\"Dear user,\", {
-                                                body: \"Password must be maximum of 8 characters.\",
-                                                icon: \"icon.png\"
-                                            });
-                                            window.location.href=\"register.php\";
-                                            } else if (Notification.permission !== \"denied\") {
-                                                Notification.requestPermission().then(permission => {
-                                                    if (permission === \"granted\") {
-                                                        new Notification(\"Dear user\", {
-                                                        body: \"Password must be maximum of 8 characters.\",
-                                                        icon: \"icon.png\"
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    </script>";
-                                }
+                                        <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Dear user,\", {
+                                                    body: \"Pls fill in your password.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"register.php\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Dear user\", {
+                                                            body: \"Pls fill in your password.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        </script>";
+                                    }
                             }
-                            else
-                            {
-                                // echo "
-                                //     <script>
-                                //         new Notification(\"Dear user,\", {
-                                //                 body: \"Please fill in the password field.\",
-                                //                 icon: \"icon.png\"
-                                //             });
-                                //         window.location.href=\"register.php\"
-                                //     </script>
-                                // ";
-                                echo "
-                                    <script>
-                                        if (Notification.permission === \"granted\") {
-                                            new Notification(\"Dear user,\", {
-                                                body: \"Pls fill in your password.\",
+                        }
+                        else
+                        {
+                            // echo "
+                            //     <script>
+                            //             new Notification(\"Dear user,\", {
+                            //                     body: \"Username must atleast be 3 to 6 characters minum and maximum.\",
+                            //                     icon: \"icon.png\"
+                            //                 });
+                            //             window.location.href=\"register.php\"
+                            //     </script>
+                            // ";     
+
+                            echo "
+                            <script>
+                                if (Notification.permission === \"granted\") {
+                                    new Notification(\"Dear user,\", {
+                                        body: \"Username must atleast be 3 to 6 characters minimum and maximum.\",
+                                        icon: \"icon.png\"
+                                    });
+                                    window.location.href=\"register.php\";
+                                    } else if (Notification.permission !== \"denied\") {
+                                        Notification.requestPermission().then(permission => {
+                                            if (permission === \"granted\") {
+                                                new Notification(\"Dear user\", {
+                                                body: \"Username must atleast be 3 to 6 characters minimum and maximum.\",
                                                 icon: \"icon.png\"
                                             });
-                                            window.location.href=\"register.php\";
-                                            } else if (Notification.permission !== \"denied\") {
-                                                Notification.requestPermission().then(permission => {
-                                                    if (permission === \"granted\") {
-                                                        new Notification(\"Dear user\", {
-                                                        body: \"Pls fill in your password.\",
-                                                        icon: \"icon.png\"
-                                                    });
-                                                }
-                                            });
                                         }
-                                    </script>";
+                                    });
                                 }
+                            </script>";
                         }
                     }
                     else
@@ -308,18 +365,17 @@
                         // echo "
                         //     <script>
                         //             new Notification(\"Dear user,\", {
-                        //                     body: \"Username must atleast be 3 to 6 characters minum and maximum.\",
+                        //                     body: \"Pls fill in a username.\",
                         //                     icon: \"icon.png\"
                         //                 });
                         //             window.location.href=\"register.php\"
                         //     </script>
-                        // ";     
-
+                        // ";
                         echo "
                         <script>
                             if (Notification.permission === \"granted\") {
                                 new Notification(\"Dear user,\", {
-                                    body: \"Username must atleast be 3 to 6 characters minimum and maximum.\",
+                                    body: \"Pls add your username.\",
                                     icon: \"icon.png\"
                                 });
                                 window.location.href=\"register.php\";
@@ -327,7 +383,7 @@
                                     Notification.requestPermission().then(permission => {
                                         if (permission === \"granted\") {
                                             new Notification(\"Dear user\", {
-                                            body: \"Username must atleast be 3 to 6 characters minimum and maximum.\",
+                                            body: \"Pls add your username.\",
                                             icon: \"icon.png\"
                                         });
                                     }
@@ -335,37 +391,6 @@
                             }
                         </script>";
                     }
-                }
-                else
-                {
-                    // echo "
-                    //     <script>
-                    //             new Notification(\"Dear user,\", {
-                    //                     body: \"Pls fill in a username.\",
-                    //                     icon: \"icon.png\"
-                    //                 });
-                    //             window.location.href=\"register.php\"
-                    //     </script>
-                    // ";
-                    echo "
-                    <script>
-                        if (Notification.permission === \"granted\") {
-                            new Notification(\"Dear user,\", {
-                                body: \"Pls add your username.\",
-                                icon: \"icon.png\"
-                            });
-                            window.location.href=\"register.php\";
-                            } else if (Notification.permission !== \"denied\") {
-                                Notification.requestPermission().then(permission => {
-                                    if (permission === \"granted\") {
-                                        new Notification(\"Dear user\", {
-                                        body: \"Pls add your username.\",
-                                        icon: \"icon.png\"
-                                    });
-                                }
-                            });
-                        }
-                    </script>";
                 }
             }
             else
