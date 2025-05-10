@@ -205,7 +205,7 @@
                         </div>
     
                         <div class="col pt-2 d-flex justify-content-start align-items-center">
-                            <span style="font-size: 1rem; opacity: 40%;"> Forgot your password? Change it woth Flow. </span>
+                            <span style="font-size: 1rem; opacity: 40%;"> Forgot your password? Change it with Flow. </span>
                         </div>
     
                         <div class="col pt-4 d-flex flex-column" style="gap: 1rem;">
@@ -217,15 +217,14 @@
     
                                 <!-- email -->
                                 <input type="email" name="email" placeholder="Email" style="width: 100%;">
-                                <!-- <button type="submit" name="send-email-verification" class="d-flex justify-content-center bg-white border-0" style="width: 3rem;">
-                                    <i class="bi bi-arrow-right-circle-fill align-self-center text-primary" style="font-size: 1.75rem;"></i>
-                                </button> -->
                             </div>
+
+                        </div>
 
                         <br>
     
                         <div class="BUTTON col pb-2 d-flex justify-content-center align-items-center">
-                            <button type="submit" name="send-email-verification" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> SEND VERIFICATION CODE </b> </button>
+                            <button type="submit" name="send-email-verification" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> SEND VERIFICATION </b> </button>
                         </div>
     
                         <div class="col pt-3 pb-5 d-flex justify-content-center align-items-center">
