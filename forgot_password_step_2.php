@@ -2,44 +2,189 @@
 
     session_start();
 
-    // class changepassword
-    // {
-    //     private $email;
-    //     private $verified_code;
-    //     private $password;
-    //     private $cpassword;
-    //     private $conn;
+    // echo $_SESSION['email'];
+    // echo $_SESSION['code'];
 
-    //     public function __construct($email="", $verified_code="", $password="", $cpassword, $conn="")
-    //     {
-    //         $this->email=$this->checkInputData($email);
-    //         $this->verified_code=$this->checkInputData($verified_code);
-    //         $this->password=$this->checkInputData($password);
-    //         $this->cpassword=$this->checkInputData($cpassword);
-    //         $this->conn=$conn;
+    class changepassword
+    {
+        private $email;
+        private $verified_code;
+        private $password;
+        private $cpassword;
+        private $conn;
 
-    //         $this->fetchUserDataAndUpdate($this->conn);
-    //     }
+        public function __construct($email="", $verified_code="", $password="", $cpassword, $conn="")
+        {
+            $this->email=$this->checkInputData($email);
+            $this->verified_code=$this->checkInputData($verified_code);
+            $this->password=$this->checkInputData($password);
+            $this->cpassword=$this->checkInputData($cpassword);
+            $this->conn=$conn;
 
-    //     public function checkInputData($data) 
-    //     {
-    //         $data = trim($data);
-    //         $data = stripslashes($data);
-    //         $data = htmlspecialchars($data);
-    //         return $data;
-    //     }
+            $this->fetchUserDataAndUpdate($this->conn);
+        }
 
-    //     public function fetchUserDataAndUpdate($conn)
-    //     {
+        public function checkInputData($data) 
+        {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        }
 
-    //     }
-    // }
+        public function fetchUserDataAndUpdate($conn)
+        {
+            if($this->email !== $_SESSION['email'])
+            {
+                echo "
+                    <script>
+                        new Notification(\"Dear user,\", {
+                                body: \"Email does not match.\",
+                                icon: \"icon.png\"
+                            });
+                    </script>
+                ";
+            }
+            else
+            {
+                if($this->verified_code !== $_POST['verification'])
+                {
+                    echo "
+                        <script>
+                            new Notification(\"Dear user,\", {
+                                    body: \"Email verification error.\",
+                                    icon: \"icon.png\"
+                                });
+                        </script>
+                    ";
+                }
+                else
+                {
+                    if(!empty($this->password) && !empty($this->cpassword))
+                    {
+                        if(strlen($this->password) < 8)
+                        {
+                            //echo "password must be at maximum 8 characters.";
+                            echo "
+                                <script>
+                                    new Notification(\"Dear user,\", {
+                                            body: \"Password must be maximum of 8 characters.\",
+                                            icon: \"icon.png\"
+                                    });
+                                </script>
+                            ";
+                        }
+                        else
+                        {
+                            // if(!preg_match('/[A-Z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password))
+                            // {
+                            //     echo "
+                            //         <script>
+                            //             new Notification(\"Dear user,\", {
+                            //                     body: \"Password must atleast contain special characters, capital and numbers.\",
+                            //                     icon: \"icon.png\"
+                            //             });
+                            //         </script>
+                            //     ";
+                            // }
+                            // else
+                            // {
+                            //     echo "hello there";
+                            // }
+                            if($this->cpassword !== $this->password)
+                            {
+                                echo "
+                                    <script>
+                                        new Notification(\"Dear user,\", {
+                                                body: \"Password does not match.\",
+                                                icon: \"icon.png\"
+                                        });
+                                    </script>
+                                ";
+                            }
+                            else
+                            {
+                                if(preg_match('/^[a-zA-Z0-9]+$/', $this->cpassword)) 
+                                {
+                                    // echo "The string is alphanumeric.";
+                                    $hash = password_hash($this->cpassword, PASSWORD_DEFAULT);
+
+                                    $result = mysqli_query($conn, $sql);
+                                    $count_user = mysqli_num_rows($result);
+            
+                                    $sql = "SELECT * FROM users WHERE email='". $this->email ."'";
+                                    $result = mysqli_query($conn, $sql);
+                                    $count_user = mysqli_num_rows($result);
+
+                                    if($count_user === 0)
+                                    {
+                                        echo "
+                                            <script>
+                                                new Notification(\"Dear user,\", {
+                                                        body: \"No users found.\",
+                                                        icon: \"icon.png\"
+                                                });
+                                                window.locationd.href=\"forgot_password_step_1.php\";
+                                            </script>
+                                        ";
+                                    }
+                                    else
+                                    {
+                                        $sql = "UPDATE users SET password='$hash' WHERE email='".$ths->email."'";
+                                        $result = mysqli_query($conn, $sql);
+                
+                                        if($result===false)
+                                        {
+                                            echo"<script> alert('Database query failed.') </script>";
+                                        }
+                
+                                        $conn->close();
+                                        echo "
+                                            <script>
+                                                new Notification(\"Dear user,\", {
+                                                        body: \"Password has changed.\",
+                                                        icon: \"icon.png\"
+                                                });
+                                                window.locationd.href=\"login.php\";
+                                            </script>
+                                        ";
+                                    }
+                                } 
+                                else 
+                                {
+                                    echo "
+                                        <script>
+                                            new Notification(\"Dear user,\", {
+                                                    body: \"Password must contain atleast one capital or digit.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                        </script>
+                                    ";
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        echo "
+                            <script>
+                                new Notification(\"Dear user,\", {
+                                        body: \"Please fill in the password field.\",
+                                        icon: \"icon.png\"
+                                    });
+                            </script>
+                        ";
+                    }
+                }
+            }
+        }
+    }
 
     if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['change-password']))
     {
         include_once("conn_db.php");
 
-        $changepassword = new changepassword($_POST['email'], $_POST['verification_code'], $_POST['created_password'], $_POST['confirmed_password'], $conn);
+        $changepassword = new changepassword($_SESSION['email'], $_SESSION['code'], $_POST['password'], $_POST['cpassword'], $conn);
     }
 
 ?>
@@ -189,7 +334,7 @@
                                 </div>
     
                                 <!-- password -->
-                                <input type="password" name="password" placeholder="New password" style="width: 100%;">
+                                <input maxLength="8" type="password" name="password" placeholder="New password" style="width: 100%;">
                             </div>
 
                             <br>
@@ -204,14 +349,14 @@
                                 </div>
     
                                 <!-- password -->
-                                <input type="password" name="cpassword" placeholder="Confirm password" style="width: 100%;">
+                                <input maxLength="8" type="password" name="cpassword" placeholder="Confirm password" style="width: 100%;">
                             </div>
                         </div>
 
                         <br>
     
                         <div class="BUTTON col pb-2 d-flex justify-content-center align-items-center">
-                            <button type="submit" name="schange-password" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> CHANGE PASSWORD </b> </button>
+                            <button type="submit" name="change-password" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> CHANGE PASSWORD </b> </button>
                         </div>
     
                         <div class="col pt-3 pb-5 d-flex justify-content-center align-items-center">
