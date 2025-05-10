@@ -39,6 +39,9 @@
             $_SESSION["code"] = $verificationCode;
 
             //echo "<script> alert('Verification code sent successfully. Please check your spam folder or primary messages.') </script>";
+            session_abort();
+            session_destroy();
+            
             echo "
             <script>
                     if (Notification.permission === \"granted\") {
@@ -46,6 +49,7 @@
                             body: \"Check your inbox or spam folder.\",
                             icon: \"icon.png\"
                         });
+                        window.location.href=\"forgot_password_step_2.php\";
                     } else if (Notification.permission !== \"denied\") {
                         Notification.requestPermission().then(permission => {
                             if (permission === \"granted\") {
@@ -57,6 +61,7 @@
                         });
                     }
             </script>";
+            // header("Location: forgot_password_step_2.php");
         } catch (Exception $e) {
             //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             //echo "<script> alert('Message could not be sent.') </script>";
@@ -176,6 +181,22 @@
             text-decoration: none;
         }
 
+        .progress-bar {
+            /* transition: 0.3s ease-in-out; */
+            background: linear-gradient(to right, #3DE5B1, #42B1F6);
+
+            animation: growBar 0.6s ease-in-out forwards;
+        }
+
+        @keyframes growBar {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 50%;
+            }
+        }
+
     </style>
 
 </head>
@@ -206,6 +227,22 @@
     
                         <div class="col pt-2 d-flex justify-content-start align-items-center">
                             <span style="font-size: 1rem; opacity: 40%;"> Forgot your password? Change it with Flow. </span>
+                        </div>
+
+                        <div class="card-header pt-3 pb-2">
+                            
+                            <div class="border rounded-4" style="height: 0.6rem;">
+                                <div class="progress-bar d-flex h-100"></div>
+                            </div>
+                            <div class="d-flex flex-row">
+                                <div class="w-100 d-flex justify-content-start"> 
+                                    <span style="font-size: 0.8rem;"> Step 1 </span> 
+                                </div>
+                                <div class="w-100 d-flex justify-content-end"> 
+                                    <span style="font-size: 0.8rem;"> Step 2 </span> 
+                                </div>
+                            </div>
+
                         </div>
     
                         <div class="col pt-4 d-flex flex-column" style="gap: 1rem;">
@@ -238,46 +275,5 @@
 
         </div>
     </div>
-
-    <script type="text/javascript">
-
-        let default_lock = "assets/lock.png";
-        let open_lock = "assets/unlock.png";
-        
-        let pass = document.querySelector("input[name='password']");
-        let pslock = document.getElementById("pslock-state");
-
-        let cpass = document.querySelector("input[name='cpassword']");
-        let cslock = document.getElementById("cslock-state");
-
-        function togglePassword() 
-        {
-            if(pass.type === "password") 
-            {
-                pass.type = "text";
-                pslock.src = open_lock;
-            } 
-            else 
-            {
-                pass.type = "password";
-                pslock.src = default_lock;
-            }
-        }
-
-        function toggleCPassword() 
-        {
-            if(cpass.type === "password") 
-            {
-                cpass.type = "text";
-                cslock.src = open_lock;
-            } 
-            else 
-            {
-                cpass.type = "password";
-                cslock.src = default_lock;
-            }
-        }
-
-    </script>
 </body>
 </html>
