@@ -37,10 +37,9 @@
             // $code[] = $verificationCode;
 
             $_SESSION["code"] = $verificationCode;
+            $_SESSION["email"] = $receiver;
 
             //echo "<script> alert('Verification code sent successfully. Please check your spam folder or primary messages.') </script>";
-            session_abort();
-            session_destroy();
             
             echo "
             <script>
@@ -69,67 +68,6 @@
             <script>
                 new Notification(\"Dear user,\", {
                         body: \"Message could not be sent.\",
-                        icon: \"icon.png\"
-                    });
-            </script>";
-        }
-    }
-    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['change-password']))
-    {
-        include_once("conn_db.php");
-        // require_once 'conn_db.php';
-
-        // echo "code".$code[0];
-
-        if(!empty($_POST['email']))
-        {
-            if(!empty($_POST['password']) && !empty($_POST['password']))
-            {
-                if($_POST['cpassword'] !== $_POST['password'])
-                {
-                    if($_POST['verif-code'] === $_SESSION["code"])
-                    {
-                        echo "hello world";
-                    }
-                    else
-                    {
-                        echo "
-                        <script>
-                            new Notification(\"Dear user,\", {
-                                body: \"Verification code error.\",
-                                icon: \"icon.png\"
-                            });
-                        </script>";
-                    }
-                }
-                else
-                {
-                    echo "
-                    <script>
-                        new Notification(\"Dear user,\", {
-                            body: \"Password does not match.\",
-                            icon: \"icon.png\"
-                        });
-                    </script>"; 
-                }
-            }
-            else
-            {
-                echo "
-                <script>
-                    new Notification(\"Dear user,\", {
-                            body: \"Please enter your password.\",
-                            icon: \"icon.png\"
-                        });
-                </script>";  
-            }
-        }
-        else
-        {
-            echo "
-            <script>
-                new Notification(\"Dear user,\", {
-                        body: \"Please enter your email.\",
                         icon: \"icon.png\"
                     });
             </script>";

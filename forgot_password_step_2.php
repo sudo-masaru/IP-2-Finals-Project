@@ -1,3 +1,48 @@
+<?php
+
+    session_start();
+
+    // class changepassword
+    // {
+    //     private $email;
+    //     private $verified_code;
+    //     private $password;
+    //     private $cpassword;
+    //     private $conn;
+
+    //     public function __construct($email="", $verified_code="", $password="", $cpassword, $conn="")
+    //     {
+    //         $this->email=$this->checkInputData($email);
+    //         $this->verified_code=$this->checkInputData($verified_code);
+    //         $this->password=$this->checkInputData($password);
+    //         $this->cpassword=$this->checkInputData($cpassword);
+    //         $this->conn=$conn;
+
+    //         $this->fetchUserDataAndUpdate($this->conn);
+    //     }
+
+    //     public function checkInputData($data) 
+    //     {
+    //         $data = trim($data);
+    //         $data = stripslashes($data);
+    //         $data = htmlspecialchars($data);
+    //         return $data;
+    //     }
+
+    //     public function fetchUserDataAndUpdate($conn)
+    //     {
+
+    //     }
+    // }
+
+    if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['change-password']))
+    {
+        include_once("conn_db.php");
+
+        $changepassword = new changepassword($_POST['email'], $_POST['verification_code'], $_POST['created_password'], $_POST['confirmed_password'], $conn);
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,7 +150,7 @@
                             </div>
 
                         </div>
-    
+
                         <div class="col pt-4 d-flex flex-column" style="gap: 1rem;">
     
                             <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
@@ -114,6 +159,19 @@
                                 </div>
     
                                 <!-- email -->
+                                <input type="email" name="email" value="<?php echo $_SESSION["email"] ?>" style="width: 100%;">
+                            </div>
+
+                        </div>
+    
+                        <div class="col pt-4 d-flex flex-column" style="gap: 1rem;">
+    
+                            <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
+                                <div class="col-auto d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem;">
+                                    <i class="bi bi-patch-check"></i>
+                                </div>
+    
+                                <!-- verif -->
                                 <input type="text" name="verification" placeholder="Verification code" style="width: 100%;">
                             </div>
 
