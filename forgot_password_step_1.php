@@ -1,13 +1,12 @@
 <?php
 
+    session_start();
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
     require 'vendor/autoload.php';
         
     $mail = new PHPMailer(true);
-
-    $code = array();
 
     if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['send-email-verification']))
     {
@@ -19,13 +18,13 @@
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com'; // Use your SMTP provider
             $mail->SMTPAuth = true;
-            $mail->Username = 'kajocaw490@gmail.com';       // Your Gmail address
-            $mail->Password = 'yvow bviz nbko ikmb';          // App password, NOT Gmail password
+            $mail->Username = 'bsmir.vendor@gmail.com';       // Your Gmail address
+            $mail->Password = 'xtbe rzxz nuch jfjz';          // App password, NOT Gmail password
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
             // Email settings
-            $mail->setFrom('kajocaw490@gmail.com', 'BSMIR Task System');
+            $mail->setFrom('bsmir.vendor@gmail.com', 'BSMIR Task System');
             $mail->addAddress($receiver); // Receiver's email
 
             $verificationCode = rand(100000, 999999); // Generate a code
@@ -35,26 +34,28 @@
             $mail->send();
             // echo 'Verification code sent successfully.'.$verificationCode;
             
-            $code[0] = $verificationCode;
+            // $code[] = $verificationCode;
+
+            $_SESSION["code"] = $verificationCode;
 
             //echo "<script> alert('Verification code sent successfully. Please check your spam folder or primary messages.') </script>";
             echo "
             <script>
-                if (Notification.permission === \"granted\") {
-                    new Notification(\"Verification Code Sent!\", {
-                        body: \"Check your inbox or spam folder.\",
-                        icon: \"icon.png\"
-                    });
-                } else if (Notification.permission !== \"denied\") {
-                    Notification.requestPermission().then(permission => {
-                        if (permission === \"granted\") {
-                            new Notification(\"Verification Code Sent!\", {
-                                body: \"Check your inbox or spam folder.\",
-                                icon: \"icon.png\"
-                            });
-                        }
-                    });
-                }
+                    if (Notification.permission === \"granted\") {
+                        new Notification(\"Verification Code Sent!\", {
+                            body: \"Check your inbox or spam folder.\",
+                            icon: \"icon.png\"
+                        });
+                    } else if (Notification.permission !== \"denied\") {
+                        Notification.requestPermission().then(permission => {
+                            if (permission === \"granted\") {
+                                new Notification(\"Verification Code Sent!\", {
+                                    body: \"Check your inbox or spam folder.\",
+                                    icon: \"icon.png\"
+                                });
+                            }
+                        });
+                    }
             </script>";
         } catch (Exception $e) {
             //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
@@ -70,10 +71,64 @@
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['change-password']))
     {
-        // include_once("conn_db.php");
+        include_once("conn_db.php");
         // require_once 'conn_db.php';
 
-        echo "code".$code[0];
+        // echo "code".$code[0];
+
+        if(!empty($_POST['email']))
+        {
+            if(!empty($_POST['password']) && !empty($_POST['password']))
+            {
+                if($_POST['cpassword'] !== $_POST['password'])
+                {
+                    if($_POST['verif-code'] === $_SESSION["code"])
+                    {
+                        echo "hello world";
+                    }
+                    else
+                    {
+                        echo "
+                        <script>
+                            new Notification(\"Dear user,\", {
+                                body: \"Verification code error.\",
+                                icon: \"icon.png\"
+                            });
+                        </script>";
+                    }
+                }
+                else
+                {
+                    echo "
+                    <script>
+                        new Notification(\"Dear user,\", {
+                            body: \"Password does not match.\",
+                            icon: \"icon.png\"
+                        });
+                    </script>"; 
+                }
+            }
+            else
+            {
+                echo "
+                <script>
+                    new Notification(\"Dear user,\", {
+                            body: \"Please enter your password.\",
+                            icon: \"icon.png\"
+                        });
+                </script>";  
+            }
+        }
+        else
+        {
+            echo "
+            <script>
+                new Notification(\"Dear user,\", {
+                        body: \"Please enter your email.\",
+                        icon: \"icon.png\"
+                    });
+            </script>";
+        }
     }
 
 ?>
@@ -141,7 +196,7 @@
 
             <div class="FORM col p-3 bg-white" style="box-shadow: 8px 10px 10px 8px rgba(0, 0, 0, 0.205);">
                 
-                <form method="POST">
+                <form id="form" method="POST">
                     <div class="col h-100">
 
                         <div class="col d-flex justify-content-start align-items-center" style="gap: 1rem;">
@@ -162,51 +217,15 @@
     
                                 <!-- email -->
                                 <input type="email" name="email" placeholder="Email" style="width: 100%;">
-                                <button type="submit" name="send-email-verification" class="d-flex justify-content-center bg-white border-0" style="width: 3rem;">
+                                <!-- <button type="submit" name="send-email-verification" class="d-flex justify-content-center bg-white border-0" style="width: 3rem;">
                                     <i class="bi bi-arrow-right-circle-fill align-self-center text-primary" style="font-size: 1.75rem;"></i>
-                                </button>
+                                </button> -->
                             </div>
-
-                            <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
-                                <div class="col-auto d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem;">
-                                    <i class="bi bi-patch-check"></i>
-                                </div>
-    
-                                <!-- verif -->
-                                <input type="text" name="verif-code" placeholder="Verification code" style="width: 100%;">
-                            </div>
-    
-                            <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
-                                <div class="col-auto d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem;">
-                                    
-                                    <!-- Pass lock -->
-                                    <button onclick="togglePassword()" type="button" class="d-flex justify-content-center align-items-center" style="border: none; background: none;">
-                                        <img id="pslock-state" src="assets/lock.png" alt="..." width="20rem" height="20rem">
-                                    </button>
-                                </div>
-    
-                                <!-- password -->
-                                <input type="password" name="password" placeholder="New password" style="width: 100%;">
-                            </div>
-
-                            <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
-                                <div class="col-auto d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem;">
-                                    
-                                    <!-- Pass lock -->
-                                    <button onclick="toggleCPassword()" type="button" class="d-flex justify-content-center align-items-center" style="border: none; background: none;">
-                                        <img id="cslock-state" src="assets/lock.png" alt="..." width="20rem" height="20rem">
-                                    </button>
-                                </div>
-    
-                                <!-- password -->
-                                <input type="password" name="cpassword" placeholder="Confirm password" style="width: 100%;">
-                            </div>
-                        </div>
 
                         <br>
     
                         <div class="BUTTON col pb-2 d-flex justify-content-center align-items-center">
-                            <button type="submit" name="change-password" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> CHANGE PASSWORD </b> </button>
+                            <button type="submit" name="send-email-verification" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> SEND VERIFICATION CODE </b> </button>
                         </div>
     
                         <div class="col pt-3 pb-5 d-flex justify-content-center align-items-center">
