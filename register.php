@@ -1,3 +1,195 @@
+<?php
+
+    
+    class signup{
+    
+        private $email;
+        private $username;
+        private $password;
+        private $cpassword;
+        private $conn="";
+
+        public function __construct($email="",$username="",$password="",$cpassword="",$conn="")
+        {
+            $this->username=$this->checkInputData($username);
+            $this->age=$this->checkInputData($age);
+            $this->email=$this->checkInputData($email);
+            $this->password=$this->checkInputData($password);
+            $this->cpassword=$this->checkInputData($cpassword);
+            $this->conn=$conn;
+
+            $this->validateDataAndCreateUser($this->conn);
+        }
+        public function checkInputData($data) 
+        {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        }
+        public function validateDataAndCreateUser($conn)
+        {
+            if(!empty($this->email))
+            {
+                if(!empty($this->username))
+                {
+                    if(strlen($this->username) >= 3)
+                    {
+                        if(!empty($this->password) && !empty($this->cpassword))
+                        {
+                            if(strlen($this->password) >=8 && strlen($this->cpassword) >= 8)
+                            {
+                                if(preg_match('/^(?=.*[A-Z])(?=.*\d).+$/', $this->cpassword))
+                                {
+                                    if($this->cpassword === $this->password)
+                                    {
+                                        $hash = password_hash($this->password, PASSWORD_DEFAULT);
+
+                                        $sql = "SELECT * FROM users WHERE email='".$this->email."'";
+                                        $result = mysqli_query($conn, $sql);
+                                        $count_user = mysqli_num_rows($result);
+                                        
+                                        $sql2 = "SELECT * FROM users WHERE username='".$this->username."'";
+                                        $result2 = mysqli_query($conn, $sql2);
+                                        $count_user2 = mysqli_num_rows($result2);
+            
+                                        if($count_user === 0 && $count_user2 === 0)
+                                        {
+                                            $sql3 = "INSERT INTO `users`(id, username, email, password_hash, created_at) VALUES (null,'".$this->username."','".$this->email."','$hash',CURRENT_DATE())";
+                                            $result3 = mysqli_query($conn, $sql3);
+                                        
+                                            if($result3===false)
+                                            {
+                                                echo"<script> alert('Database query failed.') </script>";
+                                            }
+                                            $conn->close();
+                                            //header("Location: login.php?message=User+has+been+added+successfully!");
+
+                                            echo "
+                                                <script>
+                                                    new Notification(\"Dear user,\", {
+                                                            body: \"Account has been created.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    window.location.href=\"index.php\"
+                                                </script>
+                                            ";
+                                        }
+                                        else
+                                        {
+                                            echo "
+                                                <script>
+                                                    new Notification(\"Dear user,\", {
+                                                            body: \"User already exists.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    window.location.href=\"register.php\"
+                                                </script>
+                                            ";
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        echo "
+                                            <script>
+                                                new Notification(\"Dear user,\", {
+                                                        body: \"Password does not match.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                window.location.href=\"register.php\"
+                                            </script>
+                                        ";
+                                    }
+                                }
+                                else
+                                {
+                                    echo "
+                                        <script>
+                                            new Notification(\"Dear user,\", {
+                                                    body: \"Password must have atleast include capital letter, number and special character.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                            window.location.href=\"register.php\"
+                                        </script>
+                                    ";
+                                }
+                            }
+                            else
+                            {
+                                echo "
+                                    <script>
+                                        new Notification(\"Dear user,\", {
+                                                body: \"Password must be maximum of 8 characters.\",
+                                                icon: \"icon.png\"
+                                            });
+                                        window.location.href=\"register.php\"
+                                    </script>
+                                ";
+                            }
+                        }
+                        else
+                        {
+                            echo "
+                                <script>
+                                    new Notification(\"Dear user,\", {
+                                            body: \"Please fill in the password field.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    window.location.href=\"register.php\"
+                                </script>
+                            ";
+                        }
+                    }
+                    else
+                    {
+                        echo "
+                            <script>
+                                    new Notification(\"Dear user,\", {
+                                            body: \"Username must atleast be 3 to 6 characters minum and maximum.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    window.location.href=\"register.php\"
+                            </script>
+                        ";     
+                    }
+                }
+                else
+                {
+                    echo "
+                        <script>
+                                new Notification(\"Dear user,\", {
+                                        body: \"Pls fill in a username.\",
+                                        icon: \"icon.png\"
+                                    });
+                                window.location.href=\"register.php\"
+                        </script>
+                    ";
+                }
+            }
+            else
+            {
+                echo "
+                    <script>
+                            new Notification(\"Dear user,\", {
+                                    body: \"Pls fill in your email e.g( example@gmail.com ).\",
+                                    icon: \"icon.png\"
+                                });
+                            window.location.href=\"register.php\"
+                    </script>
+                ";
+            }
+        }
+    }
+
+    if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['sign-up']))
+    {
+        include_once("conn_db.php");
+
+        $signup = new signup($_POST['email'], $_POST['username'], $_POST['password'], $_POST['cpassword'], $conn);
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,7 +283,7 @@
                                 </div>
     
                                 <!-- username -->
-                                <input type="text" name="username" placeholder="Username" style="width: 100%;">
+                                <input maxLength="6" type="text" name="username" placeholder="Username" style="width: 100%;">
                             </div>
     
                             <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
@@ -104,7 +296,7 @@
                                 </div>
     
                                 <!-- password -->
-                                <input type="password" name="password" placeholder="Password" style="width: 100%;">
+                                <input maxLength="8" type="password" name="password" placeholder="Password" style="width: 100%;">
                             </div>
 
                             <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
@@ -117,13 +309,11 @@
                                 </div>
     
                                 <!-- password -->
-                                <input type="password" name="cpassword" placeholder="Password" style="width: 100%;">
+                                <input maxLength="8" type="password" name="cpassword" placeholder="Password" style="width: 100%;">
                             </div>
                         </div>
-    
-                        <div class="col pt-3 pb-5 d-flex justify-content-end align-items-center">
-                                <span style="font-size: 0.8rem;"> Forgot Pass? <a href="#"> Click here. </a> </span>
-                        </div>
+
+                        <br>
     
                         <div class="BUTTON col pb-2 d-flex justify-content-center align-items-center">
                             <button type="submit" name="sign-up" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> CREATE ACCOUNT </b> </button>

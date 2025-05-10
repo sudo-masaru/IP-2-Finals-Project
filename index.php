@@ -110,7 +110,7 @@
                         </div>
     
                         <div class="BUTTON col pb-2 d-flex justify-content-center align-items-center">
-                            <button type="submit" name="sign-up" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> LOGIN </b> </button>
+                            <button type="submit" name="sign-in" style="width: 100%; height: 3rem; border-radius: 8px; background: linear-gradient(to right, #3DE5B1, #42B1F6); color: white; border: none;"> <b> LOGIN </b> </button>
                         </div>
     
                         <div class="col pt-3 pb-5 d-flex justify-content-center align-items-center">
