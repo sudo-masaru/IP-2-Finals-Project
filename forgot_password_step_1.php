@@ -24,7 +24,7 @@
             $mail->Port = 587;
 
             // Email settings
-            $mail->setFrom('bsmir.vendor@gmail.com', 'BSMIR Task System');
+            $mail->setFrom('bsmir.vendor@gmail.com', 'BSMIR Task Management System');
             $mail->addAddress($receiver); // Receiver's email
 
             $verificationCode = rand(100000, 999999); // Generate a code
@@ -40,6 +40,7 @@
             $_SESSION["email"] = $receiver;
 
             //echo "<script> alert('Verification code sent successfully. Please check your spam folder or primary messages.') </script>";
+
             
             echo "
             <script>

@@ -5,6 +5,8 @@
     // echo $_SESSION['email'];
     // echo $_SESSION['code'];
 
+    // echo $_POST['email'];
+
     class changepassword
     {
         private $email;
@@ -42,6 +44,7 @@
                                 body: \"Email does not match.\",
                                 icon: \"icon.png\"
                             });
+                            window.location.href=\"forgot_password_step_1.php\"
                     </script>
                 ";
             }
@@ -55,6 +58,7 @@
                                     body: \"Email verification error.\",
                                     icon: \"icon.png\"
                                 });
+                            window.location.href=\"forgot_password_step_1.php\"
                         </script>
                     ";
                 }
@@ -62,106 +66,92 @@
                 {
                     if(!empty($this->password) && !empty($this->cpassword))
                     {
-                        if(strlen($this->password) < 8)
+                        if(strlen($this->password) >=8 && strlen($this->cpassword) >= 8)
                         {
-                            //echo "password must be at maximum 8 characters.";
-                            echo "
-                                <script>
-                                    new Notification(\"Dear user,\", {
-                                            body: \"Password must be maximum of 8 characters.\",
-                                            icon: \"icon.png\"
-                                    });
-                                </script>
-                            ";
-                        }
-                        else
-                        {
-                            // if(!preg_match('/[A-Z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password))
-                            // {
-                            //     echo "
-                            //         <script>
-                            //             new Notification(\"Dear user,\", {
-                            //                     body: \"Password must atleast contain special characters, capital and numbers.\",
-                            //                     icon: \"icon.png\"
-                            //             });
-                            //         </script>
-                            //     ";
-                            // }
-                            // else
-                            // {
-                            //     echo "hello there";
-                            // }
-                            if($this->cpassword !== $this->password)
+                            if(preg_match('/^(?=.*[A-Z])(?=.*\d).+$/', $this->cpassword))
                             {
-                                echo "
-                                    <script>
-                                        new Notification(\"Dear user,\", {
-                                                body: \"Password does not match.\",
-                                                icon: \"icon.png\"
-                                        });
-                                    </script>
-                                ";
-                            }
-                            else
-                            {
-                                if(preg_match('/^[a-zA-Z0-9]+$/', $this->cpassword)) 
+                                if($this->cpassword === $this->password)
                                 {
-                                    // echo "The string is alphanumeric.";
+                                    // echo "hello world";
                                     $hash = password_hash($this->cpassword, PASSWORD_DEFAULT);
 
-                                    $result = mysqli_query($conn, $sql);
-                                    $count_user = mysqli_num_rows($result);
-            
-                                    $sql = "SELECT * FROM users WHERE email='". $this->email ."'";
-                                    $result = mysqli_query($conn, $sql);
-                                    $count_user = mysqli_num_rows($result);
-
-                                    if($count_user === 0)
+                                    $sql = "SELECT * FROM users WHERE email='".$this->email."'";
+                                    $result = mysqli_query($this->conn, $sql);
+                                    $count = mysqli_num_rows($result);
+                                    if($count > 0)
                                     {
+                                        $sql2 = "UPDATE users SET password_hash='$hash' WHERE email='".$this->email."'";
+                                        $result2 = mysqli_query($this->conn, $sql2);
+
+                                        if($result2===false)
+                                        {
+                                            echo"<script> alert('Database query failed.') </script>";
+                                        }
+
+                                        session_unset();
+                                        session_destroy();
+                                        $conn->close();
+
                                         echo "
                                             <script>
                                                 new Notification(\"Dear user,\", {
-                                                        body: \"No users found.\",
+                                                        body: \"Password has been changed.\",
                                                         icon: \"icon.png\"
                                                 });
-                                                window.locationd.href=\"forgot_password_step_1.php\";
+                                                window.location.href=\"index.php\"
                                             </script>
                                         ";
                                     }
                                     else
                                     {
-                                        $sql = "UPDATE users SET password='$hash' WHERE email='".$ths->email."'";
-                                        $result = mysqli_query($conn, $sql);
-                
-                                        if($result===false)
-                                        {
-                                            echo"<script> alert('Database query failed.') </script>";
-                                        }
-                
-                                        $conn->close();
                                         echo "
                                             <script>
                                                 new Notification(\"Dear user,\", {
-                                                        body: \"Password has changed.\",
+                                                        body: \"User not found.\",
                                                         icon: \"icon.png\"
-                                                });
-                                                window.locationd.href=\"login.php\";
+                                                    });
+                                                window.location.href=\"forgot_password_step_2.php\"
                                             </script>
                                         ";
                                     }
-                                } 
-                                else 
+                                }
+                                else
                                 {
                                     echo "
                                         <script>
                                             new Notification(\"Dear user,\", {
-                                                    body: \"Password must contain atleast one capital or digit.\",
+                                                    body: \"Password does not match.\",
                                                     icon: \"icon.png\"
                                                 });
+                                            window.location.href=\"forgot_password_step_2.php\"
                                         </script>
                                     ";
                                 }
                             }
+                            else
+                            {
+                                echo "
+                                    <script>
+                                        new Notification(\"Dear user,\", {
+                                                body: \"Password must have atleast include capital letter, number and special character.\",
+                                                icon: \"icon.png\"
+                                            });
+                                        window.location.href=\"forgot_password_step_2.php\"
+                                    </script>
+                                ";
+                            }
+                        }
+                        else
+                        {
+                            echo "
+                                <script>
+                                    new Notification(\"Dear user,\", {
+                                            body: \"Password must be maximum of 8 characters.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    window.location.href=\"forgot_password_step_2.php\"
+                                </script>
+                            ";
                         }
                     }
                     else
@@ -172,6 +162,7 @@
                                         body: \"Please fill in the password field.\",
                                         icon: \"icon.png\"
                                     });
+                                window.location.href=\"forgot_password_step_2.php\"
                             </script>
                         ";
                     }
@@ -296,8 +287,6 @@
 
                         </div>
 
-                        <div class="col pt-4 d-flex flex-column" style="gap: 1rem;">
-    
                             <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
                                 <div class="col-auto d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem;">
                                     <i class="bi bi-patch-check"></i>
@@ -306,8 +295,6 @@
                                 <!-- email -->
                                 <input type="email" name="email" value="<?php echo $_SESSION["email"] ?>" style="width: 100%;">
                             </div>
-
-                        </div>
     
                         <div class="col pt-4 d-flex flex-column" style="gap: 1rem;">
     
