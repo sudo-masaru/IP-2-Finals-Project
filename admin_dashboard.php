@@ -74,8 +74,16 @@
             $conn->close();
             header("Location: index.php");
         }
-
-        
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['profile']))
+    {
+        $conn->close();
+        header("Location: account_profile.php?&id=".$id);
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-settings']))
+    {
+        $conn->close();
+        header("Location: account_edit.php?&id=".$id);
     }
 ?>
 <!DOCTYPE html>

@@ -1,3 +1,133 @@
+<?php
+
+    include_once("conn_db.php");
+
+    $id = mysqli_real_escape_string($conn, $_GET['id']);
+    if(isset($id))
+    {
+        $profile_img="";
+        $username="";
+        $email="";
+        $date="";
+
+        $sql = "SELECT id, username, email, profile_img, created_at FROM users WHERE id='$id'";
+        $result = mysqli_query($conn, $sql);
+
+        if(mysqli_num_rows($result) > 0)
+        {
+            while($row = $result->fetch_assoc())
+            {
+                $profile_img=$row['profile_img'];
+                $username=$row['username'];
+                $email=$row['email'];
+                $date=$row['created_at'];
+            }
+        }
+    }
+
+    if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['sign-out']))
+    {
+        // echo "hello world";
+
+        if(isset($_COOKIE['alwaysLogged']))
+        {
+            // echo "false";
+            if(isset($_COOKIE['TOKEN']))
+            {
+                $sql = "DELETE FROM auth_tokens WHERE token_id='".$_COOKIE['TOKEN']."'";
+                if($conn->query($sql) === TRUE) 
+                {
+                    setcookie("TOKEN", "", time()+(86400 * 30), "/");
+                    setcookie("alwaysLogged", "", time()+(86400 * 30), "/");
+
+                    session_unset();
+                    session_destroy();
+
+                    $conn->close();
+                    header("Location: index.php");
+                } 
+                else 
+                {
+                    // echo "Error deleting record: " . $conn->error;
+                        echo "
+                        <script>
+                            if (Notification.permission === \"granted\") {
+                                new Notification(\"Notice,\", {
+                                    body: \"Failed to delete token.\",
+                                    icon: \"icon.png\"
+                                });
+                                window.location.href=\"index.php\";
+                                } else if (Notification.permission !== \"denied\") {
+                                    Notification.requestPermission().then(permission => {
+                                        if (permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                            body: \"Failed to delete token.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                            }
+                        </script>";
+                }
+            }
+        }
+        else
+        {
+            // echo "true";
+            $conn->close();
+            header("Location: index.php");
+        }
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['home']))
+    {
+        $conn->close();
+        header("Location: admin_dashboard.php?&id=".$id);
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-settings']))
+    {
+        $conn->close();
+        header("Location: account_edit.php?&id=".$id);
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['edit-profile']))
+    {
+        $conn->close();
+        header("Location: account_edit.php?&id=".$id);
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-deletion']))
+    {
+        $sql = "DELETE FROM users WHERE id='$id'";
+        if($conn->query($sql) === TRUE) 
+        {
+            setcookie("TOKEN", "", time()+(86400 * 30), "/");
+            setcookie("alwaysLogged", "", time()+(86400 * 30), "/");
+
+            session_unset();
+            session_destroy();
+
+            $conn->close();
+            echo "
+            <script>
+                    if (Notification.permission === \"granted\") {
+                        new Notification(\"Notice,\", {
+                            body: \"Account has been deleted.\",
+                            icon: \"icon.png\"
+                        });
+                        window.location.href=\"index.php\";
+                        } else if (Notification.permission !== \"denied\") {
+                            Notification.requestPermission().then(permission => {
+                                if (permission === \"granted\") {
+                                    new Notification(\"Notice\", {
+                                    body: \"Account has been deleted.\",
+                                    icon: \"icon.png\"
+                                });
+                            }
+                        });
+                    }
+            </script>";
+        }
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,26 +169,26 @@
                           
                                 <!-- Profile -->
                                 <div class="d-flex align-items-center gap-2">
-                                  <span class="me-2 nav-name" style="font-size: 1rem;">Yanagi Masaru</span>
+                                  <span class="me-2 nav-name" style="font-size: 1rem;"><?php echo $username; ?></span>
                                   <div class="dropdown">
                                     <button class="btn border-white d-flex justify-content-center align-items-center"
                                       style="overflow: hidden; width: 2.5rem; height: 2.5rem; border-radius: 50%;" type="button"
                                       data-bs-toggle="dropdown" aria-expanded="false">
-                                      <img src="assets/default.png" alt="..." width="40rem" height="40rem">
+                                      <img src="<?php echo $profile_img; ?>" alt="..." width="40rem" height="40rem">
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                       <form method="POST">
         
                                         <div class="col p-2 d-flex flex-column justify-content-center align-items-center" style="gap: 0.8rem;">
                                             <div class="border d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem; overflow: hidden; border-radius: 50%;">
-                                                <img src="assets/default.png" alt="..." width=35rem" height=35rem">
+                                                <img src="<?php echo $profile_img; ?>" alt="..." width=35rem" height=35rem">
                                             </div>
-                                            <span class="me-2" style="font-size: 0.8rem;">Yanagi Masaru</span>
+                                            <span class="me-2" style="font-size: 0.8rem;"><?php echo $username; ?></span>
                                         </div>
                                         <hr class="dropdown-divider">
-        
-                                        <li><button class="dropdown-item" type="submit" name="profile">Profile</button></li>
-                                        <li><button class="dropdown-item" type="submit" name="account-settings">Account settings</button></li>
+
+                                        <li><button class="dropdown-item" type="submit" value="<?php echo $id; ?>" name="home">Home</button></li>
+                                        <li><button class="dropdown-item" type="submit" value="<?php echo $id; ?>" name="account-settings">Account settings</button></li>
         
                                         <hr class="dropdown-divider">
                                         <li><button class="dropdown-item" type="submit">Sign out</button></li>
@@ -85,7 +215,7 @@
                                     <div class="card-body p-0 border-0 w-100 pt-3 pb-3">
     
                                         <div class="border-0 d-flex flex-row justify-content-end pe-3">
-                                            <button type="submit" name="edit-profile" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
+                                            <button type="submit" value="<?php echo $id ?>" name="edit-profile" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
                                                 <i class="bi bi-pencil-square"></i>
                                                 <span class="text-white btn-txt">Edit Profile</span>
                                             </button>
@@ -95,22 +225,24 @@
                                         <div class="border-0 w-100 pt-3 pb-3 d-flex flex-column justify-content-center align-items-center">
 
                                             <div class="border d-flex justify-content-center align-items-center" style="overflow: hidden; width: 8rem; height: 8rem; border-radius: 50%;">
-                                                <img src="assets/default.png" alt="..." width="150rem" height="150rem">
+                                                <img src="<?php echo $profile_img; ?>" alt="..." width="150rem" height="150rem">
                                             </div>
 
                                             <br>
 
                                             <h1>
-                                                Masaru
+                                                <!-- Masaru -->
+                                                <?php echo $username; ?>
                                             </h1>
                                             <span style="color: grey;">
-                                                email@email.com
+                                                <!-- email@email.com -->
                                             </span>
 
                                             <br>
 
-                                            <span style="color: rgb(209, 209, 209);">
-                                                Created at : 00-00-0000
+                                            <span style="color: rgb(177, 177, 177);">
+                                                <!-- Created at : 00-00-0000 -->
+                                                 <?php echo "Created at: ".$date; ?>
                                             </span>
 
                                         </div>

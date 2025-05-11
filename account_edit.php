@@ -1,3 +1,56 @@
+<?php
+
+    include_once("conn_db.php");
+
+    $id = mysqli_real_escape_string($conn, $_GET['id']);
+    if(isset($id))
+    {
+        $profile_img="";
+        $username="";
+        $email="";
+        $date="";
+
+        $sql = "SELECT id, username, email, profile_img, created_at FROM users WHERE id='$id'";
+        $result = mysqli_query($conn, $sql);
+
+        if(mysqli_num_rows($result) > 0)
+        {
+            while($row = $result->fetch_assoc())
+            {
+                $userID=$row['id'];
+                $profile_img=$row['profile_img'];
+                $username=$row['username'];
+                $email=$row['email'];
+                $date=$row['created_at'];
+            }
+        }
+    }
+
+
+    if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['save-changes']))
+    {
+        $user_id = $_POST['save-changes'];
+        if(isset($user_id))
+        {
+            //echo "id: ".$user_id ."<br> username: ".$_POST['username']."<br> email: ".$_POST['email'];
+
+            
+        }
+
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['home']))
+    {
+        $conn->close();
+        header("Location: admin_dashboard.php?&id=".$id);
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-profile']))
+    {
+        $conn->close();
+        header("Location: account_profile.php?&id=".$id);
+    }
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,8 +110,8 @@
                                         </div>
                                         <hr class="dropdown-divider">
         
-                                        <li><button class="dropdown-item" type="submit" name="profile">Profile</button></li>
-                                        <li><button class="dropdown-item" type="submit" name="account-settings">Account settings</button></li>
+                                        <li><button class="dropdown-item" type="submit" name="home">Home</button></li>
+                                        <li><button class="dropdown-item" type="submit" name="account-profile">Profile</button></li>
         
                                         <hr class="dropdown-divider">
                                         <li><button class="dropdown-item" type="submit">Sign out</button></li>
@@ -77,7 +130,7 @@
                             <!-- content -->
                             <div class="card my-card border p-1 pt-1 pb-3 rounded-0 d-flex flex-column justify-content-center align-items-center" style="gap: 1rem;">
 
-                                <form method="POST" class="w-100">
+                                <form method="POST" class="w-100" enctype="multipart/form-data">
                                     <div class="card-header w-100 d-flex justify-content-center align-items-center bg-white">
                                         PROFILE
                                     </div>
@@ -85,7 +138,7 @@
                                     <div class="card-body p-0 border-0 w-100 pt-3 pb-3">
     
                                         <div class="border-0 d-flex flex-row justify-content-end pe-3">
-                                            <button type="submit" name="edit-task" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1); color: #FF0022;">
+                                            <button type="submit" name="edit-task" value="<?php echo $id; ?>" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1); color: #FF0022;">
                                                 <i class="bi bi-backspace-fill"></i>
                                                 <span style="color: #FF0022;">Go back</span>
                                             </button>
@@ -94,29 +147,61 @@
 
                                         <div class="border-0 w-100 pt-3 pb-3 d-flex flex-column justify-content-center align-items-center">
 
-                                            <div class="border d-flex justify-content-center align-items-center" style="overflow: hidden; width: 8rem; height: 8rem; border-radius: 50%;">
-                                                <img src="assets/default.png" alt="..." width="150rem" height="150rem">
-                                            </div>
-
-                                            <br>
-
-                                            <input type="text" placeholder="Masaru">
+                                            <?php
                                             
-                                            <br>
+                                                $usrID = mysqli_real_escape_string($conn, $_GET['id']);
+                                                    // echo "id: ".$usrID; 
+                                                $sql4="SELECT id, username, email, profile_img FROM users WHERE id='$usrID'";
+                                                $result4 = mysqli_query($conn, $sql4);
+                                                
+                                                if(mysqli_num_rows($result4) > 0)
+                                                {
+                                                    while($row = $result4->fetch_assoc())
+                                                    {
+                                                        $usr_id=$row['id'];
+                                                        $username=$row['username'];
+                                                        $email=$row['email'];
+                                                        $profile_img=$row['profile_img'];
 
-                                            <input type="text" placeholder="email@email.com">
+                                                        // echo "hello world";
+                                                        echo"
+                                                        
+                                                            <div class='border d-flex justify-content-center align-items-center' style='overflow: hidden; width: 8rem; height: 8rem; border-radius: 50%;'>
+                                                                <img src='$profile_img' alt='...' width='150rem' height='150rem'>
+                                                            </div>
 
-                                            <br>
+                                                            <br>
+
+                                                            <div class='d-flex flex-column justify-content-start'>
+                                                                <span> Change image </span>
+                                                                <input type='file' name='image' value='$profile_img'>
+                                                            </div>
+
+                                                            <br>
+
+                                                            <input type='text' name='username' placeholder='Username' value='$username'>
+                                                            
+                                                            <br>
+
+                                                            <input type='email' name='email' placeholder='Email' value='$email'>
+
+                                                            <br>
+                                                            
+                                                            <button type='submit' name='change-password' value='$usr_id' class='border-0 bg-white' style='text-decoration: underline;'>
+                                                                change your password
+                                                            </button>
+
+                                                            <br>
+
+                                                            <button type='submit' name='save-changes' value='$usr_id' class='border-0 bg-white text-primary'>
+                                                                save changes
+                                                            </button>
+                                                        
+                                                        ";
+                                                    }
+                                                }
                                             
-                                            <button type="submit" name="change-password" class="border-0 bg-white">
-                                                change your pass >
-                                            </button>
-
-                                            <br>
-
-                                            <button type="submit" name="change-password" class="border-0 bg-white text-primary">
-                                                save changes
-                                            </button>
+                                            ?>
 
                                         </div>
     
