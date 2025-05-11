@@ -61,7 +61,7 @@
                     }
                     else
                     {
-                        $id = $row['id'];
+                        $id= $row['id'];
 
                         // echo "hello world";
                         if(password_verify($this->password, $row['password_hash']))
@@ -80,6 +80,7 @@
                                 else
                                 {
                                     setcookie("autolog", "false", time()+(86400 * $this->cookies), "/");
+                                    $_SESSION["username"]=$row['username'];
 
                                     $conn->close();
                                     header("Location: admin_dashboard.php?id=".$id);
@@ -94,11 +95,12 @@
                                     $_SESSION["password"]=$this->password;
 
                                     $conn->close();
-                                    header("Location: index.php?id=".$id);
+                                    header("Location: idnex.php?id=".$id);
                                 }
                                 else
                                 {
                                     setcookie("autolog", "false", time()+(86400 * $this->cookies), "/");
+                                    $_SESSION["username"]=$row['username'];
 
                                     $conn->close();
                                     header("Location: index.php?id=".$id);

@@ -134,7 +134,7 @@
                                                     {
                                                         echo"<script> alert('Database query failed.') </script>";
                                                     }
-                                                    $conn->close();
+                                                    // $conn->close();
                                                     //header("Location: login.php?message=User+has+been+added+successfully!");
 
                                                     // echo "
@@ -146,25 +146,59 @@
                                                     //         window.location.href=\"index.php\"
                                                     //     </script>
                                                     // ";
-                                                    echo "
-                                                    <script>
-                                                        if (Notification.permission === \"granted\") {
-                                                            new Notification(\"Dear user,\", {
-                                                                body: \"Account has been created.\",
-                                                                icon: \"icon.png\"
-                                                            });
-                                                            window.location.href=\"index.php\";
-                                                            } else if (Notification.permission !== \"denied\") {
-                                                                Notification.requestPermission().then(permission => {
-                                                                    if (permission === \"granted\") {
-                                                                        new Notification(\"Dear user\", {
-                                                                        body: \"Account has been created.\",
-                                                                        icon: \"icon.png\"
-                                                                    });
-                                                                }
-                                                            });
-                                                        }
-                                                    </script>";
+
+                                                    $sql4 = "SELECT id, username, email FROM users WHERE email='".$this->email."'";
+                                                    $result = mysqli_query($this->conn, $sql4);
+                                                    $row = mysqli_fetch_assoc($result);
+
+                                                    if(!$row)
+                                                    {
+                                                        echo "
+                                                        <script>
+                                                            if (Notification.permission === \"granted\") {
+                                                                new Notification(\"Dear user,\", {
+                                                                    body: \"User does not exist.\",
+                                                                    icon: \"icon.png\"
+                                                                });
+                                                                
+                                                                } else if (Notification.permission !== \"denied\") {
+                                                                    Notification.requestPermission().then(permission => {
+                                                                        if (permission === \"granted\") {
+                                                                            new Notification(\"Dear user\", {
+                                                                            body: \"User does not exit.\",
+                                                                            icon: \"icon.png\"
+                                                                        });
+                                                                    }
+                                                                });
+                                                            }
+                                                        </script>";
+                                                    }
+                                                    else
+                                                    {
+                                                        $id = $row['id'];
+
+
+                                                        $conn->close();
+                                                        echo "
+                                                        <script>
+                                                            if (Notification.permission === \"granted\") {
+                                                                new Notification(\"Dear user,\", {
+                                                                    body: \"Account has been created.\",
+                                                                    icon: \"icon.png\"
+                                                                });
+                                                                window.location.href=\"welcome_page.php?&id={$id}\";
+                                                                } else if (Notification.permission !== \"denied\") {
+                                                                    Notification.requestPermission().then(permission => {
+                                                                        if (permission === \"granted\") {
+                                                                            new Notification(\"Dear user\", {
+                                                                            body: \"Account has been created.\",
+                                                                            icon: \"icon.png\"
+                                                                        });
+                                                                    }
+                                                                });
+                                                            }
+                                                        </script>";
+                                                    }
                                                 }
                                                 else
                                                 {

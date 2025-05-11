@@ -1,5 +1,26 @@
 <?php
-    include_once("fethc_users_data.php");
+    include_once("conn_db.php");
+
+    $id = mysqli_real_escape_string($conn, $_GET['id']);
+    if(isset($id))
+    {
+            $profile_img="";
+            $username="";
+            $email="";
+
+            $sql = "SELECT id, username, email, profile_img FROM users WHERE id='$id'";
+            $result = mysqli_query($conn, $sql);
+
+            if(mysqli_num_rows($result) > 0)
+            {
+                while($row = $result->fetch_assoc())
+                {
+                    $profile_img=$row['profile_img'];
+                    $username=$row['username'];
+                    $email=$row['email'];
+                }
+            }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +46,6 @@
                 <div class="col p-0 my-col-content border-0 d-flex flex-column">
                     
                     
-
                     <!-- task content -->
                     <div class="my-main-content border-0 d-flex flex-column">
 
@@ -42,30 +62,30 @@
                           
                                 <!-- Profile -->
                                 <div class="d-flex align-items-center gap-2">
-                                  <span class="me-2 nav-name" style="font-size: 1rem;">Yanagi Masaru</span>
+                                  <span class="me-2 nav-name" style="font-size: 1rem;"> <?php echo $username; ?> </span>
                                   <div class="dropdown">
                                     <button class="btn border-white d-flex justify-content-center align-items-center"
                                       style="overflow: hidden; width: 2.5rem; height: 2.5rem; border-radius: 50%;" type="button"
                                       data-bs-toggle="dropdown" aria-expanded="false">
-                                      <!-- <img src="assets/def.jpeg" alt="..." width="40rem" height="40rem"> -->
-                                       <?php  ?>
+                                      <img src="<?php echo $profile_img; ?>" alt="..." width="40rem" height="40rem">
+                                       
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                       <form method="POST">
         
                                         <div class="col p-2 d-flex flex-column justify-content-center align-items-center" style="gap: 0.8rem;">
                                             <div class="border d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem; overflow: hidden; border-radius: 50%;">
-                                                <img src="assets/default.png" alt="..." width=35rem" height=35rem">
+                                                <img src="<?php echo $profile_img; ?>" alt="..." width=35rem" height=35rem">
                                             </div>
-                                            <span class="me-2" style="font-size: 0.8rem;">Yanagi Masaru</span>
+                                            <span class="me-2" style="font-size: 0.8rem;"> <?php echo $username; ?> </span>
                                         </div>
                                         <hr class="dropdown-divider">
         
-                                        <li><button class="dropdown-item" type="submit" name="profile">Profile</button></li>
-                                        <li><button class="dropdown-item" type="submit" name="account-settings">Account settings</button></li>
+                                        <li><button class="dropdown-item" type="submit" name="profile" value="<?php echo $id; ?>">Profile</button></li>
+                                        <li><button class="dropdown-item" type="submit" name="account-settings" value="<?php echo $id; ?>">Account settings</button></li>
         
                                         <hr class="dropdown-divider">
-                                        <li><button class="dropdown-item" type="submit">Sign out</button></li>
+                                        <li><button class="dropdown-item" type="submit" name="sign-out">Sign out</button></li>
                                       </form>
                                     </ul>
                                   </div>
@@ -126,11 +146,11 @@
                         <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
                     </div>
 
-                    <button title="Dashboard" type="submit" name="redirect-to-task-page" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
+                    <button title="Dashboard" type="submit" value="<?php echo $id; ?>" name="redirect-to-task-page" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
                         <i class="bi bi-speedometer2 align-self-center"></i>
                         <span> <b>Dashboard</b> </span>
                     </button>
-                    <button title="Users" type="submit" name="redirect-to-task-page" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                    <button title="Users" type="submit" value="<?php echo $id; ?>" name="redirect-to-task-page" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
                         <i class="bi bi-table align-self-center"></i>
                         <span> <b>Users</b> </span>
                     </button>
