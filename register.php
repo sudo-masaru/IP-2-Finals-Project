@@ -7,15 +7,17 @@
         private $username;
         private $password;
         private $cpassword;
+        private $profile_img;
         private $conn="";
 
-        public function __construct($email="",$username="",$password="",$cpassword="",$conn="")
+        public function __construct($email="",$username="",$password="",$cpassword="", $profile_img="", $conn="")
         {
             $this->username=$this->checkInputData($username);
             $this->age=$this->checkInputData($age);
             $this->email=$this->checkInputData($email);
             $this->password=$this->checkInputData($password);
             $this->cpassword=$this->checkInputData($cpassword);
+            $this->profile_img=$this->checkInputData($profile_img);
             $this->conn=$conn;
 
             $this->validateDataAndCreateUser($this->conn);
@@ -125,7 +127,7 @@
                     
                                                 if($count_user === 0 && $count_user2 === 0)
                                                 {
-                                                    $sql3 = "INSERT INTO `users`(id, username, email, password_hash, created_at) VALUES (null,'".$this->username."','".$this->email."','$hash',CURRENT_DATE())";
+                                                    $sql3 = "INSERT INTO `users`(id, username, email, password_hash, created_at, profile_img) VALUES (null,'".$this->username."','".$this->email."','$hash',CURRENT_DATE(), '".$this->profile_img."')";
                                                     $result3 = mysqli_query($conn, $sql3);
                                                 
                                                     if($result3===false)
@@ -422,7 +424,59 @@
     {
         include_once("conn_db.php");
 
-        $signup = new signup($_POST['email'], $_POST['username'], $_POST['password'], $_POST['cpassword'], $conn);
+        // $signup = new signup($_POST['email'], $_POST['username'], $_POST['password'], $_POST['cpassword'], $conn);
+        $file = $_FILES['image'];
+        $fileName = $_FILES['image']['name'];
+        $fileTmpName = $_FILES['image']['tmp_name'];
+        $fileSize = $_FILES['image']['size'];
+        $fileError = $_FILES['image']['error'];
+        $fileType = $_FILES['image']['type'];
+
+        $fileExt = explode('.', $fileName);
+        $fileActualExt = strtolower(end($fileExt));
+
+        if($_FILES['image']['name']=='')
+        {
+            $default="sample.png";
+            $uploadDir = "uploads/";
+            $destination = $uploadDir . basename($default);
+
+            // echo "default";
+
+            $signup = new signup($_POST['email'], $_POST['username'], $_POST['password'], $_POST['cpassword'], $destination, $conn);
+        }
+        else
+        {
+            // echo "custom";
+
+            $allowed = array('jpg', 'jpeg', 'jfif', 'png');
+            if(in_array($fileActualExt, $allowed))
+            {
+                if($fileError===0 && $fileSize < 1000000)
+                {
+                    $uploadDir = "uploads/";
+                    $destination = $uploadDir . uniqid() . '-' . basename($fileName);
+                        
+                    if(move_uploaded_file($fileTmpName, $destination))
+                    {
+                        $signup = new signup($_POST['email'], $_POST['username'], $_POST['password'], $_POST['cpassword'], $destination, $conn);
+                    }
+                    else
+                    {
+                        //echo"<script> alert('Failed to move uploaded file!') </script>";
+                        echo "Upload error code: " . $_FILES['image']['error'];
+                    }
+                }
+                else
+                {
+                    echo"<script> alert('There was an error uploading your file!') </script>";
+                }
+            }
+            else
+            {
+                echo"<script> alert('Not a type of image format!') </script>";
+            }
+        }
     }
 
 ?>
@@ -490,7 +544,7 @@
 
             <div class="FORM col p-3 bg-white" style="box-shadow: 8px 10px 10px 8px rgba(0, 0, 0, 0.205);">
                 
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="col h-100">
 
                         <div class="col d-flex justify-content-start align-items-center" style="gap: 1rem;">
@@ -520,6 +574,15 @@
     
                                 <!-- username -->
                                 <input maxLength="6" type="text" name="username" placeholder="Username" style="width: 100%;">
+                            </div>
+
+                            <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
+                                <div class="col-auto d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem;">
+                                    <img src="assets/user.png" alt="..." width="20rem" height="20rem">
+                                </div>
+    
+                                <!-- profile -->
+                                <input type="file" name="image" placeholder="image" style="width: 100%;">
                             </div>
     
                             <div class="INPUT col pt-2 pb-2 d-flex justify-content-start align-items-center">
