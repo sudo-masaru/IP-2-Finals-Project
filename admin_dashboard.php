@@ -160,11 +160,25 @@
                                 <div class="sub-card border rounded-2">
                                     <div class="card-header bg-white border-0">
                                         <i class="bi bi-person-fill"></i>
-                                        users
+                                        Users
                                     </div>
 
                                     <div class="card-body">
-                                        0
+                                        <!-- 0 -->
+                                        <?php
+                                        
+                                            $sql = "SELECT COUNT($id) AS NumberOfUsers FROM users;";
+                                            $result=mysqli_query($conn, $sql);
+
+                                            if ($result && mysqli_num_rows($result) > 0) {
+                                                $row = mysqli_fetch_assoc($result);
+                                                echo $row['NumberOfUsers'];
+                                            } 
+                                            else 
+                                            {
+                                                echo "0";
+                                            }
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="sub-card border rounded-2">
