@@ -61,6 +61,7 @@
                     else
                     {
                         $id= $row['id'];
+                        $username = $row['username'];
 
                         // echo "hello world";
                         if(password_verify($this->password, $row['password_hash']))
@@ -137,8 +138,27 @@
                                         }
                                         setcookie("TOKEN", "$token", time()+(86400 * $this->cookies), "/");
 
-
-                                        echo "token inserted";
+                                        // echo "token inserted";
+                
+                                        echo "
+                                        <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\",\", {
+                                                    body: \"Welcome back! {$username}.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"admin_dashboard.php?&id={$id}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\",\", {
+                                                            body: \"Welcome back! {$username}.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        </script>";
                                     }
 
                                 }
