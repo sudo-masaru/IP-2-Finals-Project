@@ -26,12 +26,12 @@
     {
         // echo "hello world";
 
-        if(isset($_COOKIE['alwaysLogged']) && $_COOKIE['TOKEN']==="false")
+        if(isset($_COOKIE['alwaysLogged']))
         {
             // echo "false";
             if(isset($_COOKIE['TOKEN']))
             {
-                $sql = "DE￼LETE FROM auth_tokens WHERE token_id='".$_COOKIE['TOKEN']."'";
+                $sql = "DELETE FROM auth_tokens WHERE token_id='".$_COOKIE['TOKEN']."'";
                 if($conn->query($sql) === TRUE) 
                 {
                     setcookie("TOKEN", "", time()+(86400 * 30), "/");
