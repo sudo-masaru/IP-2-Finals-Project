@@ -98,7 +98,7 @@
                                         echo "
                                         <script>
                                             if (Notification.permission === \"granted\") {
-                                                new Notification(\",\", {
+                                                new Notification(\"Notice,\", {
                                                     body: \"Token already exists.\",
                                                     icon: \"icon.png\"
                                                 });
@@ -106,7 +106,7 @@
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
-                                                            new Notification(\",\", {
+                                                            new Notification(\"Notice,\", {
                                                             body: \"Token already exists.\",
                                                             icon: \"icon.png\"
                                                         });
@@ -131,7 +131,7 @@
                                         echo "
                                         <script>
                                             if (Notification.permission === \"granted\") {
-                                                new Notification(\",\", {
+                                                new Notification(\"Notice,\", {
                                                     body: \"Welcome back! {$username}.\",
                                                     icon: \"icon.png\"
                                                 });
@@ -139,7 +139,7 @@
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
-                                                            new Notification(\",\", {
+                                                            new Notification(\"Notice,\", {
                                                             body: \"Welcome back! {$username}.\",
                                                             icon: \"icon.png\"
                                                         });
@@ -163,7 +163,7 @@
                                         echo "
                                         <script>
                                             if (Notification.permission === \"granted\") {
-                                                new Notification(\",\", {
+                                                new Notification(\"Notice,\", {
                                                     body: \"Token already exists.\",
                                                     icon: \"icon.png\"
                                                 });
@@ -171,7 +171,7 @@
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
-                                                            new Notification(\",\", {
+                                                            new Notification(\"Notice,\", {
                                                             body: \"Token already exists.\",
                                                             icon: \"icon.png\"
                                                         });
