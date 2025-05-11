@@ -1,6 +1,105 @@
 <?php
     session_start();
     include_once("conn_db.php");
+
+
+    if(isset($_COOKIE['TOKEN']))
+    {
+        // echo "hello world";
+        $getToken = $_COOKIE['TOKEN'];
+        $token =(int)$getToken;
+
+        // echo "token: " . $token;
+
+        if(isset($_COOKIE['alwaysLogged']) && $_COOKIE['alwaysLogged']==="true")
+        {
+            $sql = "SELECT token_id, user_id FROM auth_tokens WHERE token_id='$token'";
+            $result = mysqli_query($conn, $sql);
+            $row = mysqli_fetch_assoc($result);
+            if(!$row)
+            {
+                echo "
+                <script>
+                    if (Notification.permission === \"granted\") {
+                        new Notification(\"Dear user,\", {
+                            body: \"User does not exist.\",
+                            icon: \"icon.png\"
+                        });
+                        window.location.href=\"index.php\";
+                    } else if (Notification.permission !== \"denied\") {
+                            Notification.requestPermission().then(permission => {
+                                if (permission === \"granted\") {
+                                        new Notification(\"Dear user\", {
+                                        body: \"User does not exist.\",
+                                        icon: \"icon.png\"
+                                    });
+                                }
+                            });
+                    }
+                </script>";
+            }
+            else
+            {
+                // echo "token exists";
+                $id = $row['user_id'];
+
+                $sql2 = "SELECT id, username FROM users WHERE id='$id'";
+                $result2 = mysqli_query($conn, $sql2);
+                $row2 = mysqli_fetch_assoc($result2);
+                
+                if(!$row2)
+                {
+                    echo "
+                    <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Dear user,\", {
+                                body: \"User does not exist.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"index.php\";
+                        } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                            new Notification(\"Dear user\", {
+                                            body: \"User does not exist.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                        }
+                    </script>";
+                }
+                else
+                {
+                    $username = $row2['username'];
+
+                    // echo "hello world ".$username;
+                    $conn->close();
+                    echo "
+                    <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Dear user,\", {
+                                body: \"Welcome back! {$username}.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"admin_dashboard.php?&id={$id}\";
+                        } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                            new Notification(\"Dear user\", {
+                                            body: \"Welcome back! {$username}.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                        }
+                    </script>";
+                }
+
+            }
+        }
+    }
+    
     
     class signin{
 

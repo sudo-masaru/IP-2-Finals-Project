@@ -34,7 +34,6 @@
                 $sql = "DE￼LETE FROM auth_tokens WHERE token_id='".$_COOKIE['TOKEN']."'";
                 if($conn->query($sql) === TRUE) 
                 {
-
                     setcookie("TOKEN", "", time()+(86400 * 30), "/");
                     setcookie("alwaysLogged", "", time()+(86400 * 30), "/");
 
