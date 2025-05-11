@@ -77,28 +77,82 @@
                                     // $conn->close();
                                     // header("Location: admin_dashboard.php?id=".$id);
                                     
-                                    
+                                    // $code = rand(100000, 999999);
+                                    // $token = (String)$code;
+
+                                    // echo "token: " . $token;
+
+                                    // echo "hello world";
+
+                                        // echo "hello world";
                                     
                                     $code = rand(100000, 999999);
                                     $token = (String)$code;
 
-                                    echo "token: " . $token;
+                                    $sql2="SELECT * FROM auth_tokens WHERE token_id='$token'";
+                                    $result2 = mysqli_query($this->conn, $sql2);
+                                    $row2 = mysqli_fetch_assoc($result);
+                                 
+                                    if($row2 > 0)
+                                    {
+                                        echo "
+                                        <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\",\", {
+                                                    body: \"Token already exists.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"index.php\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\",\", {
+                                                            body: \"Token already exists.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        </script>";
+                                    }
+                                    else
+                                    {
+                                        // echo "hello world";
+                                        $sql3="INSERT INTO `auth_tokens`(token_id, user_id) VALUES ('$token','$id')";
+        
+                                        $result3 = mysqli_query($this->conn, $sql3);
+                                        if($result3===false)
+                                        {
+                                            echo"<script> alert('Database query failed.') </script>";
+                                        }
+                                        setcookie("TOKEN", "$token", time()+(86400 * $this->cookies), "/");
+                                        setcookie("alwaysLogged", "true", time()+(86400 * $this->cookies), "/");
+
+                                        echo "
+                                        <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\",\", {
+                                                    body: \"Welcome back! {$username}.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"admin_dashboard.php?&id={$id}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\",\", {
+                                                            body: \"Welcome back! {$username}.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        </script>";
+                                    }
                                 }
                                 else
                                 {
-                                    // setcookie("autolog", "false", time()+(86400 * $this->cookies), "/");
-                                    // $_SESSION["username"]=$row['username'];
-
-                                    // $conn->close();
-                                    // header("Location: admin_dashboard.php?id=".$id);
-                                    
-                                    
-                                    
                                     $code = rand(100000, 999999);
                                     $token = (String)$code;
-
-                                    // echo "token: " . $token;
-                                    //setcookie("TOKEN", "$token", time()+(86400 * $this->cookies), "/");
 
                                     $sql2="SELECT * FROM auth_tokens WHERE token_id='$token'";
                                     $result2 = mysqli_query($this->conn, $sql2);
@@ -137,9 +191,8 @@
                                             echo"<script> alert('Database query failed.') </script>";
                                         }
                                         setcookie("TOKEN", "$token", time()+(86400 * $this->cookies), "/");
+                                        setcookie("alwaysLogged", "false", time()+(86400 * $this->cookies), "/");
 
-                                        // echo "token inserted";
-                
                                         echo "
                                         <script>
                                             if (Notification.permission === \"granted\") {
