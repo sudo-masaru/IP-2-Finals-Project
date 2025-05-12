@@ -124,6 +124,80 @@
         $conn->close();
         echo" <script> window.location.href=\"create_user.php?&id={$id}\"; </script> ";
     }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['action-to-operate']))
+    {
+        $id = mysqli_real_escape_string($conn, $_GET['id']);
+        $usrID = $_POST['action-to-operate'];
+
+        // echo "selected: ".$actionSelected;
+        if(isset($_POST['selected']) && $_POST['selected'] === "view")
+        {
+            $conn->close();
+            echo" <script> window.location.href=\"admin_view_user.php?&id={$id}&?usrID={$usrID}\"; </script> ";
+        }
+        else if(isset($_POST['selected']) && $_POST['selected'] === "edit")
+        {
+            $conn->close();
+            echo" <script> window.location.href=\"admin_edit_user.php?&id={$id}&?usrID={$usrID}\"; </script> ";
+        }
+        if(isset($_POST['selected']) && $_POST['selected'] === "delete")
+        {
+            // echo "delete";
+            // echo "id: ".$_POST['action-to-operate'];
+
+            if($id === $usrID)
+            {
+                // echo "unable to delete self.";
+                echo "
+                <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Notice,\", {
+                                body: \"You cannot remove yourself.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"users_table.php?&id={$id}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                        new Notification(\"Notice\", {
+                                        body: \"You cannot remove yourself.\",
+                                        icon: \"icon.png\"
+                                    });
+                                }
+                            });
+                        }
+                </script>";
+            }
+            else
+            {
+                $sql = "DELETE FROM users WHERE id='$id'";
+                if($conn->query($sql) === TRUE) 
+                {
+                    $conn->close();
+                    echo "
+                    <script>
+                            if (Notification.permission === \"granted\") {
+                                new Notification(\"Notice,\", {
+                                    body: \"User has been removed.\",
+                                    icon: \"icon.png\"
+                                });
+                                window.location.href=\"users_table.php?&id={$id}\";
+                                } else if (Notification.permission !== \"denied\") {
+                                    Notification.requestPermission().then(permission => {
+                                        if (permission === \"granted\") {
+                                            new Notification(\"Notice\", {
+                                            body: \"User has been removed.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                            }
+                    </script>";
+                }
+            }
+        }
+    }
+    
 
 ?>
 <!DOCTYPE html>
@@ -131,16 +205,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fluttertask - dashboard</title>
+    <title>Fluttertask - users table</title>
     <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNC4yNSAyLjVhLjI1LjI1IDAgMCAwLS4yNS0uMjVIN0EyLjc1IDIuNzUgMCAwIDAgNC4yNSA1djE0QTIuNzUgMi43NSAwIDAgMCA3IDIxLjc1aDEwQTIuNzUgMi43NSAwIDAgMCAxOS43NSAxOVY5LjE0N2EuMjUuMjUgMCAwIDAtLjI1LS4yNUgxNWEuNzUuNzUgMCAwIDEtLjc1LS43NXptLjc1IDkuNzVhLjc1Ljc1IDAgMCAxIDAgMS41SDlhLjc1Ljc1IDAgMCAxIDAtMS41em0wIDRhLjc1Ljc1IDAgMCAxIDAgMS41SDlhLjc1Ljc1IDAgMCAxIDAtMS41eiIgY2xpcC1ydWxlPSJldmVub2RkIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1Ljc1IDIuODI0YzAtLjE4NC4xOTMtLjMwMS4zMzYtLjE4NnEuMTgyLjE0Ny4zMjMuMzQybDMuMDEzIDQuMTk3Yy4wNjguMDk2LS4wMDYuMjItLjEyNC4yMkgxNmEuMjUuMjUgMCAwIDEtLjI1LS4yNXoiLz48L3N2Zz4=" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="my_sidebar.css">
-    <link rel="stylesheet" href="admin_dashboard.css">
 
     <style>
+        .my-main-content{
+            overflow-x: auto;
+            height: 100vh;
+        } 
+
+        .Logo-txt {
+            font-size: 1.25rem; 
+            font-weight: bold;
+            background: linear-gradient(to right, #3DE5B1, #42B1F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        select:focus-within{
+            outline-style: none;
+        }
+
+        .card-headline{
+            display: flex;
+        }
+
+
+        .card-header-grid{
+            display: flex;
+        }
+
+        .my-card{
+            flex-direction: row;
+        }
+
+        .sub-card{
+            width: 15rem;
+            height: 8rem;
+
+            background-color: #ffffff;
+            box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2); 
+        }
+
+        .search-bar-column{
+            flex-direction: row;
+        }
+
+        @media (max-width: 780px){
+            .my-row{
+                display: flex;
+                flex-direction:column;
+            }
+
+            .my-main-content
+            {
+                overflow: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .my-main-content::-webkit-scrollbar 
+            {
+                display: none;
+            }
+
+            select:focus-within{
+                outline-style: none;
+            }
+
+            .card-headline{
+                display: none;
+            }
+
+            .card-header-grid-2{
+                display: none;
+            }
+
+            .my-card{
+                flex-direction: column;
+            }
+
+            .search-bar-column{
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 600px){ 
+            .card-header-grid-1{
+                display: none;
+            }
+        }
+
+        @media (max-width: 500px){ 
+            .btn-txt{
+                display: none;
+            }
+        }
 
         .hide-column{
             display: flex;
@@ -166,7 +333,9 @@
                     <!-- task content -->
                     <div class="my-main-content border-0 d-flex flex-column">
 
-                        <nav class="p-0 navbar navbar-expand navbar-light topbar mb-4 static-top border-bottom" style="background-color: #ffff;">
+                                                
+                        
+                    <nav class="p-0 navbar navbar-expand navbar-light topbar mb-4 static-top border-bottom" style="background-color: #ffff;">
                             <nav class="navbar bg-body-white p-0 w-100">
                               <div class="container-fluid d-flex justify-content-between align-items-center">
                           
@@ -218,20 +387,23 @@
                             <!-- content -->
                             <div class="card my-card border ps-3 pe-3 pt-1 pb-3 rounded-0">
                                 
-                                    <form method="POST" class="w-100 h-100">
+                                    <div class="w-100 h-100">
 
-                                        <div class="p-1 card-header border-0 w-100 bg-white d-flex flex-row justify-content-center align-items-center">
+                                        
+                                    <div class="p-1 card-header border-0 w-100 bg-white d-flex flex-row justify-content-center align-items-center">
                                             <div class="border-0 pt-2 pb-2 w-100 h-100 d-flex justify-content-start align-items-center">
                                                 <span> USERS </span>
                                             </div>
                                             <div class="border-0 pt-2 pb-2 pe-3 w-100 h-100 d-flex justify-content-end align-items-center">
-                                                <button type="submit" name="create-new-user" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
-                                                    <i class="bi bi-person-add"></i>
-                                                    <span class="text-white btn-txt">New User</span>
-                                                </button>
+                                                <form method="POST">
+                                                    <button type="submit" name="create-new-user" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
+                                                        <i class="bi bi-person-add"></i>
+                                                        <span class="text-white btn-txt">New User</span>
+                                                    </button>
+                                                </form>
                                             </div>    
                                         </div>
-                                        <div class="p-1 card-header border-0 w-100 bg-white d-flex flex-row justify-content-center align-items-center">
+                                        <div class="search-bar-column p-1 card-header border-0 w-100 bg-white d-flex justify-content-center align-items-center">
                                             <div class="border-0 pt-2 pb-2 w-100 h-100 d-flex justify-content-start align-items-center">
                                                 <div class="container-fluid border-0 p-0" style="height: 2rem;">
                                                     <input class="form-control me-2 h-100" type="search" placeholder="Search" aria-label="Search"/>
@@ -351,7 +523,7 @@
 
                                                     <div class="w-100 h-100 border-top" style="overflow-y: auto;">
 
-                                                            <div class="card-header p-0 d-flex flex-row justyf-content-start align-items-center">
+                                                            <div class="card-header p-0 d-flex flex-row justify-content-start align-items-center">
                                                                 
                                                                 <div class="hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2">
                                                                     <span> ID </span>
@@ -427,19 +599,19 @@
                                                                                     <span> ".$row['email']."  </span>
                                                                                 </div>
                                                                                 <div class='border-0 w-100 h-100 d-flex justify-content-center align-items-center pt-2 pb-2'>
-                                                                                    <div class='border d-flex flex-row'>
-                                                                                        <button type='submit' name='action' value='".$row['id']."' class='bg-light border-0 rounded-3' title='Press to operate'>
-                                                                                            <i class='bi bi-three-dots'></i>
-                                                                                        </button>
-                                                                                        <div>
-                                                                                            <select name='selected_action' class='w-100 border-0 bg-light p-1 rounded-3' style='font-size: 0.8rem;'>
-                                                                                                <optgroup label='Actions'>
-                                                                                                    <option value='".$row['id']."'>view</option>
-                                                                                                    <option value='".$row['id']."'>edit</option>
-                                                                                                    <option value='".$row['id']."'>delete</option>
-                                                                                                </optgroup>
-                                                                                            </select>
-                                                                                        </div>
+                                                                                    <div class='border-0 d-flex flex-row'>
+                                                                                        <form method='POST' class='bg-light d-flex flex-row justify-content-center align-items-center p-0'>
+                                                                                            <button type='submit' name='action-to-operate' value='".$row['id']."' class='bg-light border-0 rounded-3' title='Press to operate'>
+                                                                                                <i class='bi bi-three-dots'></i>
+                                                                                            </button>
+                                                                                            <div>
+                                                                                                <select name='selected' class='w-100 border-0 bg-light p-1 rounded-3' style='font-size: 0.8rem;'>
+                                                                                                    <option value='view'>view</option>
+                                                                                                    <option value='edit'>edit</option>
+                                                                                                    <option value='delete'>delete</option>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </form>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -459,7 +631,7 @@
                                         </div>
                                         
 
-                                    </form>
+                                    </div>
 
                             </div>
 

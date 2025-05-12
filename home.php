@@ -9,7 +9,144 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 
     <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="my_sidebar.css">
+    <style>
+        /* body{
+            overflow: hidden;
+        }
+
+        .my-row{
+            display: flex;
+            flex-direction: row-reverse;
+        }
+
+        .my-sidebar{
+            width: 5rem;
+
+            display: flex;
+            flex-direction: column;
+        } */
+
+        /* .my-main-content{
+            overflow-x: auto;
+            height: 100vh;
+        }
+
+        .my-sidebar .brand{
+            display: flex;
+        }
+
+        .my-sidebar .sidebar-nav{
+            height: 4rem;
+            width: 100%;
+        }
+
+        .my-sidebar .sidebar-nav i{
+            font-size: 1.25rem; color: #202020;
+        }
+
+        .active{
+            background-color: #42B8EA;
+        }
+        .my-sidebar .active i{
+            color: #ffffff;
+        }
+        .inactive{
+            background-color: #f8f9fa;
+        }
+        .inactive:hover{
+            transition: 0.3s ease-in-out;
+            background-color: #42B8EA;
+        }
+        .inactive:hover i{
+            transition: 0.3s ease-in-out;
+            color: #ffffff;
+        } */
+
+        .Logo-txt {
+            font-size: 1.25rem; 
+            font-weight: bold;
+            background: linear-gradient(to right, #3DE5B1, #42B1F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        select:focus-within{
+            outline-style: none;
+        }
+
+        .card-headline{
+            display: flex;
+        }
+
+        .nav-name{
+            display: block;
+        }
+
+        @media (max-width: 780px){
+            .my-row{
+                display: flex;
+                flex-direction:column;
+            }
+            .my-sidebar{
+                /* height: 4rem;
+                width: 100%;
+
+                position: fixed;
+                bottom: 0;
+
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+
+                border-style: none;
+            } */
+
+            .my-main-content
+            {
+                overflow: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .my-main-content::-webkit-scrollbar 
+            {
+                display: none;
+            }
+
+            /* .my-sidebar .brand{
+                display: none;
+            }
+
+            .my-sidebar .sidebar-nav{
+                justify-content: center;
+                align-items: center;
+                width: 5rem;
+            }
+            
+            .my-sidebar .sidebar-nav i{
+                font-size: 1rem;
+            } */
+
+            select:focus-within{
+                outline-style: none;
+            }
+
+            .card-headline{
+                display: none;
+            }
+
+            .nav-name{
+                display: none;
+            }
+
+            .search-bar{
+                width: 8rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -453,25 +590,27 @@
 
                 </div>
 
+                <!-- START OF SIDEBAR -->
                 <div class="col-auto border my-sidebar bg-light p-0">
+                   <form method="POST">
 
-                    <div class="brand border-0 pt-3 pb-3 justify-content-center align-items-center">
-                        <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
-                    </div>
+                        <div class="brand border-0 pt-3 pb-3 justify-content-center align-items-center">
+                            <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
+                        </div>
 
-                    <button title="Task" type="submit" name="redirect-to-task-page" class="sidebar-nav border-0 d-flex justify-content-center active">
-                        <i class="bi bi-list-task align-self-center"></i>
-                    </button>
-                    <button title="Calendar" type="submit" name="redirect-to-task-page" class="inactive sidebar-nav border-0 d-flex justify-content-center">
-                        <i class="bi bi-calendar-minus align-self-center"></i>
-                    </button>
+                        <button type="submit" title="Dashboard"  value="<?php echo $id; ?>" name="admin-dashboard" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                            <i class="bi bi-speedometer2 align-self-center"></i>
+                            <span> <b>Dashboard</b> </span>
+                        </button>
 
-                    <button title="Create new task" type="submit" name="redirect-to-create-task-page" class="inactive sidebar-nav border-0 d-flex justify-content-center">
-                        <i class="bi bi-plus-square align-self-center"></i>
-                    </button>
-                    
+                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="users-table" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
+                            <i class="bi bi-table align-self-center"></i>
+                            <span> <b>Users</b> </span>
+                        </button>
 
+                   </form>
                 </div>
+                <!-- End OF SIDEBAR -->
 
             </div>
 
