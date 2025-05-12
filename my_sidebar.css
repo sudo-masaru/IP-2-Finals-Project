@@ -75,6 +75,9 @@ body{
     .my-sidebar form .brand{
         display: none;
     }
+    .my-sidebar form .sidebar-nav{
+        width: 5rem;
+    }
 
 }
 
