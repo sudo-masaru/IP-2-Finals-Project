@@ -23,6 +23,64 @@
     }
 
 
+    class createuser{
+    
+        private $username;
+        private $email;
+        private $password;
+        private $file;
+        private $conn;
+        private $userid;
+
+        public function __construct($username="", $email="", $password="", $file="", $conn="", $userid=0)
+        {
+            $this->username=$this->checkInputData($username);
+            $this->email=$this->checkInputData($email);
+            $this->password=$this->checkInputData($password);
+            $this->file=$this->checkInputData($file);
+            $this->userid=checkInputData($userid);
+            $this->conn=$conn;
+
+            $this->validateDataAndCreateUser($this->conn);
+        }
+        public function checkInputData($data) 
+        {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        }
+        public function validateDataAndCreateUser($conn)
+        {
+            if(!empty($this->email))
+            {
+                echo "hello world";
+            }
+            else
+            {
+                $this->conn->close();
+                echo "
+                <script>
+                    if (Notification.permission === \"granted\") {
+                        new Notification(\"Dear user,\", {
+                                body: \"Pls fill in your password.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"create_user.php?&id={$this->userid}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                    new Notification(\"Dear user\", {
+                                    body: \"Pls fill in your password.\",
+                                    icon: \"icon.png\"
+                                });
+                            }
+                        });
+                    }
+                </script>";
+            }
+        }
+    }
 
 
 
@@ -99,11 +157,6 @@
         $conn->close();
         echo" <script> window.location.href=\"users_table.php?&id={$id}\"; </script> ";
     }
-    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['create-new-user']))
-    {
-        $conn->close();
-        echo" <script> window.location.href=\"create_user.php?&id={$id}\"; </script> ";
-    }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['users-table']))
     {
         $conn->close();
@@ -111,7 +164,59 @@
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['create-user']))
     {
-        echo "hello world";
+        $user_id = mysqli_real_escape_string($conn, $_GET['id']);
+
+        $file = $_FILES['image'];
+        $fileName = $_FILES['image']['name'];
+        $fileTmpName = $_FILES['image']['tmp_name'];
+        $fileSize = $_FILES['image']['size'];
+        $fileError = $_FILES['image']['error'];
+        $fileType = $_FILES['image']['type'];
+
+        $fileExt = explode('.', $fileName);
+        $fileActualExt = strtolower(end($fileExt));
+
+        if($_FILES['image']['name']=='')
+        {
+            $default="gimp-sample.png";
+            $uploadDir = "uploads/";
+            $destination = $uploadDir . basename($default);
+
+            $signup = new createuser($_POST['email'], $_POST['username'], $_POST['password'], $_POST['cpassword'], $destination, $conn, $user_id);
+        }
+        else
+        {
+            $allowed = array('jpg', 'jpeg', 'jfif', 'png');
+            if(in_array($fileActualExt, $allowed))
+            {
+                if($fileError===0 && $fileSize < 1000000)
+                {
+                    $uploadDir = "uploads/";
+                    $destination = $uploadDir . uniqid() . '-' . basename($fileName);
+                        
+                    if(move_uploaded_file($fileTmpName, $destination))
+                    {
+                        $signup = new signup($_POST['email'], $_POST['username'], $_POST['password'], $_POST['cpassword'], $destination, $conn, $user_id);
+                    }
+                    else
+                    {
+                        //echo"<script> alert('Failed to move uploaded file!') </script>";
+                        echo "Upload error code: " . $_FILES['image']['error'];
+                    }
+                }
+                else
+                {
+                    echo"<script> alert('There was an error uploading your file!') </script>";
+                }
+            }
+            else
+            {
+                echo"<script> alert('Not a type of image format!') </script>";
+            }
+        }
+
+
+        //$createuser = new createuser($_POST['username'], $_POST['email'], "H#0_00aa", $file);
     }
 
 ?>
@@ -335,14 +440,10 @@
                                                 <input type="file" placeholder="profile" name="image" class="h-100 w-100 border-0">
                                             </div>
                                         </div>
-
-                                        <div class="border d-flex flex-row" style="height: 3rem;">
-                                            <div class="border-0 d-flex justify-content-center align-items-center" style="width: 3rem;">
-                                                <button onclick="togglePassword()" type="button" class="d-flex justify-content-center align-items-center" style="border: none; background: none;">
-                                                    <img id="pslock-state" src="assets/lock.png" alt="..." width="20rem" height="20rem">
-                                                </button>
-                                            </div>
-                                            <input type="password" placeholder="Password" name="password" class="h-100 w-100 border-0">
+                                        
+                                        <div class="d-flex flex-row justify-content-start align-items-center" style="gap: 0.6rem;">
+                                            <i class="bi bi-info-circle" style="font-size: 0.8rem;" title="Automated password is sent to the user's email."></i>
+                                            <span> Password is automated </span>
                                         </div>
 
                                         <br>
@@ -365,9 +466,9 @@
 
                 </div>
 
+                <!-- START OF SIDEBAR -->
                 <div class="col-auto border my-sidebar bg-light p-0">
-
-                    <form class="my-sidebar"  method="POST">
+                   <form method="POST">
 
                         <div class="brand border-0 pt-3 pb-3 justify-content-center align-items-center">
                             <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
@@ -377,15 +478,15 @@
                             <i class="bi bi-speedometer2 align-self-center"></i>
                             <span> <b>Dashboard</b> </span>
                         </button>
+
                         <button type="submit" title="Users" value="<?php echo $id; ?>" name="users-table" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
                             <i class="bi bi-table align-self-center"></i>
                             <span> <b>Users</b> </span>
                         </button>
 
-                    </form>
-                    
-
+                   </form>
                 </div>
+                <!-- End OF SIDEBAR -->
 
             </div>
 

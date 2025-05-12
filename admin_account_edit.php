@@ -1298,7 +1298,7 @@
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['home']))
     {
         $conn->close();
-        header("Location: admin_dashboard.php?&id=".$id);
+        header("Location: admin_dashboard.php.php?&id=".$id);
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-profile']))
     {
@@ -1320,7 +1320,7 @@
 
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="my_sidebar.css">
-    <link rel="stylesheet" href="account_edit.css">
+    <link rel="stylesheet" href="admin_acount_edit.css">
         
 </head>
 <body>

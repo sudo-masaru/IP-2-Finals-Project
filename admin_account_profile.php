@@ -140,7 +140,7 @@
 
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="my_sidebar.css">
-    <link rel="stylesheet" href="account_profile.css">
+    <link rel="stylesheet" href="admin_account_profile.css">
         
 </head>
 <body>
