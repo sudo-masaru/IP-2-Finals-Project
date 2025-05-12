@@ -95,6 +95,11 @@
         $conn->close();
         echo" <script> window.location.href=\"users_table.php?&id={$id}\"; </script> ";
     }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['create-new-user']))
+    {
+        $conn->close();
+        echo" <script> window.location.href=\"create_user.php?&id={$id}\"; </script> ";
+    }
 
 ?>
 <!DOCTYPE html>
@@ -144,7 +149,7 @@
                                 <div class="border-0">
                                     <a class="navbar-brand d-flex justify-content-center align-items-center" href="#">
                                         <img src="assets/Logo.png"Logo" width="50rem" height="48rem" class="d-inline-block align-text-top">
-                                        <span class="Logo-txt"> FLutterTask </span>
+                                        <span class="Logo-txt"> FlutterTask </span>
                                     </a>
                                 </div>
                           
@@ -247,7 +252,7 @@
 
 
                                                             <!-- list -->
-                                                            <div class="border-bottom pb-3 pt-3 w-100 p-0 d-flex flex-row justify-content-start align-items-center">
+                                                            <!-- <div class="border-bottom pb-3 pt-3 w-100 p-0 d-flex flex-row justify-content-start align-items-center">
                                                                 <div class="hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2">
                                                                     <span> 7 </span>
                                                                 </div>
@@ -276,39 +281,64 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-
-                                                            <!-- list (sample) -->
-                                                            <!-- <div class="border-bottom pb-3 pt-3 w-100 p-0 d-flex flex-row justify-content-start align-items-center">
-                                                                <div class="hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2">
-                                                                    <span> 7 </span>
-                                                                </div>
-                                                                <div class="hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2">
-                                                                    <img src="..." alt="...">
-                                                                </div>
-                                                                <div class="hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2">
-                                                                    <span> Masaru </span>
-                                                                </div>
-                                                                <div class="border-0 p-1 w-100 d-flex h-100 justify-content-center align-items-center pt-2 pb-2" style="text-align: justify;">
-                                                                    <span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque iusto fugiat consequuntur fuga labore, voluptatibus magnam corporis tempore! Quod beatae commodi reprehenderit pariatur, id odit nulla earum provident iusto ducimus. </span>
-                                                                </div>
-                                                                <div class="border-0 w-100 h-100 d-flex justify-content-center align-items-center pt-2 pb-2">
-                                                                    <div class="border d-flex flex-row">
-                                                                        <button type="submit" name="sort_by" class="bg-light border-0 rounded-3" title="Press to operate">
-                                                                            <i class="bi bi-three-dots"></i>
-                                                                        </button>
-                                                                        <div>
-                                                                            <select name="filter" class="w-100 border-0 bg-light p-1 rounded-3" style="font-size: 0.8rem;">
-                                                                                <optgroup label="Actions">
-                                                                                    <option value="view">view</option>
-                                                                                    <option value="edit">edit</option>
-                                                                                    <option value="delete">delete</option>
-                                                                                </optgroup>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
                                                             </div> -->
+
+                                                            <?php
+                                                                    $usrID = mysqli_real_escape_string($conn, $_GET['id']);
+                                                                        // echo "id: ".$usrID; 
+                                                                    $sql_users="SELECT id, username, email, profile_img FROM users WHERE id='$usrID'";
+                                                                    $result_query = mysqli_query($conn, $sql_users);
+                                                                    
+                                                                    if(mysqli_num_rows($result_query) > 0)
+                                                                    {
+                                                                        while($row = $result_query->fetch_assoc())
+                                                                        {
+                                                                            $usr_id=$row['id'];
+                                                                            $username=$row['username'];
+                                                                            $email=$row['email'];
+                                                                            $profile_img=$row['profile_img'];
+
+                                                                            // echo "hello world";
+                                                                            echo"
+                                                                            
+                                                                                <div class='border-bottom pb-3 pt-3 w-100 p-0 d-flex flex-row justify-content-start align-items-center'>
+                                                                                <div class='hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2'>
+                                                                                    <span> $usr_id </span>
+                                                                                </div>
+                                                                                <div class='hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2'>
+                                                                                    <div class='border d-flex justify-content-center align-items-center' style='border-radius: 50%; width: 2rem; height: 2rem; overflow: hidden;'>
+                                                                                        <img src='$profile_img' alt='...' style='width: 3rem; height: 3rem;'>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class='hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2'>
+                                                                                    <span> $username </span>
+                                                                                </div>
+                                                                                <div class='border-0 p-1 w-100 d-flex h-100 justify-content-center align-items-center pt-2 pb-2' style='text-align: justify;'>
+                                                                                    <span> $email  </span>
+                                                                                </div>
+                                                                                <div class='border-0 w-100 h-100 d-flex justify-content-center align-items-center pt-2 pb-2'>
+                                                                                    <div class='border d-flex flex-row'>
+                                                                                        <button type='submit' name='action' value='$userid' class='bg-light border-0 rounded-3' title='Press to operate'>
+                                                                                            <i class='bi bi-three-dots'></i>
+                                                                                        </button>
+                                                                                        <div>
+                                                                                            <select name='selected_action' class='w-100 border-0 bg-light p-1 rounded-3' style='font-size: 0.8rem;'>
+                                                                                                <optgroup label='Actions'>
+                                                                                                    <option value='view'>view</option>
+                                                                                                    <option value='edit'>edit</option>
+                                                                                                    <option value='delete'>delete</option>
+                                                                                                </optgroup>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            
+                                                                            ";
+                                                                        }
+                                                                    }
+                                                            
+                                                            ?>
 
                                                     </div>
 

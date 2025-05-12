@@ -131,7 +131,7 @@
                                 <div class="border-0">
                                     <a class="navbar-brand d-flex justify-content-center align-items-center" href="#">
                                         <img src="assets/Logo.png"Logo" width="50rem" height="48rem" class="d-inline-block align-text-top">
-                                        <span class="Logo-txt"> FLutterTask </span>
+                                        <span class="Logo-txt"> FlutterTask </span>
                                     </a>
                                 </div>
                           
