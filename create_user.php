@@ -31,10 +31,11 @@
         private $file;
         private $conn;
 
-        public function __construct($userid="", $email="", $username="", $file="", $conn="")
+        public function __construct($userid="", $email="", $username="", $password="", $file="", $conn="")
         {
             $this->userid=$this->checkInputData($userid);
             $this->email=$this->checkInputData($email);
+            $this->username=$this->checkInputData($username);
             $this->password=$this->checkInputData($password);
             $this->file=$this->checkInputData($file);
             $this->conn=$conn;
@@ -53,11 +54,130 @@
             //    echo "hello world";
             if(!empty($this->email))
             {
+                if(!empty($this->username))
+                {
+                    if($this->username >= 3)
+                    {
+                        $tmpPass = array("12#qDom2", "qw@rtY23", "CIas&#ic");
+                        $index = rand(0, count($tmpPass) - 1);
 
+                        // echo "password: " . $tmpPass[$index];
+                        // echo "hello world";
+
+                        $hash=password_hash($index, PASSWORD_DEFAULT);
+
+                        $sql = "SELECT * FROM users WHERE email='".$this->email."'";
+                        $result = mysqli_query($conn, $sql);
+                        $count_user = mysqli_num_rows($result);
+                                                    
+                        $sql2 = "SELECT * FROM users WHERE username='".$this->username."'";
+                        $result2 = mysqli_query($conn, $sql2);
+                        $count_user2 = mysqli_num_rows($result2);
+
+                        if($count_user === 0 && $count_user2 === 0)
+                        {
+                            $sql3 = "INSERT INTO `users`(id, username, email, password_hash, created_at, profile_img) VALUES (null,'".$this->username."','".$this->email."','$hash',CURRENT_DATE(), '".$this->file."')";
+                            $result3 = mysqli_query($conn, $sql3);
+                                                    
+                            if($result3===false)
+                            {
+                                echo"<script> alert('Database query failed.') </script>";
+                            }
+                        
+                            $this->conn->close();
+                            echo "
+                            <script>
+                                if (Notification.permission === \"granted\") {
+                                    new Notification(\"Notice,\", {
+                                        body: \"Account has been added.\",
+                                        icon: \"icon.png\"
+                                    });
+                                    window.location.href=\"create_user.php?&id={$this->userid}\";
+                                    } else if (Notification.permission !== \"denied\") {
+                                        Notification.requestPermission().then(permission => {
+                                            if (permission === \"granted\") {
+                                                new Notification(\"Notice\", {
+                                                body: \"Account has been added.\",
+                                                icon: \"icon.png\"
+                                            });
+                                        }
+                                    });
+                                }
+                            </script>";
+
+                        }
+                        else
+                        {
+                            echo "
+                            <script>
+                                if (Notification.permission === \"granted\") {
+                                    new Notification(\"Dear user,\", {
+                                        body: \"User already exists.\",
+                                        icon: \"icon.png\"
+                                    });
+                                    window.location.href=\"create_user.php?&id={$this->userid}\";
+                                    } else if (Notification.permission !== \"denied\") {
+                                        Notification.requestPermission().then(permission => {
+                                            if (permission === \"granted\") {
+                                                new Notification(\"Dear user\", {
+                                                body: \"User already exists.\",
+                                                icon: \"icon.png\"
+                                            });
+                                        }
+                                    });
+                                }
+                            </script>";
+                        }
+                    }
+                    else
+                    {
+                            echo "
+                            <script>
+                                if (Notification.permission === \"granted\") {
+                                    new Notification(\"Notice,\", {
+                                        body: \"Username must be atleast 3 or above.\",
+                                        icon: \"icon.png\"
+                                    });
+                                    window.location.href=\"create_user.php?&id={$this->userid}\";
+                                    } else if (Notification.permission !== \"denied\") {
+                                        Notification.requestPermission().then(permission => {
+                                            if (permission === \"granted\") {
+                                                new Notification(\"Notice\", {
+                                                body: \"Username must be atleast 3 or above.\",
+                                                icon: \"icon.png\"
+                                            });
+                                        }
+                                    });
+                                }
+                            </script>";
+                        
+                    }
+                }
+                else
+                {
+                    echo "
+                    <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Notice\", {
+                                body: \"Please add an username.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"create_user.php?&id={$this->userid}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                        new Notification(\"Notice\", {
+                                        body: \"Please add a username.\",
+                                        icon: \"icon.png\"
+                                    });
+                                }
+                            });
+                        }
+                    </script>";
+                }
             }
             else
             {
-                $this->conn->close();
                 echo "
                 <script>
                     if (Notification.permission === \"granted\") {
@@ -65,7 +185,7 @@
                             body: \"Please add an email address.\",
                             icon: \"icon.png\"
                         });
-                        window.location.href=\"create_user.php?&id={$userid}\";
+                        window.location.href=\"create_user.php?&id={$this->userid}\";
                         } else if (Notification.permission !== \"denied\") {
                             Notification.requestPermission().then(permission => {
                                 if (permission === \"granted\") {
@@ -148,11 +268,15 @@
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['admin-dashboard']))
     {
+        $id = $_POST['admin-dashboard'];
+
         $conn->close();
         echo" <script> window.location.href=\"admin_dashboard.php?&id={$id}\"; </script> ";
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['users-table']))
     {
+        $id = $_POST['users-table'];
+
         $conn->close();
         echo" <script> window.location.href=\"users_table.php?&id={$id}\"; </script> ";
     }
@@ -182,7 +306,8 @@
             // echo "default";
 
             // echo "no world";
-            $createuser = new createuser($user_id, $_POST['email'], $_POST['username'], "w#-H.p13", $destination, $conn);
+            
+            $createuser = new createuser($user_id, $_POST['email'], $_POST['username'], "", $destination, $conn);
         }
         else
         {
@@ -197,7 +322,7 @@
                         
                     if(move_uploaded_file($fileTmpName, $destination))
                     {
-                        $createuser = new createuser($user_id, $_POST['email'], $_POST['username'], "w#-H.p13", $destination, $conn);
+                        $createuser = new createuser($user_id, $_POST['email'], $_POST['username'], "", $destination, $conn);
                     }
                     else
                     {
