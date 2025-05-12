@@ -26,6 +26,755 @@
         }
     }
 
+    class update
+    {
+        private $userid;
+        private $username; 
+        private $email; 
+        private $conn;
+        private $file;
+        private $current_username;
+        private $current_email;
+
+        public function __construct($username = "", $email = "", $conn="", $file="", $current_username="", $current_email="", $userid=0)
+        {
+            $this->username=$this->checkInputData($username);
+            $this->email=$this->checkInputData($email);
+            $this->file=$this->checkInputData($file);
+            $this->current_username=$this->checkInputData($current_username);
+            $this->current_email=$this->checkInputData($current_email);
+            $this->userid=$this->checkInputData($userid);
+            $this->conn=$conn;
+
+            $this->validateDataAndUpdateUser($this->conn);
+        }
+    
+        public function checkInputData($data) 
+        {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        }
+
+        public function validateDataAndUpdateUser($conn)
+        {
+            // echo "hello world";
+            //echo "email: ".$this->email."<br> username: ".$this->username."<br> profile: ".$this->file;
+
+            if(!empty($this->email))
+            {
+                if(!empty($this->username))
+                {
+                    $sql_username = "SELECT * FROM users WHERE username='".$this->username."'";
+                    $result5 = mysqli_query($this->conn, $sql_username);
+                    $existing_username = mysqli_num_rows($result5);
+
+                    if($this->username === $this->current_username)
+                    {
+                        // no changes in username
+                        $sql_username = "SELECT * FROM users WHERE username='".$this->username."'";
+                        $result6 = mysqli_query($this->conn, $sql_username);
+                        $existing_email = mysqli_num_rows($result6);
+
+                        if($this->email === $this->current_email)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                        else if($existing_email === 0)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                        else if($this->email !== $this->current_email && $existing_email > 0)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                    }
+                    else if($existing_username === 0)
+                    {
+                        // no changes in username
+                        $sql_username = "SELECT * FROM users WHERE username='".$this->username."'";
+                        $result6 = mysqli_query($this->conn, $sql_username);
+                        $existing_email = mysqli_num_rows($result6);
+
+                        if($this->email === $this->current_email)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                        else if($existing_email === 0)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                        else if($this->email !== $this->current_email && $existing_email > 0)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                    }
+                    else if($this->username !== $this->current_username && $existing_username > 0)
+                    {
+                        // no changes in username
+                        $sql_username = "SELECT * FROM users WHERE username='".$this->username."'";
+                        $result6 = mysqli_query($this->conn, $sql_username);
+                        $existing_email = mysqli_num_rows($result6);
+
+                        if($this->email === $this->current_email)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                        else if($existing_email === 0)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                        else if($this->email !== $this->current_email && $existing_email > 0)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                    
+                        // no changes in username
+                        $sql_username = "SELECT * FROM users WHERE username='".$this->username."'";
+                        $result6 = mysqli_query($this->conn, $sql_username);
+                        $existing_email = mysqli_num_rows($result6);
+
+                        if($this->email === $this->current_email)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                        else if($existing_email === 0)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                        else if($this->email !== $this->current_email && $existing_email > 0)
+                        {
+                            // no changes in email
+                            $UPDATE="UPDATE users SET `profile_img`='".$this->file."',`username`='".$this->username."', `email`='".$this->email."' WHERE id='".$this->userid."'";
+
+                            if ($this->conn->query($UPDATE) === TRUE) 
+                            {
+                                $this->conn->close();
+                                echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Profile sucessfully updated.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Profile sucessfully updated.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                            } 
+                            else 
+                            {
+                                $this->conn->close();
+                                echo "
+                                <script>
+                                        if (Notification.permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                                body: \"Something went wrong.\",
+                                                icon: \"icon.png\"
+                                            });
+                                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                            } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"Something went wrong.\",
+                                                        icon: \"icon.png\"
+                                                    });
+                                                }
+                                            });
+                                        }
+                                </script>";
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    $this->conn->close();
+                    echo "
+                    <script>
+                            if (Notification.permission === \"granted\") {
+                                new Notification(\"Notice,\", {
+                                    body: \"Please fill in your username.\",
+                                    icon: \"icon.png\"
+                                });
+                                window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                } else if (Notification.permission !== \"denied\") {
+                                    Notification.requestPermission().then(permission => {
+                                        if (permission === \"granted\") {
+                                            new Notification(\"Notice\", {
+                                            body: \"Please fill in your username.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                            }
+                    </script>";
+                }
+            }
+            else
+            {
+                $this->conn->close();
+                echo "
+                <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Notice,\", {
+                                body: \"Please fill in your email.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                        new Notification(\"Notice\", {
+                                        body: \"Please fill in your email.\",
+                                        icon: \"icon.png\"
+                                    });
+                                }
+                            });
+                        }
+                </script>";
+            }
+        }
+    }
+
 
     if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['save-changes']))
     {
@@ -34,7 +783,85 @@
         {
             //echo "id: ".$user_id ."<br> username: ".$_POST['username']."<br> email: ".$_POST['email'];
 
-            
+            $sql3="SELECT id, username, email, profile_img FROM users WHERE id='$user_id'";
+            $result3 = mysqli_query($conn, $sql3);
+            $row = mysqli_fetch_assoc($result3);
+
+            if(!$row)
+            {
+                $conn->close();
+                echo "
+                <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Notice,\", {
+                                body: \"Something went wrong.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"account_edit.php?&id={$user_id}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                        new Notification(\"Notice\", {
+                                        body: \"Something went wrong.\",
+                                        icon: \"icon.png\"
+                                    });
+                                }
+                            });
+                        }
+                </script>";
+            }
+            else
+            {
+                // echo "fetched";
+                $file = $_FILES['image'];
+                $fileName = $_FILES['image']['name'];
+                $fileTmpName = $_FILES['image']['tmp_name'];
+                $fileSize = $_FILES['image']['size'];
+                $fileError = $_FILES['image']['error'];
+                $fileType = $_FILES['image']['type'];
+
+                $fileExt = explode('.', $fileName);
+                $fileActualExt = strtolower(end($fileExt));
+
+                if($_FILES['image']['name']=='')
+                {
+                    $uploadDir = "uploads/";
+                    $destination = $uploadDir . basename($current_profile);
+
+                    $update = new update($_POST['username'], $_POST['email'], $conn, $destination, $current_username, $current_email, $id);
+                }
+                else
+                {
+                    $allowed = array('jpg', 'jpeg', 'jfif', 'png');
+                    if(in_array($fileActualExt, $allowed))
+                    {
+                        if($fileError===0 && $fileSize < 1000000)
+                        {
+                            $uploadDir = "uploads/";
+                            $destination = $uploadDir . uniqid() . '-' . basename($fileName);
+                                
+                            if(move_uploaded_file($fileTmpName, $destination))
+                            {
+                                $update = new update($_POST['username'], $_POST['email'], $conn, $destination, $current_username, $current_email, $id);
+                            }
+                            else
+                            {
+                                echo"<script> alert('Your file is too big!') </script>";
+                            }
+                        }
+                        else
+                        {
+                            echo"<script> alert('There was an error uploading your file!') </script>";
+                        }
+                    }
+                    else
+                    {
+                        echo"<script> alert('Not a type of image format!') </script>";
+                    }
+                }
+            }
+
+
         }
 
     }
@@ -92,21 +919,21 @@
                           
                                 <!-- Profile -->
                                 <div class="d-flex align-items-center gap-2">
-                                  <span class="me-2 nav-name" style="font-size: 1rem;">Yanagi Masaru</span>
+                                  <span class="me-2 nav-name" style="font-size: 1rem;"><?php echo $username; ?></span>
                                   <div class="dropdown">
                                     <button class="btn border-white d-flex justify-content-center align-items-center"
                                       style="overflow: hidden; width: 2.5rem; height: 2.5rem; border-radius: 50%;" type="button"
                                       data-bs-toggle="dropdown" aria-expanded="false">
-                                      <img src="assets/default.png" alt="..." width="40rem" height="40rem">
+                                      <img src="<?php echo $profile_img; ?>" alt="..." width="40rem" height="40rem">
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                       <form method="POST">
         
                                         <div class="col p-2 d-flex flex-column justify-content-center align-items-center" style="gap: 0.8rem;">
                                             <div class="border d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem; overflow: hidden; border-radius: 50%;">
-                                                <img src="assets/default.png" alt="..." width=35rem" height=35rem">
+                                                <img src="<?php echo $profile_img; ?>" alt="..." width=35rem" height=35rem">
                                             </div>
-                                            <span class="me-2" style="font-size: 0.8rem;">Yanagi Masaru</span>
+                                            <span class="me-2" style="font-size: 0.8rem;"><?php echo $username; ?></span>
                                         </div>
                                         <hr class="dropdown-divider">
         
@@ -138,7 +965,7 @@
                                     <div class="card-body p-0 border-0 w-100 pt-3 pb-3">
     
                                         <div class="border-0 d-flex flex-row justify-content-end pe-3">
-                                            <button type="submit" name="edit-task" value="<?php echo $id; ?>" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1); color: #FF0022;">
+                                            <button type="submit" name="account-profile" value="<?php echo $id; ?>" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1); color: #FF0022;">
                                                 <i class="bi bi-backspace-fill"></i>
                                                 <span style="color: #FF0022;">Go back</span>
                                             </button>
