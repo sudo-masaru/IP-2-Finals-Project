@@ -240,10 +240,107 @@
                                             </div>
 
                                             <div class="border-0 pt-2 pb-2 pe-3 w-100 h-100 d-flex justify-content-end align-items-center">
-                                                <div class="d-flex justify-content-center align-items-center h-100">
-                                                    <i class="bi bi-caret-left-fill"></i>
+                                                <div class="d-flex border-0 flex-row justify-content-center align-items-center h-100" style="gap: 0.6rem;">
+                                                    <!-- <i class="bi bi-caret-left-fill"></i>
                                                     <span> 1 out of 100 </span>
-                                                    <i class="bi bi-caret-right-fill"></i>
+                                                    <i class="bi bi-caret-right-fill"></i> -->
+                                                    <!-- first
+                                                    prev
+                                                    next
+                                                    last -->
+
+                                                    <!-- FIRST -->
+                                                    <?php
+                                                        $userID=mysqli_real_escape_string($conn, $_GET['id']);
+                                                        if(isset($userID))
+                                                        {
+                                                            echo"
+                                                            <a href='?page-nr=1&id=$userID' class='border-0 d-flex justify-content-center align-items-center' style='background-color:rgb(235, 235, 235); text-decoration: none; border-radius: 6px; width: 1.75rem; font-size: 1.5rem; text-align: center;' title='First'>
+                                                                <span style='font-size: 1rem;'> &laquo; </span>
+                                                            </a>
+                                                            ";
+                                                        }
+                                                    ?>
+
+                                                    <!-- NEXT -->
+                                                    <?php
+                                                        $userID=mysqli_real_escape_string($conn, $_GET['id']);
+                                                        if(isset($userID))
+                                                        {
+                                                            if(isset($_GET['page-nr']) && $_GET['page-nr'] > 1)
+                                                            {
+                                                                $previous_page = intval($_GET['page-nr']) - 1;
+                                                                echo "
+                                                                    <a href='?page-nr=$previous_page&id=$userID' class='border d-flex justify-content-center align-items-center' style='background-color:rgb(235, 235, 235); text-decoration: none; border-radius: 6px; width: 1.75rem; font-size: 1.5rem; text-align: center;' title='Previous'>
+                                                                        <span style='font-size: 1rem;'> &lsaquo; </span>
+                                                                    </a>
+                                                                ";
+                                                            }
+                                                            else
+                                                            {
+                                                                echo "
+                                                                    <a class='border d-flex justify-content-center align-items-center' style='background-color:rgb(235, 235, 235); text-decoration: none; border-radius: 6px; width: 1.75rem; font-size: 1.5rem; text-align: center;' title='Previous'>
+                                                                        <span style='font-size: 1rem;'> &lsaquo; </span>
+                                                                    </a>
+                                                                ";
+                                                            }   
+                                                        }
+                                                    ?>
+
+                                                    <!-- COUNT -->
+                                                    <span style="font-size: 0.6rem;"> <b> 1 out of <?php echo $pages; ?> </b> </span>
+
+                                                    <!-- NEXT -->
+                                                     <?php
+                                                        $userID=mysqli_real_escape_string($conn, $_GET['id']);
+                                                        if(isset($userID))
+                                                        {
+                                                            if(!isset($_GET['page-nr']))
+                                                            {
+                                                                echo"
+                                                                    <a href='?page-nr=2&id=$userID' class='border d-flex justify-content-center align-items-center' style='background-color:rgb(235, 235, 235); text-decoration: none; border-radius: 6px; width: 1.75rem; font-size: 1.5rem; text-align: center;' title='Next'>
+                                                                        <span style='font-size: 1rem;'> &rsaquo; </span>
+                                                                    </a> 
+                                                                ";
+                                                            }
+                                                            else
+                                                            {
+                                                                if($_GET['page-nr'] >= $pages2)
+                                                                {
+                                                                    echo "
+                                                                        <a class='border d-flex justify-content-center align-items-center' style='background-color:rgb(235, 235, 235); text-decoration: none; border-radius: 6px; width: 1.75rem; font-size: 1.5rem; text-align: center;' title='Next'>
+                                                                            <span style='font-size: 1rem;'> &rsaquo; </span>
+                                                                        </a> 
+                                                                    ";
+                                                                }
+                                                                else
+                                                                {
+                                                                    $next_page = intval($_GET['page-nr']) + 1;
+                                                    
+                                                                    echo "
+                                                                        <a href='?page-nr=$next_page&id=$userID' class='border d-flex justify-content-center align-items-center' style='background-color:rgb(235, 235, 235); text-decoration: none; border-radius: 6px; width: 1.75rem; font-size: 1.5rem; text-align: center;' title='Next'>
+                                                                            <span style='font-size: 1rem;'> &rsaquo; </span>
+                                                                        </a>
+                                                                    ";
+                                                                }
+                                                            }
+                                                        }
+                                                    ?>
+
+                                                    <!-- last -->
+                                                    <?php
+                                                        $userID=mysqli_real_escape_string($conn, $_GET['id']);
+                                                        if(isset($userID))
+                                                        {
+                                                            echo"
+                                                                <a href='?page-nr=$pages2&id=$userID' class='border d-flex justify-content-center align-items-center' style='background-color:rgb(235, 235, 235); text-decoration: none; border-radius: 6px; width: 1.75rem; font-size: 1.5rem; text-align: center;' title='Last'>
+                                                                    <span style='font-size: 1rem;'> &raquo; </span>
+                                                                </a>
+                                                            ";
+                                                        }
+                                                    ?>
+
+
                                                 </div>
                                             </div>    
                                         </div>
