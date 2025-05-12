@@ -85,6 +85,17 @@
         $conn->close();
         header("Location: account_edit.php?&id=".$id);
     }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['admin-dashboard']))
+    {
+        $conn->close();
+        echo" <script> window.location.href=\"admin_dashboard.php?&id={$id}\"; </script> ";
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['users-table']))
+    {
+        $conn->close();
+        echo" <script> window.location.href=\"users_table.php?&id={$id}\"; </script> ";
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -220,18 +231,22 @@
 
                 <div class="col-auto border my-sidebar bg-light p-0">
 
-                    <div class="brand border-0 pt-3 pb-3 justify-content-center align-items-center">
-                        <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
-                    </div>
+                    <form class="my-sidebar"  method="POST">
 
-                    <button title="Dashboard" type="submit" value="<?php echo $id; ?>" name="redirect-to-task-page" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
-                        <i class="bi bi-speedometer2 align-self-center"></i>
-                        <span> <b>Dashboard</b> </span>
-                    </button>
-                    <button title="Users" type="submit" value="<?php echo $id; ?>" name="redirect-to-task-page" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
-                        <i class="bi bi-table align-self-center"></i>
-                        <span> <b>Users</b> </span>
-                    </button>
+                        <div class="brand border-0 pt-3 pb-3 justify-content-center align-items-center">
+                            <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
+                        </div>
+
+                        <button type="submit" title="Dashboard"  value="<?php echo $id; ?>" name="admin-dashboard" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
+                            <i class="bi bi-speedometer2 align-self-center"></i>
+                            <span> <b>Dashboard</b> </span>
+                        </button>
+                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="users-table" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                            <i class="bi bi-table align-self-center"></i>
+                            <span> <b>Users</b> </span>
+                        </button>
+
+                    </form>
                     
 
                 </div>
