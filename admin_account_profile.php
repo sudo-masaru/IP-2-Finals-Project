@@ -86,12 +86,12 @@
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-settings']))
     {
         $conn->close();
-        header("Location: account_edit.php?&id=".$id);
+        header("Location: admin_account_edit.php?&id=".$id);
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['edit-profile']))
     {
         $conn->close();
-        header("Location: account_edit.php?&id=".$id);
+        header("Location: admin_account_edit.php?&id=".$id);
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-deletion']))
     {

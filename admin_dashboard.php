@@ -78,12 +78,12 @@
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['profile']))
     {
         $conn->close();
-        header("Location: account_profile.php?&id=".$id);
+        header("Location: admin_account_profile.php?&id=".$id);
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-settings']))
     {
         $conn->close();
-        header("Location: account_edit.php?&id=".$id);
+        header("Location: admin_account_edit.php?&id=".$id);
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['admin-dashboard']))
     {

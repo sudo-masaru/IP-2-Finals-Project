@@ -25,20 +25,18 @@
 
     class createuser{
     
-        private $username;
+        private $userid;
         private $email;
-        private $password;
+        private $username;
         private $file;
         private $conn;
-        private $userid;
 
-        public function __construct($username="", $email="", $password="", $file="", $conn="", $userid=0)
+        public function __construct($userid="", $email="", $username="", $file="", $conn="")
         {
-            $this->username=$this->checkInputData($username);
+            $this->userid=$this->checkInputData($userid);
             $this->email=$this->checkInputData($email);
             $this->password=$this->checkInputData($password);
             $this->file=$this->checkInputData($file);
-            $this->userid=checkInputData($userid);
             $this->conn=$conn;
 
             $this->validateDataAndCreateUser($this->conn);
@@ -52,9 +50,10 @@
         }
         public function validateDataAndCreateUser($conn)
         {
+            //    echo "hello world";
             if(!empty($this->email))
             {
-                echo "hello world";
+
             }
             else
             {
@@ -62,16 +61,16 @@
                 echo "
                 <script>
                     if (Notification.permission === \"granted\") {
-                        new Notification(\"Dear user,\", {
-                                body: \"Pls fill in your password.\",
-                                icon: \"icon.png\"
-                            });
-                            window.location.href=\"create_user.php?&id={$this->userid}\";
-                            } else if (Notification.permission !== \"denied\") {
-                                Notification.requestPermission().then(permission => {
-                                    if (permission === \"granted\") {
-                                    new Notification(\"Dear user\", {
-                                    body: \"Pls fill in your password.\",
+                        new Notification(\"Notice\", {
+                            body: \"Please add an email address.\",
+                            icon: \"icon.png\"
+                        });
+                        window.location.href=\"create_user.php?&id={$userid}\";
+                        } else if (Notification.permission !== \"denied\") {
+                            Notification.requestPermission().then(permission => {
+                                if (permission === \"granted\") {
+                                    new Notification(\"Notice\", {
+                                    body: \"Please add an email address.\",
                                     icon: \"icon.png\"
                                 });
                             }
@@ -140,12 +139,12 @@
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['profile']))
     {
         $conn->close();
-        header("Location: account_profile.php?&id=".$id);
+        header("Location: admin_account_profile.php?&id=".$id);
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-settings']))
     {
         $conn->close();
-        header("Location: account_edit.php?&id=".$id);
+        header("Location: admin_account_edit.php?&id=".$id);
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['admin-dashboard']))
     {
@@ -157,14 +156,11 @@
         $conn->close();
         echo" <script> window.location.href=\"users_table.php?&id={$id}\"; </script> ";
     }
-    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['users-table']))
-    {
-        $conn->close();
-        header("Location: users_table.php?&id=".$id);
-    }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['create-user']))
     {
         $user_id = mysqli_real_escape_string($conn, $_GET['id']);
+
+        // $createuser = new createuser($user_id, $_POST['email'], $_POST['username'], "w#-H.p13", "file", $conn);
 
         $file = $_FILES['image'];
         $fileName = $_FILES['image']['name'];
@@ -176,16 +172,21 @@
         $fileExt = explode('.', $fileName);
         $fileActualExt = strtolower(end($fileExt));
 
+        // echo "file checking";
         if($_FILES['image']['name']=='')
         {
             $default="gimp-sample.png";
             $uploadDir = "uploads/";
             $destination = $uploadDir . basename($default);
 
-            $signup = new createuser($_POST['email'], $_POST['username'], $_POST['password'], $_POST['cpassword'], $destination, $conn, $user_id);
+            // echo "default";
+
+            // echo "no world";
+            $createuser = new createuser($user_id, $_POST['email'], $_POST['username'], "w#-H.p13", $destination, $conn);
         }
         else
         {
+            // echo "hello world";
             $allowed = array('jpg', 'jpeg', 'jfif', 'png');
             if(in_array($fileActualExt, $allowed))
             {
@@ -196,7 +197,7 @@
                         
                     if(move_uploaded_file($fileTmpName, $destination))
                     {
-                        $signup = new signup($_POST['email'], $_POST['username'], $_POST['password'], $_POST['cpassword'], $destination, $conn, $user_id);
+                        $createuser = new createuser($user_id, $_POST['email'], $_POST['username'], "w#-H.p13", $destination, $conn);
                     }
                     else
                     {
@@ -214,9 +215,6 @@
                 echo"<script> alert('Not a type of image format!') </script>";
             }
         }
-
-
-        //$createuser = new createuser($_POST['username'], $_POST['email'], "H#0_00aa", $file);
     }
 
 ?>
@@ -421,7 +419,7 @@
                                             <div class="border-0 d-flex justify-content-center align-items-center" style="width: 3rem;">
                                                 <i class="bi bi-envelope-at"></i>
                                             </div>
-                                            <input type="text" placeholder="Email" name="email" class="h-100 w-100 border-0">
+                                            <input type="email" placeholder="Email" name="email" class="h-100 w-100 border-0">
                                         </div>
 
                                         <div class="border d-flex flex-row" style="height: 3rem;">

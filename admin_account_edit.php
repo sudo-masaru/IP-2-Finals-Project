@@ -101,7 +101,7 @@
                                                     body: \"Update complete. no changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -124,7 +124,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -154,7 +154,7 @@
                                                     body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -177,7 +177,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -215,7 +215,7 @@
                                                     body: \"Update complete. no changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -238,7 +238,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -268,7 +268,7 @@
                                                     body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -291,7 +291,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -329,7 +329,7 @@
                                                     body: \"Update complete. no changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -352,7 +352,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -382,7 +382,7 @@
                                                     body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -405,7 +405,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -453,7 +453,7 @@
                                                     body: \"Update complete. no changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -476,7 +476,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -506,7 +506,7 @@
                                                     body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -529,7 +529,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -567,7 +567,7 @@
                                                     body: \"Update complete. no changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -590,7 +590,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -620,7 +620,7 @@
                                                     body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -643,7 +643,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -681,7 +681,7 @@
                                                     body: \"Update complete. no changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -704,7 +704,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -734,7 +734,7 @@
                                                     body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -757,7 +757,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -805,7 +805,7 @@
                                                     body: \"Update complete. no changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -828,7 +828,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -858,7 +858,7 @@
                                                     body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -881,7 +881,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -900,19 +900,6 @@
                         }
                         else if($existing_email === 0)
                         {
-                            // no changes made to email
-
-                            //echo "existing_email === 0";
-
-                            // if($this->file !== $this->current_profile)
-                            // {
-                            //     echo "current: ".$this-> file."<br> old: ".$this->file;
-                            // }
-                            // else if($this->file === $this->current_profile)
-                            // {
-                            //     echo "current: ".$this-> file."<br> old: ".$this->file;
-                            // }
-
                             $sql_profile = "SELECT id, profile_img FROM users WHERE id='".$this->userid."'";
                             $result7 = mysqli_query($this->conn, $sql_profile);
                             $current_profile = mysqli_fetch_assoc($result7);
@@ -932,7 +919,7 @@
                                                     body: \"Update complete. no changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -955,7 +942,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -985,7 +972,7 @@
                                                     body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -1008,7 +995,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -1027,19 +1014,6 @@
                         }
                         else if($this->email !== $this->current_email && $existing_email > 0)
                         {
-                            // no changes made to email
-
-                            //echo "existing_email === 0";
-
-                            // if($this->file !== $this->current_profile)
-                            // {
-                            //     echo "current: ".$this-> file."<br> old: ".$this->file;
-                            // }
-                            // else if($this->file === $this->current_profile)
-                            // {
-                            //     echo "current: ".$this-> file."<br> old: ".$this->file;
-                            // }
-
                             $sql_profile = "SELECT id, profile_img FROM users WHERE id='".$this->userid."'";
                             $result7 = mysqli_query($this->conn, $sql_profile);
                             $current_profile = mysqli_fetch_assoc($result7);
@@ -1059,7 +1033,7 @@
                                                     body: \"Update complete. no changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -1082,7 +1056,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -1112,7 +1086,7 @@
                                                     body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -1135,7 +1109,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"account_profile.php?&id={$this->userid}\";
+                                                window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -1163,7 +1137,7 @@
                                     body: \"Please fill in your username.\",
                                     icon: \"icon.png\"
                                 });
-                                window.location.href=\"account_edit.php?&id={$this->userid}\";
+                                window.location.href=\"admin_account_edit.php?&id={$this->userid}\";
                                 } else if (Notification.permission !== \"denied\") {
                                     Notification.requestPermission().then(permission => {
                                         if (permission === \"granted\") {
@@ -1187,7 +1161,7 @@
                                 body: \"Please fill in your email.\",
                                 icon: \"icon.png\"
                             });
-                            window.location.href=\"account_edit.php?&id={$this->userid}\";
+                            window.location.href=\"admin_account_edit.php?&id={$this->userid}\";
                             } else if (Notification.permission !== \"denied\") {
                                 Notification.requestPermission().then(permission => {
                                     if (permission === \"granted\") {
@@ -1298,12 +1272,12 @@
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['home']))
     {
         $conn->close();
-        header("Location: admin_dashboard.php.php?&id=".$id);
+        header("Location: admin_dashboard.php?&id=".$id);
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-profile']))
     {
         $conn->close();
-        header("Location: account_profile.php?&id=".$id);
+        header("Location: admin_account_profile.php?&id=".$id);
     }
 
 
