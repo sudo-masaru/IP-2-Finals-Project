@@ -109,7 +109,104 @@
 
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="my_sidebar.css">
-    <link rel="stylesheet" href="admin_dashboard.css">
+    <!-- <link rel="stylesheet" href="admin_dashboard.css"> -->
+    <style>
+        /* body{
+            overflow: hidden;
+        }
+
+        .my-row{
+            display: flex;
+            flex-direction: row-reverse;
+        }
+        */
+        .my-main-content{
+            overflow-x: auto;
+            height: 100vh;
+        } 
+
+        .Logo-txt {
+            font-size: 1.25rem; 
+            font-weight: bold;
+            background: linear-gradient(to right, #3DE5B1, #42B1F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        select:focus-within{
+            outline-style: none;
+        }
+
+        .card-headline{
+            display: flex;
+        }
+
+
+        .card-header-grid{
+            display: flex;
+        }
+
+        .my-card{
+            flex-direction: row;
+        }
+
+        .sub-card{
+            width: 15rem;
+            height: 8rem;
+
+            background-color: #ffffff;
+            box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2); 
+        }
+
+        @media (max-width: 780px){
+            .my-row{
+                display: flex;
+                flex-direction:column;
+            }
+
+            .my-main-content
+            {
+                overflow: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .my-main-content::-webkit-scrollbar 
+            {
+                display: none;
+            }
+
+            select:focus-within{
+                outline-style: none;
+            }
+
+            .card-headline{
+                display: none;
+            }
+
+            .card-header-grid-2{
+                display: none;
+            }
+
+            .my-card{
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 600px){ 
+            .card-header-grid-1{
+                display: none;
+            }
+        }
+
+        @media (max-width: 500px){ 
+            .btn-txt{
+                display: none;
+            }
+        }
+    </style>
 
 </head>
 <body>
@@ -174,54 +271,7 @@
                             
                             
                             <!-- content -->
-                            <div class="card my-card border-0 pt-1 pb-3 rounded-0 d-flex flex-wrap justify-content-start align-items-center" style="gap: 1rem;">
-
-                                <div class="sub-card border rounded-2">
-                                    <div class="card-header bg-white border-0">
-                                        <i class="bi bi-person-fill"></i>
-                                        Users
-                                    </div>
-
-                                    <div class="card-body">
-                                        <!-- 0 -->
-                                        <?php
-                                        
-                                            $sql = "SELECT COUNT($id) AS NumberOfUsers FROM users;";
-                                            $result=mysqli_query($conn, $sql);
-
-                                            if ($result && mysqli_num_rows($result) > 0) {
-                                                $row = mysqli_fetch_assoc($result);
-                                                echo $row['NumberOfUsers'];
-                                            } 
-                                            else 
-                                            {
-                                                echo "0";
-                                            }
-                                        ?>
-                                    </div>
-                                </div>
-                                <div class="sub-card border rounded-2">
-                                    <div class="card-header bg-white border-0">
-                                        *
-                                    </div>
-                                </div>
-                                <div class="sub-card border rounded-2">
-                                    <div class="card-header bg-white border-0">
-                                        *
-                                    </div>
-                                </div>
-                                <div class="sub-card border rounded-2">
-                                    <div class="card-header bg-white border-0">
-                                        *
-                                    </div>
-                                </div>
-                                <div class="sub-card border rounded-2">
-                                    <div class="card-header bg-white border-0">
-                                        *
-                                    </div>
-                                </div>
-
-                            </div>
+                            
 
                         </div>
 
@@ -231,7 +281,7 @@
 
                 <div class="col-auto border my-sidebar bg-light p-0">
 
-                    <form class="my-sidebar"  method="POST">
+                   <form method="POST">
 
                         <div class="brand border-0 pt-3 pb-3 justify-content-center align-items-center">
                             <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
@@ -246,8 +296,7 @@
                             <span> <b>Users</b> </span>
                         </button>
 
-                    </form>
-                    
+                   </form>
 
                 </div>
 

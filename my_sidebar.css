@@ -7,23 +7,94 @@ body{
     flex-direction: row-reverse;
 }
 
+.my-sidebar{
+    width: 5rem;
+}
 .my-sidebar form{
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+.my-sidebar form .brand{
+    display: flex;
+}
+.my-sidebar form .sidebar-nav{
+    height: 4rem;
+    width: 100%;
+}
+.my-sidebar form  .active{
+    background-color: #42B8EA;
+}
+.my-sidebar form .active i{
+    color: #ffffff;
+}
+.my-sidebar form  .inactive{
+    background-color: #f8f9fa;
+}
+.my-sidebar form  .inactive:hover{
+    transition: 0.3s ease-in-out;
+    background-color: #ececec;
+}
+.my-sidebar form .active span{
+    color: #ffffff;
+}
+.my-sidebar form .inactive span{
+    color: #202020;
+}
+.my-sidebar form .nav-name{
+    display: block;
+}
+.my-sidebar form span{
+    font-size: 0.6rem;
+}
+
+
+@media (max-width: 780px){ 
+
+    .my-sidebar{
+        height: 3.5rem;
+        width: 100%;
+
+        position: fixed;
+        bottom: 0;
+
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        border-style: none;
+    }
+    .my-sidebar form{
+        width: 100%;
+
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    .my-sidebar form .brand{
+        display: none;
+    }
+
+}
+
+/* .my-sidebar{
     width: 5rem;
 
     display: flex;
     flex-direction: column;
 }
 
-.my-sidebar form .brand{
+.my-sidebar .brand{
     display: flex;
 }
 
-.my-sidebar form .sidebar-nav{
+.my-sidebar .sidebar-nav{
     height: 4rem;
     width: 100%;
 }
 
-.my-sidebar form .sidebar-nav i{
+.my-sidebar .sidebar-nav i{
     font-size: 1.25rem; color: #202020;
 }
 
@@ -42,7 +113,6 @@ body{
 }
 .inactive:hover i{
     transition: 0.3s ease-in-out;
-    /* color: #ffffff; */
 }
 .sidebar-nav span{
     font-size: 0.4rem;
@@ -90,4 +160,4 @@ body{
     .nav-name{
         display: none;
     }
-}
+} */
