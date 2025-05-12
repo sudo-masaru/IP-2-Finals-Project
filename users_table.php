@@ -22,6 +22,30 @@
             }
     }
 
+    /* start of fetching to display list of users in a table */  //* DISPLAY USERS TABLE
+    $start = 0;
+    $rows_per_page = 10;
+
+    $records = mysqli_query($conn, "SELECT * FROM users");
+
+    $nr_of_rows = mysqli_num_rows($records);
+
+    $pages = ceil($nr_of_rows / $rows_per_page);
+
+    if(isset($_GET['page-nr'])) 
+    {
+        $page = intval($_GET['page-nr']) - 1; 
+        if($page < 0) 
+        {
+            $page = 0;
+        }
+        $start = $page * $rows_per_page;
+    }
+
+    $sql_display = "SELECT id, username, email, profile_img FROM users LIMIT $start, $rows_per_page";
+    $result_display = mysqli_query($conn, $sql_display);
+    /* end of fetching to display list of users in a table */
+
     if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['sign-out']))
     {
         // echo "hello world";
@@ -284,60 +308,51 @@
                                                             </div> -->
 
                                                             <?php
-                                                                    $usrID = mysqli_real_escape_string($conn, $_GET['id']);
-                                                                        // echo "id: ".$usrID; 
-                                                                    $sql_users="SELECT id, username, email, profile_img FROM users WHERE id='$usrID'";
-                                                                    $result_query = mysqli_query($conn, $sql_users);
-                                                                    
-                                                                    if(mysqli_num_rows($result_query) > 0)
+                                                                if($result_display->num_rows > 0)
+                                                                {
+                                                                    while($row = $result_display->fetch_assoc())
                                                                     {
-                                                                        while($row = $result_query->fetch_assoc())
-                                                                        {
-                                                                            $usr_id=$row['id'];
-                                                                            $username=$row['username'];
-                                                                            $email=$row['email'];
-                                                                            $profile_img=$row['profile_img'];
-
-                                                                            // echo "hello world";
-                                                                            echo"
-                                                                            
-                                                                                <div class='border-bottom pb-3 pt-3 w-100 p-0 d-flex flex-row justify-content-start align-items-center'>
+                                                                        echo 
+                                                                        " 
+                                                                        <div class='border-bottom pb-3 pt-3 w-100 p-0 d-flex flex-row justify-content-start align-items-center'>
                                                                                 <div class='hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2'>
-                                                                                    <span> $usr_id </span>
+                                                                                    <span> ".$row['id']." </span>
                                                                                 </div>
                                                                                 <div class='hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2'>
                                                                                     <div class='border d-flex justify-content-center align-items-center' style='border-radius: 50%; width: 2rem; height: 2rem; overflow: hidden;'>
-                                                                                        <img src='$profile_img' alt='...' style='width: 3rem; height: 3rem;'>
+                                                                                        <img src='".$row['profile_img']."' alt='...' style='width: 3rem; height: 3rem;'>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class='hide-column border-0 w-100 h-100 justify-content-center align-items-center pt-2 pb-2'>
-                                                                                    <span> $username </span>
+                                                                                    <span> ".$row['username']." </span>
                                                                                 </div>
                                                                                 <div class='border-0 p-1 w-100 d-flex h-100 justify-content-center align-items-center pt-2 pb-2' style='text-align: justify;'>
-                                                                                    <span> $email  </span>
+                                                                                    <span> ".$row['email']."  </span>
                                                                                 </div>
                                                                                 <div class='border-0 w-100 h-100 d-flex justify-content-center align-items-center pt-2 pb-2'>
                                                                                     <div class='border d-flex flex-row'>
-                                                                                        <button type='submit' name='action' value='$userid' class='bg-light border-0 rounded-3' title='Press to operate'>
+                                                                                        <button type='submit' name='action' value='".$row['id']."' class='bg-light border-0 rounded-3' title='Press to operate'>
                                                                                             <i class='bi bi-three-dots'></i>
                                                                                         </button>
                                                                                         <div>
                                                                                             <select name='selected_action' class='w-100 border-0 bg-light p-1 rounded-3' style='font-size: 0.8rem;'>
                                                                                                 <optgroup label='Actions'>
-                                                                                                    <option value='view'>view</option>
-                                                                                                    <option value='edit'>edit</option>
-                                                                                                    <option value='delete'>delete</option>
+                                                                                                    <option value='".$row['id']."'>view</option>
+                                                                                                    <option value='".$row['id']."'>edit</option>
+                                                                                                    <option value='".$row['id']."'>delete</option>
                                                                                                 </optgroup>
                                                                                             </select>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            
-                                                                            ";
-                                                                        }
+                                                                        ";
                                                                     }
-                                                            
+                                                                }
+                                                                else
+                                                                {
+                                                                    echo "";
+                                                                }   
                                                             ?>
 
                                                     </div>
