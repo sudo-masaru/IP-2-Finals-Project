@@ -111,57 +111,10 @@
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="my_sidebar.css">
     <style>
-        /* body{
-            overflow: hidden;
-        }
-
-        .my-row{
-            display: flex;
-            flex-direction: row-reverse;
-        }
-
-        .my-sidebar{
-            width: 5rem;
-
-            display: flex;
-            flex-direction: column;
-        } */
-
-        /* .my-main-content{
+        .my-main-content{
             overflow-x: auto;
             height: 100vh;
-        }
-
-        .my-sidebar .brand{
-            display: flex;
-        }
-
-        .my-sidebar .sidebar-nav{
-            height: 4rem;
-            width: 100%;
-        }
-
-        .my-sidebar .sidebar-nav i{
-            font-size: 1.25rem; color: #202020;
-        }
-
-        .active{
-            background-color: #42B8EA;
-        }
-        .my-sidebar .active i{
-            color: #ffffff;
-        }
-        .inactive{
-            background-color: #f8f9fa;
-        }
-        .inactive:hover{
-            transition: 0.3s ease-in-out;
-            background-color: #42B8EA;
-        }
-        .inactive:hover i{
-            transition: 0.3s ease-in-out;
-            color: #ffffff;
-        } */
+        } 
 
         .Logo-txt {
             font-size: 1.25rem; 
@@ -181,8 +134,25 @@
             display: flex;
         }
 
-        .nav-name{
-            display: block;
+
+        .card-header-grid{
+            display: flex;
+        }
+
+        .my-card{
+            flex-direction: row;
+        }
+
+        .sub-card{
+            width: 15rem;
+            height: 8rem;
+
+            background-color: #ffffff;
+            box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2); 
+        }
+
+        .search-bar-column{
+            flex-direction: row;
         }
 
         @media (max-width: 780px){
@@ -190,19 +160,6 @@
                 display: flex;
                 flex-direction:column;
             }
-            .my-sidebar{
-                /* height: 4rem;
-                width: 100%;
-
-                position: fixed;
-                bottom: 0;
-
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-
-                border-style: none;
-            } */
 
             .my-main-content
             {
@@ -216,20 +173,6 @@
                 display: none;
             }
 
-            /* .my-sidebar .brand{
-                display: none;
-            }
-
-            .my-sidebar .sidebar-nav{
-                justify-content: center;
-                align-items: center;
-                width: 5rem;
-            }
-            
-            .my-sidebar .sidebar-nav i{
-                font-size: 1rem;
-            } */
-
             select:focus-within{
                 outline-style: none;
             }
@@ -238,20 +181,40 @@
                 display: none;
             }
 
-            .nav-name{
+            .card-header-grid-2{
                 display: none;
             }
 
-            .search-bar{
-                width: 8rem;
+            .my-card{
+                flex-direction: column;
+            }
+
+            .search-bar-column{
+                flex-direction: column;
             }
         }
-    }
+
+        @media (max-width: 600px){ 
+            .card-header-grid-1{
+                display: none;
+            }
+        }
+
         @media (max-width: 500px){ 
             .btn-txt{
                 display: none;
             }
         }
+
+        .hide-column{
+            display: flex;
+        }
+        @media (max-width: 800px){ 
+            .hide-column{
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -313,43 +276,19 @@
                             </nav>
                         </nav>
                         
-                        <div class="d-flex flex-column border-0 p-1">
+                        <div class="d-flex flex-column border-0 ps-3 pe-3" style="gap: 1rem;">
                             
-                            
-                            <div class="container-fluid">
+                            <div class="card p-0 rounded-3 border d-flex justify-content-center align-items-center" style="height: 20rem; overflow: hidden; background-color: #F3FAFB;">
+                                <img src="assets/banner.jpeg" alt="..." style="width: 20rem height: 20rem;">
+                            </div>
 
-                                <div class="row">
-                                    <div class="card p-0" style="height: 20rem;">
-                                        
-                                            <div class="card-body p-0 rounded-3 w-100 h-100 d-flex justify-content-center align-items-center" style="overflow: hidden; background-color: #F3FAFB;">
-                                                    <img src="assets/banner.jpeg" alt="..." style="">
-                                            </div>
-
-                                    </div>
-                                    <div class="card border-0 p-0">
-                                        <div class="card-header d-flex flex-row border-0 bg-white p-0 ps-2 pe-2 pt-3 pb-3" style="height: 5rem;">
-                                            <div class="border-0 w-100 h-100 d-flex justify-content-start align-items-center">
-                                                <span style="font-size: 1.5rem;"> Tasks </span>
-                                            </div>
-                                            <div class="border-0 w-100 h-100 d-flex justify-content-end align-items-center">
-                                                <form method="POST" class="h-100 w-100 d-flex justify-content-end align-items-center">
-                                                    <button type="submit" name="create-new-task" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
-                                                        <i class="bi bi-plus-square"></i>
-                                                        <span class="text-white btn-txt">New Task</span>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card">
-                                        <form method="POST">
-
-                                        </form>
-                                    </div>
-                                    
+                            <div class="card rounded-0 border-0 d-flex flex-row" style="height: 3rem;">
+                                <div class="w-100 h-100 d-flex justify-content-start align-items-center border-0">
+                                    <span> <b>TASKS</b> </span>
                                 </div>
-
+                                <div class="w-100 h-100 d-flex justify-content-end align-items-center border-0">
+                                    f
+                                </div>
                             </div>
 
                         </div>
