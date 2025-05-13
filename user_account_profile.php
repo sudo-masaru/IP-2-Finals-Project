@@ -8,8 +8,9 @@
             $profile_img="";
             $username="";
             $email="";
+            $date="";
 
-            $sql = "SELECT id, username, email, profile_img FROM users WHERE id='$id'";
+            $sql = "SELECT id, username, email, profile_img, created_at FROM users WHERE id='$id'";
             $result = mysqli_query($conn, $sql);
 
             if(mysqli_num_rows($result) > 0)
@@ -19,6 +20,7 @@
                     $profile_img=$row['profile_img'];
                     $username=$row['username'];
                     $email=$row['email'];
+                    $date=$row['created_at'];
                 }
             }
     }
@@ -103,11 +105,38 @@
         $conn->close();
         echo" <script> window.location.href=\"files.php?&id={$id}\"; </script> ";
     }
-
-    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['create-new-task']))
+        else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-deletion']))
     {
-        $conn->close();
-        echo" <script> window.location.href=\"create_task.php?&id={$id}\"; </script> ";
+        $sql = "DELETE FROM users WHERE id='$id'";
+        if($conn->query($sql) === TRUE) 
+        {
+            setcookie("TOKEN", "", time()+(86400 * 30), "/");
+            setcookie("alwaysLogged", "", time()+(86400 * 30), "/");
+
+            session_unset();
+            session_destroy();
+
+            $conn->close();
+            echo "
+            <script>
+                    if (Notification.permission === \"granted\") {
+                        new Notification(\"Notice,\", {
+                            body: \"Account has been deleted.\",
+                            icon: \"icon.png\"
+                        });
+                        window.location.href=\"index.php\";
+                        } else if (Notification.permission !== \"denied\") {
+                            Notification.requestPermission().then(permission => {
+                                if (permission === \"granted\") {
+                                    new Notification(\"Notice\", {
+                                    body: \"Account has been deleted.\",
+                                    icon: \"icon.png\"
+                                });
+                            }
+                        });
+                    }
+            </script>";
+        }
     }
 
 ?>
@@ -116,7 +145,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fluttertask - home</title>
+    <title>Fluttertask - edit user</title>
     <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNC4yNSAyLjVhLjI1LjI1IDAgMCAwLS4yNS0uMjVIN0EyLjc1IDIuNzUgMCAwIDAgNC4yNSA1djE0QTIuNzUgMi43NSAwIDAgMCA3IDIxLjc1aDEwQTIuNzUgMi43NSAwIDAgMCAxOS43NSAxOVY5LjE0N2EuMjUuMjUgMCAwIDAtLjI1LS4yNUgxNWEuNzUuNzUgMCAwIDEtLjc1LS43NXptLjc1IDkuNzVhLjc1Ljc1IDAgMCAxIDAgMS41SDlhLjc1Ljc1IDAgMCAxIDAtMS41em0wIDRhLjc1Ljc1IDAgMCAxIDAgMS41SDlhLjc1Ljc1IDAgMCAxIDAtMS41eiIgY2xpcC1ydWxlPSJldmVub2RkIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1Ljc1IDIuODI0YzAtLjE4NC4xOTMtLjMwMS4zMzYtLjE4NnEuMTgyLjE0Ny4zMjMuMzQybDMuMDEzIDQuMTk3Yy4wNjguMDk2LS4wMDYuMjItLjEyNC4yMkgxNmEuMjUuMjUgMCAwIDEtLjI1LS4yNXoiLz48L3N2Zz4=" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
@@ -127,6 +156,7 @@
         .my-main-content{
             overflow-x: auto;
             height: 100vh;
+            border-bottom: 8rem;
         } 
 
         .Logo-txt {
@@ -178,8 +208,12 @@
             border: 1px solid rgb(247, 247, 247);
         }
 
-        .content-mobile{
-            padding-bottom: 6rem;
+        .profile-card{
+            flex-direction:row;
+        }
+        .fg{
+            width: 100%;
+            height: 20rem;
         }
 
         @media (max-width: 780px){
@@ -193,6 +227,7 @@
                 overflow: auto;
                 scrollbar-width: none;
                 -ms-overflow-style: none;
+                padding-bottom: 8rem;
             }
 
             .my-main-content::-webkit-scrollbar 
@@ -220,9 +255,12 @@
                 flex-direction: column;
             }
 
-
             .content-mobile{
                 padding-bottom: 6rem;
+            }
+
+            .profile-card{
+                flex-direction:column;
             }
         }
 
@@ -310,54 +348,63 @@
                         
                         <div class="d-flex flex-column border-0 ps-3 pe-3" style="gap: 1rem;">
                             
-                            <div class="card p-0 rounded-3 border d-flex justify-content-center align-items-center" style="height: 20rem; overflow: hidden; background-color: #F3FAFB;">
-                                <img src="assets/banner.jpeg" alt="..." style="width: 20rem height: 20rem;">
-                            </div>
+                            <!-- <div class="card p-0 rounded-3 border-0 d-flex justify-content-center align-items-center" style="height: 20rem; overflow: hidden; background-color:rgb(248, 248, 248);">
+                                <img src="assets/banner2.jpeg" alt="..." style="width: 20rem height: 20rem;">
+                            </div> -->
 
-                            <div class="card rounded-0 border-0 d-flex flex-row" style="height: 3rem;">
-                                <div class="w-100 h-100 d-flex justify-content-start align-items-center border-0">
-                                    <span> <b>TASKS</b> </span>
-                                </div>
-                                <div class="w-100 h-100 d-flex justify-content-end align-items-center border-0">
-                                    <div class="border-0 pt-2 pb-2 pe-3 w-100 h-100 d-flex justify-content-end align-items-center">
-                                            <form method="POST">
-                                                <button type="submit" name="create-new-task" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
-                                                    <i class="bi bi-plus-circle"></i>
-                                                    <span class="text-white btn-txt">New Task</span>
-                                                </button>
-                                            </form>
-                                    </div> 
-                                </div>
-                            </div>
+                            <!-- content -->
+                            <div class="card my-card border p-1 pt-1 pb-3 rounded-0 d-flex flex-column justify-content-center align-items-center" style="gap: 1rem;">
 
-                            <div class="content-mobile card border-0 rounded-0 d-flex flex-column">
-                                
-                                <form method="SUBMIT" class="d-flex flex-column w-100 h-100" style="gap: 1rem;">
-
-                                        <!-- list -->
-                                        <!-- 
-                                        <div class="card rounded-2 d-flex" style="height: 6rem;">
-                                            <button type="submit" class="list-card rounded-2 w-100 h-100 d-flex flex-row">
-                                                    <div class="border-0 h-100 d-flex justify-content-center align-items-center" style="width: 5rem;">
-                                                        <i class="bi bi-view-list"></i>
-                                                    </div>
-                                                    <div class="border-0 w-100 d-flex justify-content-start flex-column">
-                                                        <div class="border-0 w-100 h-100 d-flex justify-content-start align-items-center">
-                                                                <span> <b> Hello world </b> </span>
-                                                        </div>
-                                                        <div class="border-0 w-100 h-100 d-flex justify-content-start align-items-center">
-                                                                <span> May 14 </span>
-                                                        </div>
-                                                    </div>
+                                <form method="POST" class="w-100">
+                                    <div class="card-header w-100 d-flex justify-content-center align-items-center bg-white">
+                                        PROFILE
+                                    </div>
+                                    
+                                    <div class="card-body p-0 border-0 w-100 pt-3 pb-3">
+    
+                                        <div class="border-0 d-flex flex-row justify-content-end pe-3">
+                                            <button type="submit" value="<?php echo $id ?>" name="account-settings" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
+                                                <i class="bi bi-pencil-square"></i>
+                                                <span class="text-white btn-txt">Edit Profile</span>
                                             </button>
-                                        </div> 
-                                        -->
+                                        </div>
+                                        <br>
 
+                                        <div class="border-0 w-100 pt-3 pb-3 d-flex flex-column justify-content-center align-items-center">
 
-                                        
+                                            <div class="border d-flex justify-content-center align-items-center" style="overflow: hidden; width: 8rem; height: 8rem; border-radius: 50%;">
+                                                <img src="<?php echo $profile_img; ?>" alt="..." width="150rem" height="150rem">
+                                            </div>
 
+                                            <br>
+
+                                            <h1>
+                                                <!-- Masaru -->
+                                                <?php echo $username; ?>
+                                            </h1>
+                                            <span style="color: grey;">
+                                                <!-- email@email.com -->
+                                                 <?php echo $email; ?>
+                                            </span>
+
+                                            <br>
+
+                                            <span style="color: rgb(177, 177, 177);">
+                                                <!-- Created at : 00-00-0000 -->
+                                                 <?php echo "Created at: ".$date; ?>
+                                            </span>
+
+                                        </div>
+
+                                        <div class="border-0 w-100 pt-3 pb-3 d-flex justify-content-center align-items-center">
+                                            <button type="submit" name="account-deletion" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1);">
+                                                <i class="bi bi-trash text-danger"></i>
+                                                <span class="text-danger">Delete Account</span>
+                                            </button>
+                                        </div>
+    
+                                    </div>
                                 </form>
-                                
 
                             </div>
 
@@ -387,9 +434,9 @@
                         <button type="submit" title="Users" value="<?php echo $id; ?>" name="calendar" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
                             <i class="bi bi-calendar-week align-self-center"></i>
                             <span> <b>Calendar</b> </span>
-                        <!-- </button>
+                        </button>
 
-                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="files" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                        <!-- <button type="submit" title="Users" value="<?php echo $id; ?>" name="files" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
                             <i class="bi bi-file-earmark-fill align-self-center"></i>
                             <span> <b>Files</b> </span>
                         </button> -->
