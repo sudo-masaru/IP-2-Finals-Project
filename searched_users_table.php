@@ -44,7 +44,7 @@
 
     $search_val = mysqli_real_escape_string($conn, $_GET['search_val']);
 
-    $sql_display = "SELECT id, username, email, profile_img FROM users WHERE id='%$search_val%' OR username='$search_val' OR email='$search_val' LIMIT $start, $rows_per_page";
+    $sql_display = "SELECT id, username, email, profile_img FROM users WHERE id LIKE '%$search_val%' OR username LIKE '%$search_val%' OR email LIKE '%$search_val%' LIMIT $start, $rows_per_page";
     $result_display = mysqli_query($conn, $sql_display);
     /* end of fetching to display list of users in a table */
 

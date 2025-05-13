@@ -160,6 +160,13 @@
             box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2); 
         }
 
+
+        .content-card{
+            flex-direction: row;
+        }
+        .content-card .card{
+            box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.2); 
+        }
         @media (max-width: 780px){
             .my-row{
                 display: flex;
@@ -192,6 +199,14 @@
 
             .my-card{
                 flex-direction: column;
+            }
+
+
+            .content-card{
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                padding-bottom: 4rem;
             }
         }
 
@@ -271,7 +286,88 @@
                             
                             
                             <!-- content -->
-                            
+                            <div class="container-fluid border-0 d-flex flex-column" style="gap: 1rem;">
+                                
+                                <div class="content-card row border-0 d-flex flex-wrap justify-content-center" style="gap: 1rem;">
+                                    <div class="card rounded-0 bg-white" style="width: 25rem; height: 15rem;">
+                                        <div class="card-header bg-white border-0 pt-4">
+                                            <h2>
+                                                Users
+                                            </h2>
+                                        </div>
+                                        <div class="card-body">
+                                            <?php
+                                            
+                                                $sql = "SELECT COUNT(*) as user_count FROM users";
+                                                $result = $conn->query($sql);
+
+                                                if($result && $row = $result->fetch_assoc()) 
+                                                {
+                                                    echo "<h3><strong>" . $row['user_count'] . " </strong></h3>";
+                                                } 
+                                                else 
+                                                {
+                                                    echo "";
+                                                }
+
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="card rounded-0 bg-white" style="width: 25rem; height: 15rem;">
+                                        <div class="card-header bg-white border-0 pt-4">
+                                            <h2>
+                                                Tasks Created by Users
+                                            </h2>
+                                        </div>
+                                            <div class="card-body">
+                                                <?php
+                                            
+                                                    $sql = "SELECT COUNT(*) as task_count FROM tasks";
+                                                    $result = $conn->query($sql);
+
+                                                    if($result && $row = $result->fetch_assoc()) 
+                                                    {
+                                                        echo "<h3><strong>" . $row['task_count'] . " </strong></h3>";
+                                                    } 
+                                                    else 
+                                                    {
+                                                        echo "";
+                                                    }
+
+                                                ?>
+                                            </div>
+                                    </div>
+                                    <div class="card rounded-0 bg-white" style="width: 25rem; height: 15rem;">
+                                        <div class="card-header bg-white border-0 pt-4">
+                                            <h2>
+                                                Completed Tasks
+                                            </h2>
+                                        </div>
+<div class="card-body">
+                                                <?php
+                                            
+                                                    $sql = "SELECT COUNT(*) as task_count FROM tasks WHERE status='compeleted'";
+                                                    $result = $conn->query($sql);
+
+                                                    if($result && $row = $result->fetch_assoc()) 
+                                                    {
+                                                        echo "<h3><strong>" . $row['task_count'] . " </strong></h3>";
+                                                    } 
+                                                    else 
+                                                    {
+                                                        echo "";
+                                                    }
+
+                                                ?>
+                                            </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="row border">
+                                        hello world
+                                </div> -->
+
+                            </div>
 
                         </div>
 
