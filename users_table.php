@@ -132,13 +132,19 @@
         // echo "selected: ".$actionSelected;
         if(isset($_POST['selected']) && $_POST['selected'] === "view")
         {
+            // $conn->close();
+            // header("Location: admin_view_user.php?&id=".$id."?&usrID=".$usrID);
+
+            // echo "id : " . $id;
+            // echo "user id : " . $usrID;
+
             $conn->close();
-            echo" <script> window.location.href=\"admin_view_user.php?&id={$id}&?usrID={$usrID}\"; </script> ";
+            header("Location: admin_view_user.php?&id=".$id."&usrID=".$usrID);
         }
         else if(isset($_POST['selected']) && $_POST['selected'] === "edit")
         {
             $conn->close();
-            echo" <script> window.location.href=\"admin_edit_user.php?&id={$id}&?usrID={$usrID}\"; </script> ";
+            header("Location: admin_edit_user.php?&id=".$id."&usrID=".$usrID);
         }
         if(isset($_POST['selected']) && $_POST['selected'] === "delete")
         {
