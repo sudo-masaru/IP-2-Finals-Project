@@ -670,19 +670,19 @@
                 </div>
 
                 <!-- START OF SIDEBAR -->
-                <div class="col-auto border my-sidebar bg-light p-0">
+                <div class="col-auto border-0 my-sidebar bg-light p-0">
                    <form method="POST">
 
                         <div class="brand border-0 pt-3 pb-3 justify-content-center align-items-center">
                             <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
                         </div>
 
-                        <button type="submit" title="Dashboard"  value="<?php echo $id; ?>" name="admin-dashboard" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="users-table" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
                             <i class="bi bi-speedometer2 align-self-center"></i>
                             <span> <b>Dashboard</b> </span>
                         </button>
-
-                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="users-table" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
+                        
+                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="users-table" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
                             <i class="bi bi-table align-self-center"></i>
                             <span> <b>Users</b> </span>
                         </button>

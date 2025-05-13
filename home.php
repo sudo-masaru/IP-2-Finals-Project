@@ -1,3 +1,103 @@
+<?php
+
+    include_once("conn_db.php");
+
+    $id = mysqli_real_escape_string($conn, $_GET['id']);
+    if(isset($id))
+    {
+            $profile_img="";
+            $username="";
+            $email="";
+
+            $sql = "SELECT id, username, email, profile_img FROM users WHERE id='$id'";
+            $result = mysqli_query($conn, $sql);
+
+            if(mysqli_num_rows($result) > 0)
+            {
+                while($row = $result->fetch_assoc())
+                {
+                    $profile_img=$row['profile_img'];
+                    $username=$row['username'];
+                    $email=$row['email'];
+                }
+            }
+    }
+
+    if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['sign-out']))
+    {
+        // echo "hello world";
+
+        if(isset($_COOKIE['alwaysLogged']))
+        {
+            // echo "false";
+            if(isset($_COOKIE['TOKEN']))
+            {
+                $sql = "DELETE FROM auth_tokens WHERE token_id='".$_COOKIE['TOKEN']."'";
+                if($conn->query($sql) === TRUE) 
+                {
+                    setcookie("TOKEN", "", time()+(86400 * 30), "/");
+                    setcookie("alwaysLogged", "", time()+(86400 * 30), "/");
+
+                    session_unset();
+                    session_destroy();
+
+                    $conn->close();
+                    header("Location: index.php");
+                } 
+                else 
+                {
+                    // echo "Error deleting record: " . $conn->error;
+                        echo "
+                        <script>
+                            if (Notification.permission === \"granted\") {
+                                new Notification(\"Notice,\", {
+                                    body: \"Failed to delete token.\",
+                                    icon: \"icon.png\"
+                                });
+                                window.location.href=\"index.php\";
+                                } else if (Notification.permission !== \"denied\") {
+                                    Notification.requestPermission().then(permission => {
+                                        if (permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                            body: \"Failed to delete token.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                            }
+                        </script>";
+                }
+            }
+        }
+        else
+        {
+            // echo "true";
+            $conn->close();
+            header("Location: index.php");
+        }
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['profile']))
+    {
+        $conn->close();
+        header("Location: admin_account_profile.php?&id=".$id);
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-settings']))
+    {
+        $conn->close();
+        header("Location: admin_account_edit.php?&id=".$id);
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['admin-dashboard']))
+    {
+        $conn->close();
+        echo" <script> window.location.href=\"admin_dashboard.php?&id={$id}\"; </script> ";
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['users-table']))
+    {
+        $conn->close();
+        echo" <script> window.location.href=\"users_table.php?&id={$id}\"; </script> ";
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,6 +246,12 @@
                 width: 8rem;
             }
         }
+    }
+        @media (max-width: 500px){ 
+            .btn-txt{
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -168,35 +274,36 @@
                                 <div class="border-0">
                                     <a class="navbar-brand d-flex justify-content-center align-items-center" href="#">
                                         <img src="assets/Logo.png"Logo" width="50rem" height="48rem" class="d-inline-block align-text-top">
-                                        <span class="Logo-txt"> FLutterTask </span>
+                                        <span class="Logo-txt"> FlutterTask </span>
                                     </a>
                                 </div>
                           
                                 <!-- Profile -->
                                 <div class="d-flex align-items-center gap-2">
-                                  <span class="me-2 nav-name" style="font-size: 1rem;">Yanagi Masaru</span>
+                                  <span class="me-2 nav-name" style="font-size: 1rem;"> <?php echo $username; ?> </span>
                                   <div class="dropdown">
                                     <button class="btn border-white d-flex justify-content-center align-items-center"
                                       style="overflow: hidden; width: 2.5rem; height: 2.5rem; border-radius: 50%;" type="button"
                                       data-bs-toggle="dropdown" aria-expanded="false">
-                                      <img src="assets/default.png" alt="..." width="40rem" height="40rem">
+                                      <img src="<?php echo $profile_img; ?>" alt="..." width="40rem" height="40rem">
+                                       
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                       <form method="POST">
         
                                         <div class="col p-2 d-flex flex-column justify-content-center align-items-center" style="gap: 0.8rem;">
                                             <div class="border d-flex justify-content-center align-items-center" style="width: 2rem; height: 2rem; overflow: hidden; border-radius: 50%;">
-                                                <img src="assets/default.png" alt="..." width=35rem" height=35rem">
+                                                <img src="<?php echo $profile_img; ?>" alt="..." width=35rem" height=35rem">
                                             </div>
-                                            <span class="me-2" style="font-size: 0.8rem;">Yanagi Masaru</span>
+                                            <span class="me-2" style="font-size: 0.8rem;"> <?php echo $username; ?> </span>
                                         </div>
                                         <hr class="dropdown-divider">
         
-                                        <li><button class="dropdown-item" type="submit" name="profile">Profile</button></li>
-                                        <li><button class="dropdown-item" type="submit" name="account-settings">Account settings</button></li>
+                                        <li><button class="dropdown-item" type="submit" name="profile" value="<?php echo $id; ?>">Profile</button></li>
+                                        <li><button class="dropdown-item" type="submit" name="account-settings" value="<?php echo $id; ?>">Account settings</button></li>
         
                                         <hr class="dropdown-divider">
-                                        <li><button class="dropdown-item" type="submit">Sign out</button></li>
+                                        <li><button class="dropdown-item" type="submit" name="sign-out">Sign out</button></li>
                                       </form>
                                     </ul>
                                   </div>
@@ -209,375 +316,40 @@
                         <div class="d-flex flex-column border-0 p-1">
                             
                             
-                            <div class="card border-0 p-1 rounded-0">
+                            <div class="container-fluid">
 
-                                
-                                <div class="p-1 card-header bg-white d-flex flex-row justify-content-start align-items-center">
+                                <div class="row">
+                                    <div class="card p-0" style="height: 20rem;">
+                                        
+                                            <div class="card-body p-0 rounded-3 w-100 h-100 d-flex justify-content-center align-items-center" style="overflow: hidden; background-color: #F3FAFB;">
+                                                    <img src="assets/banner.jpeg" alt="..." style="">
+                                            </div>
 
-                                    <div class="card-headline col-auto pe-3 border-0 justify-content-center align-items-center" style="height: 2.5rem;"><span> TASKS </span></div>
-                                    <div class="col-auto border-0 p-0 d-flex justify-content-center align-items-center" style="height: 2.5rem;">
-                                        <div class="container-fluid">
-                                            <form method="POST" class="search-bar d-flex justify-content-center align-items-center" role="search">
-                                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                                                <button type="submit" class="border-light bg-light" style="font-size: 0.8rem;"><i class="bi bi-search"></i></button>
-                                            </form>
+                                    </div>
+                                    <div class="card border-0 p-0">
+                                        <div class="card-header d-flex flex-row border-0 bg-white p-0 ps-2 pe-2 pt-3 pb-3" style="height: 5rem;">
+                                            <div class="border-0 w-100 h-100 d-flex justify-content-start align-items-center">
+                                                <span style="font-size: 1.5rem;"> Tasks </span>
+                                            </div>
+                                            <div class="border-0 w-100 h-100 d-flex justify-content-end align-items-center">
+                                                <form method="POST" class="h-100 w-100 d-flex justify-content-end align-items-center">
+                                                    <button type="submit" name="create-new-task" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
+                                                        <i class="bi bi-plus-square"></i>
+                                                        <span class="text-white btn-txt">New Task</span>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col border-0 p-0 d-flex justify-content-between align-items-start" style="height: 2.5rem;">
-                                        <form method="POST" class="border rounded-3 bg-light h-100 d-flex justify-content-start align-items-center">
 
-                                            <button type="submit" name="sort_by" class="bg-light border-0 rounded-3" title="Press to filter">
-                                                <i class="bi bi-funnel-fill"></i>
-                                            </button>
-                                            <div>
-                                                <select name="filter" class="w-100 border-0 bg-light p-1 rounded-3" style="font-size: 0.8rem;">
-                                                    <option value="default"> SORT BY </option>
-        
-                                                    <optgroup label="Status">
-                                                        <option value="in-progress">in-progress</option>
-                                                        <option value="todo">todo</option>
-                                                        <option value="completed">completed</option>
-                                                    </optgroup>
-        
-                                                    <optgroup label="Priority">
-                                                        <option value="High">High</option>
-                                                        <option value="Low">Low</option>
-                                                        <option value="Medium">Medium</option>
-                                                    </optgroup>
-                                                </select>
-                                            </div>
-    
+                                    <div class="card">
+                                        <form method="POST">
+
                                         </form>
-
-                                        <div class="d-flex justify-content-center align-items-center h-100">
-                                            <i class="bi bi-caret-left-fill"></i>
-
-                                            <i class="bi bi-caret-right-fill"></i>
-                                        </div>
                                     </div>
+                                    
                                 </div>
-                                
-                                <div class="pt-3 pb-2 border-bottom d-flex flex-column justify-content-start align-items-center">
 
-                                    <form method="POST" class="w-100">
-
-                                        <div class="card border w-100 rounded-0 border-0" style="height: 25em; overflow-y: auto;">
-                                            
-                                            <!-- list -->
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="border-bottom pb-3 pt-3 d-flex flex-row bg-white justify-content-center align-items-center">
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-start align-items-center" style="height: 2.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                                    hello world
-                                                </div>
-                                                <div class="sub-card border-0 w-100 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    05-14-2025
-                                                </div>
-                                                <div class="sub-card border-0 w-30 d-flex flex-row justify-content-end align-items-center pe-3" style="height: 2.5rem;">
-                                                    <button type="submit" name="sort_by" class="bg-light border-0" title="Press to operate">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <select name="filter" class="w-100 border-0 bg-light p-1" style="font-size: 0.8rem;">
-                                                        <optgroup label="Actions">
-                                                            <option value="view">view</option>
-                                                            <option value="edit">edit</option>
-                                                            <option value="delete">delete</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-
-                                    </form>
-
-                                </div>
                             </div>
 
                         </div>
@@ -598,14 +370,19 @@
                             <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
                         </div>
 
-                        <button type="submit" title="Dashboard"  value="<?php echo $id; ?>" name="admin-dashboard" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
-                            <i class="bi bi-speedometer2 align-self-center"></i>
-                            <span> <b>Dashboard</b> </span>
+                        <button type="submit" title="Dashboard"  value="<?php echo $id; ?>" name="tasks" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
+                            <i class="bi bi-list-task align-self-center"></i>
+                            <span> <b>Tasks</b> </span>
                         </button>
 
-                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="users-table" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
-                            <i class="bi bi-table align-self-center"></i>
-                            <span> <b>Users</b> </span>
+                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="calendar" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                            <i class="bi bi-calendar-week align-self-center"></i>
+                            <span> <b>Calendar</b> </span>
+                        </button>
+
+                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="files" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                            <i class="bi bi-file-earmark-fill align-self-center"></i>
+                            <span> <b>Files</b> </span>
                         </button>
 
                    </form>

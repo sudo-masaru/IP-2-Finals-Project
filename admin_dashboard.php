@@ -376,7 +376,7 @@
                 </div>
 
                 <!-- START OF SIDEBAR -->
-                <div class="col-auto border my-sidebar bg-light p-0">
+                <div class="col-auto border-0 my-sidebar bg-light p-0">
                    <form method="POST">
 
                         <div class="brand border-0 pt-3 pb-3 justify-content-center align-items-center">

@@ -680,6 +680,59 @@
         $conn->close();
         header("Location: admin_view_user.php?&id=".$id."&usrID=".$usrID);
     }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['sign-out']))
+    {
+        // echo "hello world";
+
+        if(isset($_COOKIE['alwaysLogged']))
+        {
+            // echo "false";
+            if(isset($_COOKIE['TOKEN']))
+            {
+                $sql = "DELETE FROM auth_tokens WHERE token_id='".$_COOKIE['TOKEN']."'";
+                if($conn->query($sql) === TRUE) 
+                {
+                    setcookie("TOKEN", "", time()+(86400 * 30), "/");
+                    setcookie("alwaysLogged", "", time()+(86400 * 30), "/");
+
+                    session_unset();
+                    session_destroy();
+
+                    $conn->close();
+                    header("Location: index.php");
+                } 
+                else 
+                {
+                    // echo "Error deleting record: " . $conn->error;
+                        echo "
+                        <script>
+                            if (Notification.permission === \"granted\") {
+                                new Notification(\"Notice,\", {
+                                    body: \"Failed to delete token.\",
+                                    icon: \"icon.png\"
+                                });
+                                window.location.href=\"index.php\";
+                                } else if (Notification.permission !== \"denied\") {
+                                    Notification.requestPermission().then(permission => {
+                                        if (permission === \"granted\") {
+                                            new Notification(\"Notice,\", {
+                                            body: \"Failed to delete token.\",
+                                            icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                            }
+                        </script>";
+                }
+            }
+        }
+        else
+        {
+            // echo "true";
+            $conn->close();
+            header("Location: index.php");
+        }
+    }
     
 ?>
 <!DOCTYPE html>
@@ -745,7 +798,7 @@
                                         <li><button class="dropdown-item" type="submit" name="account-profile">Profile</button></li>
         
                                         <hr class="dropdown-divider">
-                                        <li><button class="dropdown-item" type="submit">Sign out</button></li>
+                                        <li><button class="dropdown-item" name="sign-out" type="submit">Sign out</button></li>
                                       </form>
                                     </ul>
                                   </div>
