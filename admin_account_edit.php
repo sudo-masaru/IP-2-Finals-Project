@@ -98,7 +98,7 @@
                                     <script>
                                             if (Notification.permission === \"granted\") {
                                                 new Notification(\"Notice,\", {
-                                                    body: \"Update complete. no changes were made.\",
+                                                    body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
                                                 window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
@@ -106,7 +106,7 @@
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
                                                             new Notification(\"Notice\", {
-                                                            body: \"Update complete. no changes were made.\",
+                                                            body: \"Update complete. changes were made.\",
                                                             icon: \"icon.png\"
                                                         });
                                                     }
@@ -212,7 +212,7 @@
                                     <script>
                                             if (Notification.permission === \"granted\") {
                                                 new Notification(\"Notice,\", {
-                                                    body: \"Update complete. no changes were made.\",
+                                                    body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
                                                 window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
@@ -220,7 +220,7 @@
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
                                                             new Notification(\"Notice\", {
-                                                            body: \"Update complete. no changes were made.\",
+                                                            body: \"Update complete. changes were made.\",
                                                             icon: \"icon.png\"
                                                         });
                                                     }
@@ -326,7 +326,7 @@
                                     <script>
                                             if (Notification.permission === \"granted\") {
                                                 new Notification(\"Notice,\", {
-                                                    body: \"Update complete. no changes were made.\",
+                                                    body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
                                                 window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
@@ -334,7 +334,7 @@
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
                                                             new Notification(\"Notice\", {
-                                                            body: \"Update complete. no changes were made.\",
+                                                            body: \"Update complete. changes were made.\",
                                                             icon: \"icon.png\"
                                                         });
                                                     }
@@ -450,7 +450,7 @@
                                     <script>
                                             if (Notification.permission === \"granted\") {
                                                 new Notification(\"Notice,\", {
-                                                    body: \"Update complete. no changes were made.\",
+                                                    body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
                                                 window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
@@ -458,7 +458,7 @@
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
                                                             new Notification(\"Notice\", {
-                                                            body: \"Update complete. no changes were made.\",
+                                                            body: \"Update complete. changes were made.\",
                                                             icon: \"icon.png\"
                                                         });
                                                     }
@@ -564,7 +564,7 @@
                                     <script>
                                             if (Notification.permission === \"granted\") {
                                                 new Notification(\"Notice,\", {
-                                                    body: \"Update complete. no changes were made.\",
+                                                    body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
                                                 window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
@@ -572,7 +572,7 @@
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
                                                             new Notification(\"Notice\", {
-                                                            body: \"Update complete. no changes were made.\",
+                                                            body: \"Update complete. changes were made.\",
                                                             icon: \"icon.png\"
                                                         });
                                                     }
@@ -678,7 +678,7 @@
                                     <script>
                                             if (Notification.permission === \"granted\") {
                                                 new Notification(\"Notice,\", {
-                                                    body: \"Update complete. no changes were made.\",
+                                                    body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
                                                 window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
@@ -686,7 +686,7 @@
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
                                                             new Notification(\"Notice\", {
-                                                            body: \"Update complete. no changes were made.\",
+                                                            body: \"Update complete. changes were made.\",
                                                             icon: \"icon.png\"
                                                         });
                                                     }
@@ -802,7 +802,7 @@
                                     <script>
                                             if (Notification.permission === \"granted\") {
                                                 new Notification(\"Notice,\", {
-                                                    body: \"Update complete. no changes were made.\",
+                                                    body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
                                                 window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
@@ -810,7 +810,7 @@
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
                                                             new Notification(\"Notice\", {
-                                                            body: \"Update complete. no changes were made.\",
+                                                            body: \"Update complete. changes were made.\",
                                                             icon: \"icon.png\"
                                                         });
                                                     }
@@ -916,7 +916,7 @@
                                     <script>
                                             if (Notification.permission === \"granted\") {
                                                 new Notification(\"Notice,\", {
-                                                    body: \"Update complete. no changes were made.\",
+                                                    body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
                                                 window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
@@ -924,7 +924,7 @@
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
                                                             new Notification(\"Notice\", {
-                                                            body: \"Update complete. no changes were made.\",
+                                                            body: \"Update complete. changes were made.\",
                                                             icon: \"icon.png\"
                                                         });
                                                     }
@@ -1030,7 +1030,7 @@
                                     <script>
                                             if (Notification.permission === \"granted\") {
                                                 new Notification(\"Notice,\", {
-                                                    body: \"Update complete. no changes were made.\",
+                                                    body: \"Update complete. changes were made.\",
                                                     icon: \"icon.png\"
                                                 });
                                                 window.location.href=\"admin_account_profile.php?&id={$this->userid}\";
@@ -1038,7 +1038,7 @@
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
                                                             new Notification(\"Notice\", {
-                                                            body: \"Update complete. no changes were made.\",
+                                                            body: \"Update complete. changes were made.\",
                                                             icon: \"icon.png\"
                                                         });
                                                     }
@@ -1199,7 +1199,7 @@
                                 body: \"Something went wrong.\",
                                 icon: \"icon.png\"
                             });
-                            window.location.href=\"account_edit.php?&id={$user_id}\";
+                            window.location.href=\"admin_account_edit.php?&id={$user_id}\";
                             } else if (Notification.permission !== \"denied\") {
                                 Notification.requestPermission().then(permission => {
                                     if (permission === \"granted\") {

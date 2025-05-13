@@ -236,6 +236,7 @@
                                             </h1>
                                             <span style="color: grey;">
                                                 <!-- email@email.com -->
+                                                 <?php echo $email; ?>
                                             </span>
 
                                             <br>

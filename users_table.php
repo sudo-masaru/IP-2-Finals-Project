@@ -176,7 +176,7 @@
             }
             else
             {
-                $sql = "DELETE FROM users WHERE id='$id'";
+                $sql = "DELETE FROM users WHERE id='$usrID'";
                 if($conn->query($sql) === TRUE) 
                 {
                     $conn->close();

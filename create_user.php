@@ -92,7 +92,7 @@
                                         body: \"Account has been added.\",
                                         icon: \"icon.png\"
                                     });
-                                    window.location.href=\"create_user.php?&id={$this->userid}\";
+                                    window.location.href=\"users_table.php?&id={$this->userid}\";
                                     } else if (Notification.permission !== \"denied\") {
                                         Notification.requestPermission().then(permission => {
                                             if (permission === \"granted\") {

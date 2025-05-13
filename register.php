@@ -471,7 +471,7 @@
 
         if($_FILES['image']['name']=='')
         {
-            $default="sample.png";
+            $default="gimp-sample.png";
             $uploadDir = "uploads/";
             $destination = $uploadDir . basename($default);
 

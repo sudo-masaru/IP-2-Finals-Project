@@ -90,8 +90,10 @@
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['edit-profile']))
     {
+        $usrID = mysqli_real_escape_string($conn, $_GET['usrID']);
+
         $conn->close();
-        header("Location: admin_account_edit.php?&id=".$id);
+        header("Location: admin_edit_user.php?&id=".$id."&usrID=".$usrID);
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['account-deletion']))
     {
@@ -123,40 +125,32 @@
                 </script>";
         }
         else
-        {
-            echo "helllo world";
+        {        
+            $sql = "DELETE FROM users WHERE id='$usrID'";
+            if($conn->query($sql) === TRUE) 
+            {
+                $conn->close();
+                echo "
+                <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Notice,\", {
+                                body: \"User has been removed.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"users_table.php?&id={$id}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                        new Notification(\"Notice\", {
+                                        body: \"User has been removed.\",
+                                        icon: \"icon.png\"
+                                    });
+                                }
+                            });
+                        }
+                </script>";
+            }
         }
-
-        // $sql = "DELETE FROM users WHERE id='$id'";
-        // if($conn->query($sql) === TRUE) 
-        // {
-        //     setcookie("TOKEN", "", time()+(86400 * 30), "/");
-        //     setcookie("alwaysLogged", "", time()+(86400 * 30), "/");
-
-        //     session_unset();
-        //     session_destroy();
-
-        //     $conn->close();
-        //     echo "
-        //     <script>
-        //             if (Notification.permission === \"granted\") {
-        //                 new Notification(\"Notice,\", {
-        //                     body: \"Account has been deleted.\",
-        //                     icon: \"icon.png\"
-        //                 });
-        //                 window.location.href=\"index.php\";
-        //                 } else if (Notification.permission !== \"denied\") {
-        //                     Notification.requestPermission().then(permission => {
-        //                         if (permission === \"granted\") {
-        //                             new Notification(\"Notice\", {
-        //                             body: \"Account has been deleted.\",
-        //                             icon: \"icon.png\"
-        //                         });
-        //                     }
-        //                 });
-        //             }
-        //     </script>";
-        // }
     }
 
 ?>
