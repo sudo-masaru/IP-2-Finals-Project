@@ -42,7 +42,9 @@
         $start = $page * $rows_per_page;
     }
 
-    $sql_display = "SELECT id, username, email, profile_img FROM users LIMIT $start, $rows_per_page";
+    $search_val = mysqli_real_escape_string($conn, $_GET['search_val']);
+
+    $sql_display = "SELECT id, username, email, profile_img FROM users WHERE id='%$search_val%' OR username='$search_val' OR email='$search_val' LIMIT $start, $rows_per_page";
     $result_display = mysqli_query($conn, $sql_display);
     /* end of fetching to display list of users in a table */
 
@@ -639,7 +641,12 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    echo "";
+                                                                    echo 
+                                                                        " 
+                                                                        <div class='border-bottom pb-3 pt-3 w-100 p-0 d-flex flex-row justify-content-center align-items-center'>
+                                                                                    no results.
+                                                                            </div>
+                                                                        ";
                                                                 }   
                                                             ?>
 

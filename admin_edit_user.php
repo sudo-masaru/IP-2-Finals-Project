@@ -763,7 +763,7 @@
 
                                 <form method="POST" class="w-100" enctype="multipart/form-data">
                                     <div class="card-header w-100 d-flex justify-content-center align-items-center bg-white">
-                                        PROFILE
+                                        EDIT USER
                                     </div>
                                     
                                     <div class="card-body p-0 border-0 w-100 pt-3 pb-3">

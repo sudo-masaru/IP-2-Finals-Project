@@ -111,7 +111,7 @@
                                 body: \"You cannot remove yourself.\",
                                 icon: \"icon.png\"
                             });
-                            window.location.href=\"admin_view_user.php?&id={$id}&usrID={usrID}\";
+                            window.location.href=\"admin_view_user.php?&id={$id}&usrID={$usrID}\";
                             } else if (Notification.permission !== \"denied\") {
                                 Notification.requestPermission().then(permission => {
                                     if (permission === \"granted\") {
