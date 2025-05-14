@@ -359,7 +359,7 @@
                                                 <select name="status" class="w-100 h-100">
                                                     <option value="todo">todo</option>
                                                     <option value="in-progress">in-progress</option>
-                                                    <option value="">complete</option>
+                                                    <option value="complete">complete</option>
                                                 </select>
                                             </div>
                                             <div class="border-0 w-25 h-100 d-flex justify-content-start align-items-center">

@@ -109,6 +109,15 @@
         $conn->close();
         echo" <script> window.location.href=\"create_task.php?&id={$id}\"; </script> ";
     }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['view-task']))
+    {
+        $taskID = $_POST['view-task'];
+
+        // echo "task id: ".$taskID;
+
+        $conn->close();
+        echo" <script> window.location.href=\"user_view_task.php?&id={$id}&taskID={$taskID}\"; </script> ";
+    }
 
 ?>
 <!DOCTYPE html>
@@ -345,7 +354,7 @@
                                 </div>
                             </div>
 
-                            <form method="PSOT" class="content-mobile card border-0 rounded-0 d-flex flex-column">
+                            <form method="POST" class="content-mobile card border-0 rounded-0 d-flex flex-column">
                                 
                                         <!-- list -->
                                         
@@ -398,7 +407,7 @@
                                                     echo "
                                                     
                                                         <div class='card rounded-2 d-flex'' style='height: 6rem;'>
-                                                            <button type='submit' value='$TASKID' class='pt-2 pb-2 ps-2 pe-2 list-card rounded-2 w-100 h-100 d-flex flex-row'>
+                                                            <button type='submit' name='view-task' value='$TASKID' class='pt-2 pb-2 ps-2 pe-2 list-card rounded-2 w-100 h-100 d-flex flex-row'>
                                                                     <div class='border-0 h-100 d-flex justify-content-center align-items-center' style='width: 3rem;'>
                                                                         <i class='bi bi-view-list'></i>
                                                                     </div>
@@ -450,12 +459,8 @@
                         <button type="submit" title="Users" value="<?php echo $id; ?>" name="calendar" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
                             <i class="bi bi-calendar-week align-self-center"></i>
                             <span> <b>Calendar</b> </span>
-                        <!-- </button>
+                        </button>
 
-                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="files" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
-                            <i class="bi bi-file-earmark-fill align-self-center"></i>
-                            <span> <b>Files</b> </span>
-                        </button> -->
 
                    </form>
                 </div>
