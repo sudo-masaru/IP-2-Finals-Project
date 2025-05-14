@@ -23,6 +23,129 @@
             }
     }
 
+    class createtask{
+
+        private $status;
+        private $priority;
+        private $due_date;
+        private $title;
+        private $description;
+        private $id;
+
+        public function __construct($status="", $priority="", $due_date="", $title="", $description="", $id=0, $conn="")
+        {
+            $this->status=$this->checkInputData($status);
+            $this->priority=$this->checkInputData($priority);
+            $this->due_date=$this->checkInputData($due_date);
+            $this->title=$this->checkInputData($title);
+            $this->description=$this->checkInputData($description);
+            $this->id=$this->checkInputData($id);
+            $this->conn=$conn;
+
+            $this->validateDataAndUpdateUser($this->conn);
+        }
+    
+        public function checkInputData($data) 
+        {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        }
+
+        public function validateDataAndUpdateUser($conn)
+        {
+            //echo "title: ".$this->title." description: ".$this->description." tags: ".$this->status." ".$this->priority." due: ".$this->due_date." id: ".$this->id;
+
+            if(!empty($this->title))
+            {
+                if(!empty($this->description))
+                {
+                    //echo "title: ".$this->title." description: ".$this->description." tags: ".$this->status." ".$this->priority." due: ".$this->due_date." id: ".$this->id;
+
+                    $sql_existing_task = "SELECT user_id, title FROM tasks WHERE title='".$this->title."'";
+                    $result=mysqli_query($this->conn, $sql_existing_task);
+                    $count_existing_task = mysqli_num_rows($result);
+
+                    if($count_existing_task === 0)
+                    {
+                        // echo "task does not exist";
+                    }
+                    else
+                    {
+                        // echo "task exists";
+                        $this->conn->close();
+                        echo "
+                        <script>
+                            if (Notification.permission === \"granted\") {
+                                new Notification(\"Notice,\", {
+                                    body: \"Task already exists.\",
+                                    icon: \"icon.png\"
+                                });
+                                window.location.href=\"create_task.php?&id={$this->id}\";
+                                } else if (Notification.permission !== \"denied\") {
+                                        Notification.requestPermission().then(permission => {
+                                            if (permission === \"granted\") {
+                                                new Notification(\"Notice\", {
+                                                body: \"Task already exists.\",
+                                                icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                            }
+                        </script>";
+                    }
+                }
+                else
+                {
+                    $this->conn->close();
+                    echo "
+                    <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Notice,\", {
+                                body: \"Please add a description.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"create_task.php?&id={$this->id}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                    Notification.requestPermission().then(permission => {
+                                        if (permission === \"granted\") {
+                                            new Notification(\"Notice\", {
+                                            body: \"Please add a description.\",
+                                            icon: \"icon.png\"
+                                    });
+                                }
+                            });
+                        }
+                    </script>";
+                }
+            }
+            else
+            {
+                $this->conn->close();
+                echo "
+                <script>
+                    if (Notification.permission === \"granted\") {
+                        new Notification(\"Notice,\", {
+                            body: \"Please add a title.\",
+                            icon: \"icon.png\"
+                        });
+                        window.location.href=\"create_task.php?&id={$this->id}\";
+                        } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                        new Notification(\"Notice\", {
+                                        body: \"Please add a title.\",
+                                        icon: \"icon.png\"
+                                });
+                            }
+                        });
+                    }
+                </script>";
+            }
+        }
+    }
+
     if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['sign-out']))
     {
         // echo "hello world";
@@ -104,10 +227,11 @@
         echo" <script> window.location.href=\"files.php?&id={$id}\"; </script> ";
     }
 
-    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['create-new-task']))
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['create-task']))
     {
-        $conn->close();
-        echo" <script> window.location.href=\"create_task.php?&id={$id}\"; </script> ";
+        // code
+
+        $createtask = new createtask($_POST['status'], $_POST['priority'], $_POST['due_date'], $_POST['title'], $_POST['description'], $id, $conn);
     }
 
 ?>
@@ -184,58 +308,72 @@
                             </nav>
                         </nav>
                         
-                        <div class="d-flex flex-column border-0 p-1">
+                        <div class="CONTENT d-flex flex-column border-0 p-1 ps-3 pe-3">
                             
                             
                             <!-- content -->
-                            <div class="card border pt-3 pb-3 ps-2 pe-2 rounded-0">
-
-                                <form method="POST">
-
-                                    <div class="p-1 card-header bg-white d-flex flex-row justify-content-start align-items-center">
-
-                                        <div class="border-0 w-100 d-flex justify-content-start">
-                                            TASK
+                            <div class="card border p-2 ps-3 pe-3 pt-3 pb-3" style="height: 30rem;">
+                                
+                                <form method="POST" class="w-100 h-100">
+                                    <div class="header bg-white border-0 d-flex flex-row" style="height: 2rem;">
+                                        <div class="border-0 w-100 d-flex justify-content-start align-items-center">
+                                            <span> <b>CREATE TASK</b> </span>
                                         </div>
-                                        <div class="border-0 w-100 d-flex justify-content-end pe-3">
-                                            <!-- <button type="submit" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
-                                                <i class="bi bi-plus-circle"></i>
-                                                <span class="text-white btn-txt">New Task</span>
-                                            </button> -->
+                                        <div class="border-0 w-100 d-flex justify-content-end align-items-center">
+                                            <button type="submit" name="create-task" class="rounded-5 ps-3 pe-3 text-white" style="border: 1px solid #42B1F6; background-color: #42B1F6;">
+                                                create task
+                                            </button>
                                         </div>
                                     </div>
 
-                                    <div class="card-header border-0 bg-white p-0 pt-2 pb-2 d-flex flex-row">
+                                    <div class="header bg-white border-0 d-flex flex-row" style="height: 2rem;">
                                         <div class="border-0 w-100 d-flex flex-row justify-content-start align-items-center">
-                                            <div class="border-0 w-50 d-flex justify-content-start align-items-center" style="height: 2rem;">DUE DATE</div>
-                                            <div class="border-0 w-100" style="height: 2rem;">
-                                                <input type="date" class="w-100 h-100">
+                                            <div class="border-0 w-10 pe-3 h-100 d-flex justify-content-start align-items-center"><span> Tags: </span></div>
+                                            <div class="border-0 w-25 pe-3 h-100 d-flex justify-content-start align-items-center">
+                                                <select name="status" class="w-100 h-100">
+                                                    <option value="todo">todo</option>
+                                                    <option value="in-progress">in-progress</option>
+                                                    <option value="">complete</option>
+                                                </select>
+                                            </div>
+                                            <div class="border-0 w-25 h-100 d-flex justify-content-start align-items-center">
+                                                <select name="priority" class="w-100 h-100">
+                                                    <option value="low">low</option>
+                                                    <option value="medium">medium</option>
+                                                    <option value="high">high</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="card-header-grid-1 border-0 w-100 pt-2 pb-2 justify-content-start align-items-center"></div>
-                                        <div class="card-header-grid-2 border-0 w-100 pt-2 pb-2 justify-content-start align-items-center"></div>
                                     </div>
 
-                                    <div class="card-body p-0 pt-3 pb-3 d-flex flex-column justify-content-center align-self-center" style="gap: 1rem;">
-                                        
-                                        <div class="border" style="height: 3rem;">
-                                            <input type="text" placeholder="Title" name="title" class="h-100 w-100 border-0">
-                                        </div>
+                                    <br>
 
-                                        <div class="border" style="height: 3rem;">
-                                            <input type="text" placeholder="Description" name="description" class="h-100 w-100 border-0">
+                                    <div class="border-0 w-100 d-flex flex-row" style="height: 2rem;">
+                                        <div class="border-0 d-flex flex-row w-100">
+                                            <div class="h-100 pe-3 d-flex justify-content-center align-items-center">
+                                                <span> Due: </span>
+                                            </div>
+                                            <div class="h-100 w-100">
+                                                <input type="date" name="due_date" class="w-100 h-100">
+                                            </div>
+                                        </div>
+                                        <div class="border-0 d-flex flex-row w-100"></div>
+                                    </div>
+
+                                    <br>
+                                    <div class="card-body border-0 p-0">
+
+                                        <div class="border p-0 rounded-3" style="height: 3rem;">
+                                            <input type="text" name="title" placeholder="TITLE" class="rounded-3 w-100 h-100 border-0 ps-3">
                                         </div>
 
                                         <br>
 
-                                        <div class="border-0" style="height: 3rem;">
-                                            <button type="submit" name="create-new-task" class="w-100 h-100 p-0" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
-                                                Create new task
-                                            </button>
+                                        <div class="border rounded-3" style="height: 14rem; display: flex;">
+                                            <textarea name="description" placeholder="DESCRIPTION" class="border-0 rounded-3 w-100 h-100 p-3" style="outline: none; resize: vertical;"></textarea>
                                         </div>
 
                                     </div>
-
                                 </form>
 
                             </div>
