@@ -104,11 +104,47 @@
         echo" <script> window.location.href=\"files.php?&id={$id}\"; </script> ";
     }
 
-    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['create-task']))
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['edit-task']))
     {
         // code
 
         //$createtask = new createtask($_POST['status'], $_POST['priority'], $_POST['due_date'], $_POST['title'], $_POST['description'], $id, $conn);
+
+
+        $taskID = $_POST['edit-task'];
+        $conn->close();
+        echo" <script> window.location.href=\"user_edit_task.php?&id={$id}&taskID={$taskID}\"; </script> ";
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['delete-task']))
+    {
+        //$taskID = mysqli_real_escape_string($conn, $_GET['taskID']);
+        $taskID = $_POST['delete-task'];
+        $sql = "DELETE FROM tasks WHERE id='$taskID' AND user_id='$id'";
+        if($conn->query($sql) === TRUE) 
+            {
+                $conn->close();
+                echo "
+                <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Notice,\", {
+                                body: \"Task has been removed.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"home.php?&id={$id}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                        new Notification(\"Notice\", {
+                                        body: \"Task has been removed.\",
+                                        icon: \"icon.png\"
+                                    });
+                                }
+                            });
+                        }
+                </script>";
+            }
+        
+        // echo "task id: ". $taskID;
     }
 
 ?>
@@ -124,7 +160,95 @@
 
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="my_sidebar.css">
-    <link rel="stylesheet" href="create_task.css">
+    <style>
+        body{
+            overflow: hidden;
+        }
+
+        .my-row{
+            display: flex;
+            flex-direction: row-reverse;
+        }
+
+        .my-main-content{
+            overflow-x: auto;
+            height: 100vh;
+        }
+
+        .Logo-txt {
+            font-size: 1.25rem; 
+            font-weight: bold;
+            background: linear-gradient(to right, #3DE5B1, #42B1F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        select:focus-within{
+            outline-style: none;
+        }
+
+        .card-headline{
+            display: flex;
+        }
+
+
+        .card-header-grid{
+            display: flex;
+        }
+
+        .CONTENT{
+            padding-bottom: 3rem;
+        }
+
+        @media (max-width: 780px){
+            .my-row{
+                display: flex;
+                flex-direction:column;
+            }
+
+            .my-main-content
+            {
+                overflow: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .my-main-content::-webkit-scrollbar 
+            {
+                display: none;
+            }
+
+            select:focus-within{
+                outline-style: none;
+            }
+
+            .card-headline{
+                display: none;
+            }
+
+            .card-header-grid-2{
+                display: none;
+            }
+
+            .CONTENT{
+                padding-bottom: 8rem;
+            }
+        }
+
+        @media (max-width: 600px){ 
+            .card-header-grid-1{
+                display: none;
+            }
+        }
+
+        @media (max-width: 500px){ 
+            .btn-txt{
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -279,7 +403,7 @@
                                                                 <span> <b>VIEWING TASK</b> </span>
                                                             </div>
                                                             <div class='border-0 w-100 d-flex justify-content-end align-items-center'>
-                                                                <button type='submit' value='$ID' name='create-task' class='rounded-5 ps-3 pe-3 text-white' style='border: 1px solid #42B1F6; background-color: #42B1F6;'>
+                                                                <button type='submit' value='$ID' name='edit-task' class='rounded-5 ps-3 pe-3 text-white' style='border: 1px solid #42B1F6; background-color: #42B1F6;'>
                                                                     edit task
                                                                 </button>
                                                             </div>
@@ -313,11 +437,11 @@
 
                                                             <br>
 
-                                                            <div class='border rounded-3' style='height: 14rem; display: flex;'>
+                                                            <div class='border rounded-3' style='height: 8rem; display: flex;'>
                                                                 <textarea disabled  name='description' placeholder='DESCRIPTION' class='border-0 rounded-3 w-100 h-100 p-3' style='outline: none; resize: vertical;'> $DESCRIPTION </textarea>
                                                             </div>
 
-                                                             <button type='submit' title='' value='$ID' name='calendar' class='inactive sidebar-nav border-0 d-flex flex-column justify-content-center bg-white pt-3 pb-3'>
+                                                             <button type='submit' title='' value='$ID' name='delete-task' class='inactive sidebar-nav border-0 d-flex flex-column justify-content-center bg-white pt-3 pb-3'>
                                                                 <span class='text-danger'> Delete task </span>
                                                             </button>
 
