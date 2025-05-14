@@ -180,7 +180,12 @@
 
         .content-mobile{
             padding-bottom: 6rem;
+            gap: 1rem;
         }
+
+        /* .TITLE {
+            width: 100%;
+        } */
 
         @media (max-width: 780px){
             .my-row{
@@ -223,7 +228,17 @@
 
             .content-mobile{
                 padding-bottom: 6rem;
+                gap: 1rem;
             }
+
+
+            /* .TITLE {
+                width: 50%;
+                overflow: hidden; 
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            } */
+
         }
 
         @media (max-width: 600px){ 
@@ -330,13 +345,11 @@
                                 </div>
                             </div>
 
-                            <div class="content-mobile card border-0 rounded-0 d-flex flex-column">
+                            <form method="PSOT" class="content-mobile card border-0 rounded-0 d-flex flex-column">
                                 
-                                <form method="SUBMIT" class="d-flex flex-column w-100 h-100" style="gap: 1rem;">
-
                                         <!-- list -->
-                                        <!-- 
-                                        <div class="card rounded-2 d-flex" style="height: 6rem;">
+                                        
+                                        <!-- <div class="card rounded-2 d-flex" style="height: 6rem;">
                                             <button type="submit" class="list-card rounded-2 w-100 h-100 d-flex flex-row">
                                                     <div class="border-0 h-100 d-flex justify-content-center align-items-center" style="width: 5rem;">
                                                         <i class="bi bi-view-list"></i>
@@ -351,15 +364,65 @@
                                                     </div>
                                             </button>
                                         </div> 
-                                        -->
 
+                                        <div class="card rounded-2 d-flex" style="height: 6rem;">
+                                            <button type="submit" class="list-card rounded-2 w-100 h-100 d-flex flex-row">
+                                                    <div class="border-0 h-100 d-flex justify-content-center align-items-center" style="width: 5rem;">
+                                                        <i class="bi bi-view-list"></i>
+                                                    </div>
+                                                    <div class="border-0 w-100 d-flex justify-content-start flex-column">
+                                                        <div class="border-0 w-100 h-100 d-flex justify-content-start align-items-center">
+                                                                <span> <b> Hello world </b> </span>
+                                                        </div>
+                                                        <div class="border-0 w-100 h-100 d-flex justify-content-start align-items-center">
+                                                                <span> May 14 </span>
+                                                        </div>
+                                                    </div>
+                                            </button>
+                                        </div>  -->
 
+                                        <?php
                                         
+                                            $sql_query_tasks="SELECT id, user_id, title, created_at FROM tasks WHERE user_id='$id'";
+                                            $result_display = mysqli_query($conn, $sql_query_tasks);
+                                            
+                                            if($result_display->num_rows > 0)
+                                            {
+                                                while($row = $result_display->fetch_assoc())
+                                                {
+                                                    $TASKID = $row['id'];
+                                                    $USERID = $row['user_id'];
+                                                    $TITLE = $row['title'];
+                                                    $DATE = $row['created_at'];
 
-                                </form>
+                                                    echo "
+                                                    
+                                                        <div class='card rounded-2 d-flex'' style='height: 6rem;'>
+                                                            <button type='submit' value='$TASKID' class='pt-2 pb-2 ps-2 pe-2 list-card rounded-2 w-100 h-100 d-flex flex-row'>
+                                                                    <div class='border-0 h-100 d-flex justify-content-center align-items-center' style='width: 3rem;'>
+                                                                        <i class='bi bi-view-list'></i>
+                                                                    </div>
+                                                                    <div class='border-0 d-flex justify-content-start flex-column'>
+                                                                        <div class=' border-0 h-100 d-flex justify-content-start align-items-center' style='text-align: justify;'>
+                                                                                <span> <b> $TITLE </b> </span>
+                                                                        </div>
+                                                                        <div class='border-0 h-100 d-flex justify-content-start align-items-center'>
+                                                                                <span> $DATE </span>
+                                                                        </div>
+                                                                    </div>
+                                                            </button>
+                                                        </div>
+
+                                                    ";
+                                                }
+                                            }
+
+                                        ?>
+
+                                
                                 
 
-                            </div>
+                            </form>
 
                         </div>
 

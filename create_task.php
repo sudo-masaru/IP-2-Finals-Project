@@ -70,6 +70,32 @@
                     if($count_existing_task === 0)
                     {
                         // echo "task does not exist";
+                        $sql_create_task="INSERT INTO `tasks`(id, user_id, title, description, due_date, priority, status, created_at) VALUES (null,'".$this->id."','".$this->title."','".$this->description."','".$this->due_date."','".$this->priority."','".$this->status."',CURRENT_DATE())";
+                        $result2 = mysqli_query($this->conn, $sql_create_task);
+                        if($result2===false)
+                        {
+                            echo"<script> alert('Database query failed.') </script>";
+                        }
+                        $this->conn->close();
+                        echo "
+                        <script>
+                            if (Notification.permission === \"granted\") {
+                                new Notification(\"Notice,\", {
+                                    body: \"Task created successfuly.\",
+                                    icon: \"icon.png\"
+                                });
+                                window.location.href=\"home.php?&id={$this->id}\";
+                                } else if (Notification.permission !== \"denied\") {
+                                        Notification.requestPermission().then(permission => {
+                                            if (permission === \"granted\") {
+                                                new Notification(\"Notice\", {
+                                                body: \"Task created successfuly.\",
+                                                icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                            }
+                        </script>";
                     }
                     else
                     {
