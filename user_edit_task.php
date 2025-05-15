@@ -37,18 +37,25 @@
         private $current_title;
         private $current_description;
 
-        public function __construct($title="", $description="", $status="", $priority="", $conn="", $current_title="", $current_description="", $taskid=0, $userid=0)
+        private $current_status;
+        private $current_priority;
+
+        public function __construct($title="", $description="", $status="", $priority="", $conn="", $current_title="", $current_description="", $current_status="", $current_priority="", $taskid=0, $userid=0)
         {
             $this->title=$this->checkInputData($title);
             $this->description=$this->checkInputData($description);
+
             $this->status=$this->checkInputData($status);
             $this->priority=$this->checkInputData($priority);
+
             $this->current_title=$this->checkInputData($current_title);
             $this->current_description=$this->checkInputData($current_description);
-            $this->current_description=$this->checkInputData($current_description);
 
-            $this->taskid=$this->checkInputData($taskid);
+            $this->current_status=$this->checkInputData($current_status);
+            $this->current_priority=$this->checkInputData($current_priority);
+
             $this->userid=$this->checkInputData($userid);
+            $this->taskid=$this->checkInputData($taskid);
             
             $this->conn=$conn;
 
@@ -65,19 +72,23 @@
 
         public function validateDataAndUpdateUser($conn)
         {
-            // echo "userid : ".$this->userid." task id: ".$this->taskid." title: ".$this->title." description: ".$this->description." status: ".$this->status." priority: ".$this->priority;
+            //echo "userid : ".$this->userid." task id: ".$this->taskid." title: ".$this->title." description: ".$this->description." status: ".$this->status." priority: ".$this->priority." current status: ".$this->current_status." current priority: ".$this->current_priority;
 
-            if(!empty($this->title) && !empty($this->description))
-            {
-
-
-                $sql_existing_task = "SELECT user_id, title FROM tasks WHERE title='".$this->title."'";
+           if(!empty($this->title) && !empty($this->description))
+           {
+                    $sql_existing_task = "SELECT user_id, title FROM tasks WHERE title='".$this->title."' AND user_id='".$this->userid."'";
                     $result=mysqli_query($this->conn, $sql_existing_task);
                     $count_existing_task = mysqli_num_rows($result);
 
-                    if($count_existing_task === 0)
+                    if($this->title === $this->current_title && $count_existing_task > 0)
                     {
-                                                        $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->status."', `priority`='".$this->priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+                        // no changes made
+                        //echo "this->title === this->current_title && count_existing_task > 0";
+                        if($this->status === $this->current_status && $this->priority === $this->current_priority)
+                        {
+                            // echo "this->status === this->current_status && <br> this->priority === this->current_priority";
+
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->current_status."', `priority`='".$this->current_priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
 
                                 if ($this->conn->query($UPDATE) === TRUE) 
                                 {
@@ -103,7 +114,7 @@
                                     </script>";
                                 }
                                 else
-                                {
+                                {                                   
                                     $this->conn->close();
                                     echo "
                                     <script>
@@ -125,15 +136,85 @@
                                             }
                                     </script>";
                                 }
+                        }
+                        else if($this->status !== $this->current_status && $this->priority === $this->current_priority)
+                        {
+                            //echo "this->status !== this->current_status && <br> this->priority === this->current_priority";
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->status."', `priority`='".$this->current_priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        }
+                        else if($this->status === $this->current_status && $this->priority !== $this->current_priority)
+                        {
+                            echo "this->status === this->current_status && <br> this->priority !== this->current_priority";
+                        }
+                        else if($this->status !== $this->current_status && $this->priority !== $this->current_priority)
+                        {
+                            echo "this->status !== this->current_status && <br> this->priority !== this->current_priority";
+                        }
                     }
-                    else
+                    else if($this->title !== $this->current_title && $count_existing_task > 0)
                     {
-                        $this->conn->close();
+                        //echo "this->title !== this->current_title && count_existing_task > 0";
+                    }
+                    else if($this->title !== $this->current_title && $count_existing_task === 0)
+                    {
+                       //echo "this->title !== this->current_title && count_existing_task === 0";
+                    }
+            }
+           else
+           {
+                    // $this->conn->close();
                         echo "
                         <script>
                             if (Notification.permission === \"granted\") {
                                 new Notification(\"Notice,\", {
-                                    body: \"No changes made.\",
+                                    body: \"Title and description cannot be empty.\",
                                     icon: \"icon.png\"
                                 });
                                 window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
@@ -141,39 +222,14 @@
                                         Notification.requestPermission().then(permission => {
                                             if (permission === \"granted\") {
                                                 new Notification(\"Notice\", {
-                                                body: \"No changes made.\",
+                                                body: \"Title and description cannot be empty.\",
                                                 icon: \"icon.png\"
                                         });
                                     }
                                 });
                             }
                         </script>";
-                        
-                    }
-            }
-            else
-            {
-                    $this->conn->close();
-                    echo "
-                    <script>
-                        if (Notification.permission === \"granted\") {
-                            new Notification(\"Notice,\", {
-                                body: \"Title and description cannot be empty.\",
-                                icon: \"icon.png\"
-                            });
-                            window.location.href=\"user_edit_task.php?&id={$this->userid}&taskID={$this->taskid}\";
-                            } else if (Notification.permission !== \"denied\") {
-                                    Notification.requestPermission().then(permission => {
-                                        if (permission === \"granted\") {
-                                            new Notification(\"Notice\", {
-                                            body: \"Title and description cannot be empty.\",
-                                            icon: \"icon.png\"
-                                    });
-                                }
-                            });
-                        }
-                    </script>";
-            }
+           }
         }
     }
 
@@ -329,7 +385,7 @@
         }
         else
         {
-            $savechanges = new savechanges($_POST['title'], $_POST['description'], $_POST['status'], $_POST['priority'], $conn, $row['title'], $row['description'], $taskID, $id);
+            $savechanges = new savechanges($_POST['title'], $_POST['description'], $_POST['status'], $_POST['priority'], $conn, $row['title'], $row['description'], $row['status'], $row['priority'], $row['id'], $row['user_id']);
         }
 
         
@@ -584,65 +640,7 @@
                             <div class="card border p-2 ps-3 pe-3 pt-3 pb-3" style="">
                                 
                                 <form method="POST" class="w-100 h-100">
-                                    <!-- <div class="header bg-white border-0 d-flex flex-row" style="height: 2rem;">
-                                        <div class="border-0 w-100 d-flex justify-content-start align-items-center">
-                                            <span> <b>CREATE TASK</b> </span>
-                                        </div>
-                                        <div class="border-0 w-100 d-flex justify-content-end align-items-center">
-                                            <button type="submit" name="create-task" class="rounded-5 ps-3 pe-3 text-white" style="border: 1px solid #42B1F6; background-color: #42B1F6;">
-                                                create task
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="header bg-white border-0 d-flex flex-row" style="height: 2rem;">
-                                        <div class="border-0 w-100 d-flex flex-row justify-content-start align-items-center">
-                                            <div class="border-0 w-10 pe-3 h-100 d-flex justify-content-start align-items-center"><span> Tags: </span></div>
-                                            <div class="border-0 w-25 pe-3 h-100 d-flex justify-content-start align-items-center">
-                                                <select name="status" class="w-100 h-100">
-                                                    <option value="todo">todo</option>
-                                                    <option value="in-progress">in-progress</option>
-                                                    <option value="">complete</option>
-                                                </select>
-                                            </div>
-                                            <div class="border-0 w-25 h-100 d-flex justify-content-start align-items-center">
-                                                <select name="priority" class="w-100 h-100">
-                                                    <option value="low">low</option>
-                                                    <option value="medium">medium</option>
-                                                    <option value="high">high</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <br>
-
-                                    <div class="border-0 w-100 d-flex flex-row" style="height: 2rem;">
-                                        <div class="border-0 d-flex flex-row w-100">
-                                            <div class="h-100 pe-3 d-flex justify-content-center align-items-center">
-                                                <span> Due: </span>
-                                            </div>
-                                            <div class="h-100 w-100">
-                                                <input type="date" name="due_date" class="w-100 h-100">
-                                            </div>
-                                        </div>
-                                        <div class="border-0 d-flex flex-row w-100"></div>
-                                    </div>
-
-                                    <br>
-                                    <div class="card-body border-0 p-0">
-
-                                        <div class="border p-0 rounded-3" style="height: 3rem;">
-                                            <input type="text" name="title" placeholder="TITLE" class="rounded-3 w-100 h-100 border-0 ps-3">
-                                        </div>
-
-                                        <br>
-
-                                        <div class="border rounded-3" style="height: 14rem; display: flex;">
-                                            <textarea name="description" placeholder="DESCRIPTION" class="border-0 rounded-3 w-100 h-100 p-3" style="outline: none; resize: vertical;"></textarea>
-                                        </div>
-
-                                    </div> -->
+                                    
                                     <?php
                                     
                                         $task_id = mysqli_real_escape_string($conn, $_GET['taskID']);
@@ -664,7 +662,9 @@
                                                     $STATUS = $row['status'];
                                                     $PRIORITY = $row['priority'];
 
-                                                    echo"
+                                                    if($STATUS==="todo")
+                                                    {
+                                                        echo"
                                                     
                                                         <div class='header bg-white border-0 d-flex flex-row' style='height: 2rem;'>
                                                             <div class='border-0 w-100 d-flex justify-content-start align-items-center'>
@@ -683,9 +683,8 @@
                                                                 <div class='border-0 w-25 pe-3 h-100 d-flex justify-content-start align-items-center'>
                                                                     <select name='status' class='w-100 h-100'>
                                                                         <option value='$STATUS'>$STATUS</option>
-                                                                        <option value='todo'>todo</option>
                                                                         <option value='in-progress'>in-progress</option>
-                                                                        <option value='complete'>complete</option>
+                                                                        <option value='completed'>completed</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class='border-0 w-25 h-100 d-flex justify-content-start align-items-center'>
@@ -733,6 +732,149 @@
                                                         </div>
 
                                                     ";
+                                                    }
+                                                    else if($STATUS==="in-progress")
+                                                    {
+                                                        echo"
+                                                    
+                                                        <div class='header bg-white border-0 d-flex flex-row' style='height: 2rem;'>
+                                                            <div class='border-0 w-100 d-flex justify-content-start align-items-center'>
+                                                                <span> <b>EDITING TASK</b> </span>
+                                                            </div>
+                                                            <div class='border-0 w-100 d-flex justify-content-end align-items-center'>
+                                                                <button type='submit' value='$ID' name='save-changes' class='rounded-5 ps-3 pe-3 text-white' style='border: 1px solid #42B1F6; background-color: #42B1F6;'>
+                                                                    save changes
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class='header bg-white border-0 d-flex flex-row' justify-content-start style='height: 2rem; gap: 1rem;'>
+                                                            <div class='border-0 w-100 d-flex flex-row justify-content-start align-items-center'>
+                                                                <div class='border-0 w-10 pe-3 h-100 d-flex justify-content-start align-items-center'><span> Tags: </span></div>
+                                                                <div class='border-0 w-25 pe-3 h-100 d-flex justify-content-start align-items-center'>
+                                                                    <select name='status' class='w-100 h-100'>
+                                                                        <option value='$STATUS'>$STATUS</option>
+                                                                        <option value='todo'>todo</option>
+                                                                        <option value='completed'>completed</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class='border-0 w-25 h-100 d-flex justify-content-start align-items-center'>
+                                                                    <select name='priority' class='w-100 h-100'>
+                                                                        <option value='$PRIORITY'>$PRIORITY</option>
+                                                                        <option value='low'>low</option>
+                                                                        <option value='medium'>medium</option>
+                                                                        <option value='high'>high</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <br>
+
+                                                        <div class='border-0 w-100 d-flex flex-row' style='height: 2rem;'>
+                                                            <div class='border-0 d-flex flex-row w-100'>
+                                                                <div class='h-100 pe-3 d-flex justify-content-center align-items-center'>
+                                                                    <span> Due: </span>
+                                                                </div>
+                                                                <div class='h-100 w-100 border-0'>
+                                                                    <input disabled type='text' name='due_date' value='$DUE' class='w-100 h-100 bg-white border-0'>
+                                                                </div>
+                                                            </div>
+                                                            <div class='border-0 d-flex flex-row w-100'></div>
+                                                        </div>
+
+                                                        <br>
+                                                        <div class='card-body border-0 p-0'>
+
+                                                            <div class='border p-0 rounded-3' style='height: 3rem;'>
+                                                                <input type='text' value='$TITLE'  name='title' placeholder='TITLE' class='rounded-3 w-100 h-100 border-0 ps-3'>
+                                                            </div>
+
+                                                            <br>
+
+                                                            <div class='border rounded-3' style='height: 8rem; display: flex;'>
+                                                                <textarea  name='description' placeholder='DESCRIPTION' class='border-0 rounded-3 w-100 h-100 p-3' style='outline: none; resize: vertical;'> $DESCRIPTION </textarea>
+                                                            </div>
+
+                                                             <button type='submit' title='' value='$ID' name='cancel' class='inactive sidebar-nav border-0 d-flex flex-column justify-content-center bg-white pt-3 pb-3'>
+                                                                <span class='text-danger'> Cancel </span>
+                                                            </button>
+
+                                                        </div>
+
+                                                    ";
+                                                    }
+                                                    else if($STATUS==="completed")
+                                                    {
+                                                        echo"
+                                                    
+                                                        <div class='header bg-white border-0 d-flex flex-row' style='height: 2rem;'>
+                                                            <div class='border-0 w-100 d-flex justify-content-start align-items-center'>
+                                                                <span> <b>EDITING TASK</b> </span>
+                                                            </div>
+                                                            <div class='border-0 w-100 d-flex justify-content-end align-items-center'>
+                                                                <button type='submit' value='$ID' name='save-changes' class='rounded-5 ps-3 pe-3 text-white' style='border: 1px solid #42B1F6; background-color: #42B1F6;'>
+                                                                    save changes
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class='header bg-white border-0 d-flex flex-row' justify-content-start style='height: 2rem; gap: 1rem;'>
+                                                            <div class='border-0 w-100 d-flex flex-row justify-content-start align-items-center'>
+                                                                <div class='border-0 w-10 pe-3 h-100 d-flex justify-content-start align-items-center'><span> Tags: </span></div>
+                                                                <div class='border-0 w-25 pe-3 h-100 d-flex justify-content-start align-items-center'>
+                                                                    <select name='status' class='w-100 h-100'>
+                                                                        <option value='$STATUS'>$STATUS</option>
+                                                                        <option value='todo'>todo</option>
+                                                                        <option value='in-progress'>in-progress</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class='border-0 w-25 h-100 d-flex justify-content-start align-items-center'>
+                                                                    <select name='priority' class='w-100 h-100'>
+                                                                        <option value='$PRIORITY'>$PRIORITY</option>
+                                                                        <option value='low'>low</option>
+                                                                        <option value='medium'>medium</option>
+                                                                        <option value='high'>high</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <br>
+
+                                                        <div class='border-0 w-100 d-flex flex-row' style='height: 2rem;'>
+                                                            <div class='border-0 d-flex flex-row w-100'>
+                                                                <div class='h-100 pe-3 d-flex justify-content-center align-items-center'>
+                                                                    <span> Due: </span>
+                                                                </div>
+                                                                <div class='h-100 w-100 border-0'>
+                                                                    <input disabled type='text' name='due_date' value='$DUE' class='w-100 h-100 bg-white border-0'>
+                                                                </div>
+                                                            </div>
+                                                            <div class='border-0 d-flex flex-row w-100'></div>
+                                                        </div>
+
+                                                        <br>
+                                                        <div class='card-body border-0 p-0'>
+
+                                                            <div class='border p-0 rounded-3' style='height: 3rem;'>
+                                                                <input type='text' value='$TITLE'  name='title' placeholder='TITLE' class='rounded-3 w-100 h-100 border-0 ps-3'>
+                                                            </div>
+
+                                                            <br>
+
+                                                            <div class='border rounded-3' style='height: 8rem; display: flex;'>
+                                                                <textarea  name='description' placeholder='DESCRIPTION' class='border-0 rounded-3 w-100 h-100 p-3' style='outline: none; resize: vertical;'> $DESCRIPTION </textarea>
+                                                            </div>
+
+                                                             <button type='submit' title='' value='$ID' name='cancel' class='inactive sidebar-nav border-0 d-flex flex-column justify-content-center bg-white pt-3 pb-3'>
+                                                                <span class='text-danger'> Cancel </span>
+                                                            </button>
+
+                                                        </div>
+
+                                                    ";
+                                                    }
                                                 }
                                             }
                                         

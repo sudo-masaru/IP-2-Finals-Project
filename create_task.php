@@ -359,7 +359,7 @@
                                                 <select name="status" class="w-100 h-100">
                                                     <option value="todo">todo</option>
                                                     <option value="in-progress">in-progress</option>
-                                                    <option value="complete">complete</option>
+                                                    <option value="completed">completed</option>
                                                 </select>
                                             </div>
                                             <div class="border-0 w-25 h-100 d-flex justify-content-start align-items-center">
@@ -380,7 +380,7 @@
                                                 <span> Due: </span>
                                             </div>
                                             <div class="h-100 w-100">
-                                                <input type="date" name="due_date" class="w-100 h-100">
+                                                <input required type="date" name="due_date" class="w-100 h-100">
                                             </div>
                                         </div>
                                         <div class="border-0 d-flex flex-row w-100"></div>

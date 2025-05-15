@@ -10,7 +10,7 @@
         $email="";
         $date="";
 
-        $sql = "SELECT id, username, email, profile_img, created_at FROM users WHERE id='$id'";
+        $sql = "SELECT id, username, email, profile_img, DATE(created_at) AS created_date FROM users WHERE id='$id' AND created_at > '2025-01-01'";
         $result = mysqli_query($conn, $sql);
 
         if(mysqli_num_rows($result) > 0)
@@ -20,7 +20,7 @@
                 $profile_img=$row['profile_img'];
                 $username=$row['username'];
                 $email=$row['email'];
-                $date=$row['created_at'];
+                $date=$row['created_date'];
             }
         }
     }

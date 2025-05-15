@@ -448,7 +448,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"aadmin_view_user.php?&id={$this->id}&usrID={$this->userid}\";
+                                                window.location.href=\"admin_view_user.php?&id={$this->id}&usrID={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -501,7 +501,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"aadmin_view_user.php?&id={$this->id}&usrID={$this->userid}\";
+                                                window.location.href=\"admin_view_user.php?&id={$this->id}&usrID={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
@@ -554,7 +554,7 @@
                                                     body: \"Something went wrong.\",
                                                     icon: \"icon.png\"
                                                 });
-                                                window.location.href=\"aadmin_view_user.php?&id={$this->id}&usrID={$this->userid}\";
+                                                window.location.href=\"admin_view_user.php?&id={$this->id}&usrID={$this->userid}\";
                                                 } else if (Notification.permission !== \"denied\") {
                                                     Notification.requestPermission().then(permission => {
                                                         if (permission === \"granted\") {
