@@ -535,6 +535,18 @@
                                                     }
                                                 }
                                             }
+                                            else
+                                            {
+                                                // echo "No results.";
+                                                echo"
+                                                    <div class='card w-100 pt-5 pb-3 border-0 d-flex justify-content-center align-items-center'>
+                                                        
+                                                        No tasks! 
+                                                        <i class='bi bi-emoji-laughing text-secondary'></i>
+                                                        
+                                                    </div>
+                                                ";
+                                            }
 
                                         ?>
 

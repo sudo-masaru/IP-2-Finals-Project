@@ -128,7 +128,7 @@
                                 </div>
 
                                 <div class="border-0 pb-2 pt-2 w-100 d-flex flex-column justify-content-center align-items-center" style="gap: 1rem;">
-                                     <h1 class="Logo-txt"> Welcome to FLutterTask </h1>
+                                     <h1 class="Logo-txt"> Welcome to FlutterTask </h1>
                                      <h5><?php echo $username; ?></h5>
                                 </div>
 
