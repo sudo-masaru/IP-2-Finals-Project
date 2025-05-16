@@ -126,9 +126,9 @@
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['filter-date']))
     {
-        $date_val = $_POST['filtered-date'];
+        $date_val = $_POST['date_val'];
         $conn->close();
-        header("Location: filter_by.php?&id=".$id."&date_val=".$date_val);
+        header("Location: filter_date.php?&id=".$id."&date_val=".$date_val);
     }
 
 ?>
