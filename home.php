@@ -124,6 +124,12 @@
         $conn->close();
         header("Location: filter_by.php?&id=".$id."&filter_val=".$filter_val);
     }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['filter-date']))
+    {
+        $date_val = $_POST['filtered-date'];
+        $conn->close();
+        header("Location: filter_by.php?&id=".$id."&date_val=".$date_val);
+    }
 
 ?>
 <!DOCTYPE html>
@@ -370,14 +376,14 @@
                                 </div>
                             </div>
                             <div class="card rounded-0 border-0 d-flex flex-row" style="height: 2rem;">
-                                <div class="w-50 border h-100 d-flex justify-content-start align-items-center">
+                                <div class="w-50 border-0 h-100 d-flex justify-content-start align-items-center">
                                     <form method="POST" class="w-100 h-100">
                                         <div class="d-flex flex-row justify-content-center align-items-center w-100 h-100">
-                                            <button type="submit" name="filter-by" class="border-0 h-100">
-                                                    <i class="bi bi-funnel-fill"></i>
+                                            <button type="submit" name="filter-by" class="border-0 h-100" style="background-color: #42B8EA;">
+                                                    <i class="bi bi-funnel-fill text-white"></i>
                                             </button>
-                                            <select name="filtered-option" class="bg-white border-0 w-100 h-100">
-                                                <option value="default"> Filter by </option>
+                                            <select name="filtered-option" class="bg-white border w-100 h-100">
+                                                <!-- <option value="default"> Filter by </option> -->
                                                 <optgroup label="Status">
                                                     <option value="todo">todo</option>
                                                     <option value="in-progress">in-progress</option>
@@ -392,8 +398,14 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="w-100 h-100 d-flex justify-content-end align-items-center border-0">
-                                    
+                                <div class="w-25 h-100 d-flex justify-content-start align-items-center border-0"></div>
+                                <div class="border-0 w-100 d-flex justify-content-start align-items-center">
+                                    <form method="POST" class="w-100 h-100 d-flex flex-row">
+                                        <button type="submit" name="filter-date" class="border-0 h-100" style="background-color: #42B8EA;">
+                                            <i class="bi bi-calendar-week align-self-center text-white"></i>
+                                        </button>
+                                        <input type="date" name="date_val" class="h-100 w-100 border">
+                                    </form>
                                 </div>
                             </div>
 

@@ -191,20 +191,560 @@
                         }
                         else if($this->status === $this->current_status && $this->priority !== $this->current_priority)
                         {
-                            echo "this->status === this->current_status && <br> this->priority !== this->current_priority";
+                            //echo "this->status === this->current_status && <br> this->priority !== this->current_priority";
+
+                            //echo "this->status !== this->current_status && <br> this->priority === this->current_priority";
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->current_status."', `priority`='".$this->priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        
                         }
                         else if($this->status !== $this->current_status && $this->priority !== $this->current_priority)
                         {
-                            echo "this->status !== this->current_status && <br> this->priority !== this->current_priority";
+                            //echo "this->status !== this->current_status && <br> this->priority !== this->current_priority";
+
+                            //echo "this->status !== this->current_status && <br> this->priority === this->current_priority";
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->status."', `priority`='".$this->priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        
                         }
                     }
                     else if($this->title !== $this->current_title && $count_existing_task > 0)
                     {
                         //echo "this->title !== this->current_title && count_existing_task > 0";
+
+                        // no changes made
+                        //echo "this->title === this->current_title && count_existing_task > 0";
+                        if($this->status === $this->current_status && $this->priority === $this->current_priority)
+                        {
+                            // echo "this->status === this->current_status && <br> this->priority === this->current_priority";
+
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->current_status."', `priority`='".$this->current_priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        }
+                        else if($this->status !== $this->current_status && $this->priority === $this->current_priority)
+                        {
+                            //echo "this->status !== this->current_status && <br> this->priority === this->current_priority";
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->status."', `priority`='".$this->current_priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        }
+                        else if($this->status === $this->current_status && $this->priority !== $this->current_priority)
+                        {
+                            //echo "this->status === this->current_status && <br> this->priority !== this->current_priority";
+
+                            //echo "this->status !== this->current_status && <br> this->priority === this->current_priority";
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->current_status."', `priority`='".$this->priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        
+                        }
+                        else if($this->status !== $this->current_status && $this->priority !== $this->current_priority)
+                        {
+                            //echo "this->status !== this->current_status && <br> this->priority !== this->current_priority";
+
+                            //echo "this->status !== this->current_status && <br> this->priority === this->current_priority";
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->status."', `priority`='".$this->priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        
+                        }
+                    
                     }
                     else if($this->title !== $this->current_title && $count_existing_task === 0)
                     {
                        //echo "this->title !== this->current_title && count_existing_task === 0";
+
+                        // no changes made
+                        //echo "this->title === this->current_title && count_existing_task > 0";
+                        if($this->status === $this->current_status && $this->priority === $this->current_priority)
+                        {
+                            // echo "this->status === this->current_status && <br> this->priority === this->current_priority";
+
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->current_status."', `priority`='".$this->current_priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        }
+                        else if($this->status !== $this->current_status && $this->priority === $this->current_priority)
+                        {
+                            //echo "this->status !== this->current_status && <br> this->priority === this->current_priority";
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->status."', `priority`='".$this->current_priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        }
+                        else if($this->status === $this->current_status && $this->priority !== $this->current_priority)
+                        {
+                            //echo "this->status === this->current_status && <br> this->priority !== this->current_priority";
+
+                            //echo "this->status !== this->current_status && <br> this->priority === this->current_priority";
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->current_status."', `priority`='".$this->priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        
+                        }
+                        else if($this->status !== $this->current_status && $this->priority !== $this->current_priority)
+                        {
+                            //echo "this->status !== this->current_status && <br> this->priority !== this->current_priority";
+
+                            //echo "this->status !== this->current_status && <br> this->priority === this->current_priority";
+                                $UPDATE="UPDATE tasks SET `title`='".$this->title."', `description`='".$this->description."', `status`='".$this->status."', `priority`='".$this->priority."' WHERE id='".$this->taskid."' AND user_id='".$this->userid."'";
+
+                                if ($this->conn->query($UPDATE) === TRUE) 
+                                {
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Update complete. changes were made.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Update complete. changes were made.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                                else
+                                {                                   
+                                    $this->conn->close();
+                                    echo "
+                                    <script>
+                                            if (Notification.permission === \"granted\") {
+                                                new Notification(\"Notice,\", {
+                                                    body: \"Something went wrong.\",
+                                                    icon: \"icon.png\"
+                                                });
+                                                window.location.href=\"user_view_task.php?&id={$this->userid}&taskID={$this->taskid}\";
+                                                } else if (Notification.permission !== \"denied\") {
+                                                    Notification.requestPermission().then(permission => {
+                                                        if (permission === \"granted\") {
+                                                            new Notification(\"Notice\", {
+                                                            body: \"Something went wrong.\",
+                                                            icon: \"icon.png\"
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                    </script>";
+                                }
+                        
+                        }
+                    
                     }
             }
            else
