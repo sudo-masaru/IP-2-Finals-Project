@@ -451,7 +451,7 @@
                                             if(isset($date_val))
                                             {                                            
                                                 
-                                                $sql_query_tasks="SELECT id, user_id, title, priority, status, created_at AS created_date FROM tasks WHERE user_id='$id' AND created_at='$date_val'";
+                                                $sql_query_tasks="SELECT id, user_id, title, priority, status, created_at AS created_date FROM tasks WHERE (user_id='$id' AND created_at='$date_val')";
                                                 $result_display = mysqli_query($conn, $sql_query_tasks);
                                                 
                                                 if($result_display->num_rows > 0)
