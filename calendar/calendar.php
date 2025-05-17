@@ -1,126 +1,114 @@
 <?php
-
-    /*
-        unix timestamp : time() - function
-        Returns the current number of seconds since January 1, 1970 (Unix Epoch).
-    */
-        // $currentTime = time();
-        // echo "Time: " . $currentTime;
-
-
-
-    /*
-        Converting a Unix Timestamp to a Readable Date with Date()
-        The date() function takes a format string and a timestamp (number of seconds) and returns a human-readable date/time.
-    */ 
-        $now = time(); // current timestamp
-        // echo date("Y-m-d H:i:s", $now);
-    /*
-        Y = full year (e.g., 2025)
-
-        m = month (01 to 12)
-
-        d = day of the month (01 to 31)
-
-        H = hour in 24h format (00 to 23)
-
-        i = minutes (00 to 59)
-
-        s = seconds (00 to 59)
-    */ 
-        //echo date("d/m/Y", $now);   // day/month/year  
-        //echo date("l, F j, Y", $now); // full weekday name, full month name, day, year
-    /*
-        l : full name of the weekday
-        f : full name of the month
-        j : day of the month(no leading zeroes)
-        y : four digit year
-    */ 
-
-    
-    
-    /* important: month, year, weekdays, tasks. */ 
-        /* 
-            Custom calendar:
-
-            Step 1:
-            Zeller’s Congruence - algorithm 
-            learn how to get the day of the week for any date.
-
-            Step 2:
-            Calculate number of dats in a month
-            learn the logic to handle months and leap years manually.
-
-            step 3:
-            leap year rule.
-            if (($year % 4 == 0 && $year % 100 != 0) || ($year % 400 == 0)) {
-                // leap year
-            }
-
-            step 4:
-            display a calendar, show in a grid with 7 columns.
-
-            Step 5:
-            navigation - previous and next month
-
-        */ 
-
-
-
-        /*
-            step 1:
-            mathematical formula to determine the day of the week wthout using built in date()
-
-            formula for gregorian calendar:
-            h = ( q + ⌊(13(m + 1)/5)⌋ + K + ⌊K/4⌋ + ⌊J/4⌋ + 5J ) mod 7
-
-            --
-            h	Day of the week (0 = Saturday, 1 = Sunday, ..., 6 = Friday)
-            q	Day of the month (1–31)
-            m	Month (3 = March, 4 = April, ..., 14 = February)
-            K	Year of the century (i.e., year % 100)
-            J	Zero-based century (i.e., year / 100)
-
-            --
-            important!
-             -Jan is treated as 13
-             -Feb is treated as 14
-             of the previous year
-
-             ->implement zellers conrguence
-                -turn your manual calculations into code that automatically gives you the weekday for any date.
-                -This will be the core function you’ll use to place days correctly in your calendar grid.
-
-
-                #TASK
-                1. Write a PHP function that takes a date (day, month, year) as input.
-
-                2. Adjust January and February to months 13 and 14 of the previous year (per Zeller’s rule).
-
-                3. Calculate K and J from the year.
-
-                4. Apply the formula.
-
-                5. Return the day of the week as a number (0=Saturday, 1=Sunday, ..., 6=Friday).
-
-                6. Optionally, map that number to a weekday name.
-        */ 
-
-        function zellersCongruence($day, $month, $year) 
-        {
-            if ($month < 3) {
-                $month += 12;
-                $year -= 1;
-            }
-            $K = $year % 100;
-            $J = intdiv($year, 100);
-            
-            $h = ($day + floor((13 * ($month + 1)) / 5) + $K + floor($K / 4) + floor($J / 4) + 5 * $J) % 7;
-            
-            $weekdays = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-    
-            return $weekdays[$h];
+    function zellersCongruence($day, $month, $year) {
+        if ($month < 3) {
+            $month += 12;
+            $year -= 1;
         }
-        echo zellersCongruence(17, 5, 2025); 
+        $K = $year % 100;
+        $J = intdiv($year, 100);
+        $h = ($day + floor((13 * ($month + 1)) / 5) + $K + floor($K / 4) + floor($J / 4) + 5 * $J) % 7;
+        return $h;
+    }
 
+    function daysInMonth($month, $year) {
+        if ($month == 2) {
+            return (($year % 4 == 0 && $year % 100 != 0) || ($year % 400 == 0)) ? 29 : 28;
+        }
+        return in_array($month, [1,3,5,7,8,10,12]) ? 31 : 30;
+    }
+
+    function getMonthName($month) {
+        $months = [
+            1=>"January", 2=>"February", 3=>"March", 4=>"April",
+            5=>"May", 6=>"June", 7=>"July", 8=>"August",
+            9=>"September", 10=>"October", 11=>"November", 12=>"December"
+        ];
+        return $months[$month];
+    }
+
+    function previousMonth($month, $year) {
+        $month--;
+        if ($month < 1) {
+            $month = 12;
+            $year--;
+        }
+        return [$month, $year];
+    }
+
+    function nextMonth($month, $year) {
+        $month++;
+        if ($month > 12) {
+            $month = 1;
+            $year++;
+        }
+        return [$month, $year];
+    }
+
+    $month = isset($_GET['month']) ? (int)$_GET['month'] : (int)date('n');
+    $year = isset($_GET['year']) ? (int)$_GET['year'] : (int)date('Y');
+
+    $zellerDay = zellersCongruence(1, $month, $year);
+    $startDay = ($zellerDay + 6) % 7;
+    $totalDays = daysInMonth($month, $year);
+    list($prevMonth, $prevYear) = previousMonth($month, $year);
+    list($nextMonth, $nextYear) = nextMonth($month, $year);
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PHP Custom Calendar</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        table { margin: 20px auto; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ccc; width: 50px; height: 50px; }
+        th { background-color: #f4f4f4; }
+        .today { background-color: #d4edda; font-weight: bold; }
+        a { text-decoration: none; margin: 0 10px; }
+    </style>
+</head>
+<body>
+
+<h2>
+    <a href="?month=<?= $prevMonth ?>&year=<?= $prevYear ?>">&#8592;</a>
+    <?= getMonthName($month) . " " . $year ?>
+    <a href="?month=<?= $nextMonth ?>&year=<?= $nextYear ?>">&#8594;</a>
+</h2>
+
+<table>
+    <tr>
+        <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th>
+        <th>Thu</th><th>Fri</th><th>Sat</th>
+    </tr>
+    <tr>
+        <?php
+        $day = 1;
+        $cellCount = 0;
+
+        for ($i = 0; $i < $startDay; $i++) {
+            echo "<td></td>";
+            $cellCount++;
+        }
+
+        while ($day <= $totalDays) {
+            $isToday = ($day == date('j') && $month == date('n') && $year == date('Y'));
+            $class = $isToday ? 'today' : '';
+            echo "<td class='$class'>$day</td>";
+            $day++;
+            $cellCount++;
+            if ($cellCount % 7 == 0) {
+                echo "</tr><tr>";
+            }
+        }
+
+        while ($cellCount % 7 != 0) {
+            echo "<td></td>";
+            $cellCount++;
+        }
+        ?>
+    </tr>
+</table>
+
+</body>
+</html>
