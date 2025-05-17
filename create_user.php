@@ -641,6 +641,25 @@
                 }
             }
 
+            let logoutTimer;
+            function logoutUser() 
+            {
+                alert("You have been logged out due to inactivity.");
+                window.location.href = 'index.php'; 
+            }
+
+            function resetTimer() 
+            {
+                clearTimeout(logoutTimer);
+                logoutTimer = setTimeout(logoutUser, 30 * 60 * 1000); 
+            }
+
+            window.onload = resetTimer;
+            window.onmousemove = resetTimer;
+            window.onkeypress = resetTimer;
+            window.onscroll = resetTimer;
+            window.onclick = resetTimer;
+
         </script>
         
 </body>
