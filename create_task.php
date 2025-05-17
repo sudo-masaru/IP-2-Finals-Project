@@ -63,7 +63,7 @@
                 {
                     //echo "title: ".$this->title." description: ".$this->description." tags: ".$this->status." ".$this->priority." due: ".$this->due_date." id: ".$this->id;
 
-                    $sql_existing_task = "SELECT user_id, title FROM tasks WHERE title='".$this->title."'";
+                    $sql_existing_task = "SELECT user_id, title FROM tasks WHERE title='".$this->title."' AND user_id='".$this->id."'";
                     $result=mysqli_query($this->conn, $sql_existing_task);
                     $count_existing_task = mysqli_num_rows($result);
 
