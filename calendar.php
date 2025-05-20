@@ -130,6 +130,10 @@
         $conn->close();
         header("Location: filter_date.php?&id=".$id."&date_val=".$date_val);
     }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['getDate']))
+    {
+        echo "date: " . $_POST['getDate'];
+    }
 
 ?>
 <!DOCTYPE html>
@@ -437,110 +441,119 @@
                         
                         <div class="CONTENT h-100 d-flex flex-column border-0 ps-3 pe-3">
 
-                            <div class="card border rounded-0" style="height: 1200px;">
+                            <div class="card border rounded-0">
 
-                                <div class="border-0 p-2 d-flex justify-content-center align-items-center w-100 h-100">
+                                <div class="border-0 p-2 d-flex justify-content-center align-items-center w-100">
                                     
-                                    <div class="card border w-100 h-100">
+                                    <div class="card border-0 w-100 h-100">
                                         
-                                        <div class="CAL-BOX card-body d-flex flex-row p-0">
+                                        <div class="CAL-BOX card-body p-0">
 
-                                            <?php
-                                            
-                                                function zellersCongruence($day, $month, $year) {
-                                                    if ($month < 3) {
-                                                        $month += 12;
-                                                        $year -= 1;
+                                            <form method="POST">
+                                                        <?php
+                                                                                        
+                                                            function zellersCongruence($day, $month, $year) {
+                                                                if ($month < 3) {
+                                                                    $month += 12;
+                                                                    $year -= 1;
+                                                                }
+                                                                $K = $year % 100;
+                                                                $J = intdiv($year, 100);
+                                                                $h = ($day + floor((13 * ($month + 1)) / 5) + $K + floor($K / 4) + floor($J / 4) + 5 * $J) % 7;
+                                                                return $h;
+                                                            }
+
+                                                            function daysInMonth($month, $year) {
+                                                                if ($month == 2) {
+                                                                    return (($year % 4 == 0 && $year % 100 != 0) || ($year % 400 == 0)) ? 29 : 28;
+                                                                }
+                                                                return in_array($month, [1,3,5,7,8,10,12]) ? 31 : 30;
+                                                            }
+
+                                                            function getMonthName($month) {
+                                                                $months = [
+                                                                    1=>"January", 2=>"February", 3=>"March", 4=>"April",
+                                                                    5=>"May", 6=>"June", 7=>"July", 8=>"August",
+                                                                    9=>"September", 10=>"October", 11=>"November", 12=>"December"
+                                                                ];
+                                                                return $months[$month];
+                                                            }
+
+                                                            function previousMonth($month, $year) {
+                                                                $month--;
+                                                                if ($month < 1) {
+                                                                    $month = 12;
+                                                                    $year--;
+                                                                }
+                                                                return [$month, $year];
+                                                            }
+
+                                                            function nextMonth($month, $year) {
+                                                                $month++;
+                                                                if ($month > 12) {
+                                                                    $month = 1;
+                                                                    $year++;
+                                                                }
+                                                                return [$month, $year];
+                                                            }
+
+                                                            $month = isset($_GET['month']) ? (int)$_GET['month'] : (int)date('n');
+                                                            $year = isset($_GET['year']) ? (int)$_GET['year'] : (int)date('Y');
+
+                                                            $zellerDay = zellersCongruence(1, $month, $year);
+                                                            $startDay = ($zellerDay + 6) % 7;
+                                                            $totalDays = daysInMonth($month, $year);
+                                                            list($prevMonth, $prevYear) = previousMonth($month, $year);
+                                                            list($nextMonth, $nextYear) = nextMonth($month, $year);
+
+                                                            echo "<h2>
+                                                                <a href=\"?month=$prevMonth&year=$prevYear\">&#8592;</a>
+                                                                " . getMonthName($month) . " " . $year . "
+                                                                <a href=\"?month=$nextMonth&year=$nextYear\">&#8594;</a>
+                                                                </h2>";
+
+                                                            echo "<table>
+                                                                    <tr>
+                                                                        <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th>
+                                                                        <th>Thu</th><th>Fri</th><th>Sat</th>
+                                                                    </tr>
+                                                                    <tr>";
+
+                                                    $day = 1;
+                                                    $cellCount = 0;
+
+                                                    for ($i = 0; $i < $startDay; $i++) {
+                                                        echo "<td></td>";
+                                                        $cellCount++;
                                                     }
-                                                    $K = $year % 100;
-                                                    $J = intdiv($year, 100);
-                                                    $h = ($day + floor((13 * ($month + 1)) / 5) + $K + floor($K / 4) + floor($J / 4) + 5 * $J) % 7;
-                                                    return $h;
-                                                }
 
-                                                function daysInMonth($month, $year) {
-                                                    if ($month == 2) {
-                                                        return (($year % 4 == 0 && $year % 100 != 0) || ($year % 400 == 0)) ? 29 : 28;
+                                                    while ($day <= $totalDays) {
+                                                        $isToday = ($day == date('j') && $month == date('n') && $year == date('Y'));
+                                                        $class = $isToday ? 'today' : '';
+
+                                                        $getDate = $month . "/" . $day . "/" . $year;
+                                                        // echo "get date: " . $getDate;
+                                                        
+                                                        echo "<td class='$class'><button type='submit' name='getDate' value='$getDate' class='w-100 h-100 border-0 bg-transparent'> $day </button></td>";
+                                                        
+                                                        $day++;
+                                                        $cellCount++;
+                                                        if ($cellCount % 7 == 0) {
+                                                            echo "</tr><tr>";
+                                                        }
                                                     }
-                                                    return in_array($month, [1,3,5,7,8,10,12]) ? 31 : 30;
-                                                }
 
-                                                function getMonthName($month) {
-                                                    $months = [
-                                                        1=>"January", 2=>"February", 3=>"March", 4=>"April",
-                                                        5=>"May", 6=>"June", 7=>"July", 8=>"August",
-                                                        9=>"September", 10=>"October", 11=>"November", 12=>"December"
-                                                    ];
-                                                    return $months[$month];
-                                                }
-
-                                                function previousMonth($month, $year) {
-                                                    $month--;
-                                                    if ($month < 1) {
-                                                        $month = 12;
-                                                        $year--;
+                                                    while ($cellCount % 7 != 0) {
+                                                        echo "<td></td>";
+                                                        $cellCount++;
                                                     }
-                                                    return [$month, $year];
-                                                }
 
-                                                function nextMonth($month, $year) {
-                                                    $month++;
-                                                    if ($month > 12) {
-                                                        $month = 1;
-                                                        $year++;
-                                                    }
-                                                    return [$month, $year];
-                                                }
+                                                    echo "</tr></table>";
 
-                                                $month = isset($_GET['month']) ? (int)$_GET['month'] : (int)date('n');
-                                                $year = isset($_GET['year']) ? (int)$_GET['year'] : (int)date('Y');
+                                                ?>
+                                            </form>
 
-                                                $zellerDay = zellersCongruence(1, $month, $year);
-                                                $startDay = ($zellerDay + 6) % 7;
-                                                $totalDays = daysInMonth($month, $year);
-                                                list($prevMonth, $prevYear) = previousMonth($month, $year);
-                                                list($nextMonth, $nextYear) = nextMonth($month, $year);
-
-                                                echo "<h2>
-                                                        <a href=\"?month=$prevMonth&year=$prevYear\">&#8592;</a>
-                                                        " . getMonthName($month) . " " . $year . "
-                                                        <a href=\"?month=$nextMonth&year=$nextYear\">&#8594;</a>
-                                                    </h2>";
-
-                                                echo "<table>
-                                                        <tr>
-                                                            <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th>
-                                                            <th>Thu</th><th>Fri</th><th>Sat</th>
-                                                        </tr>
-                                                        <tr>";
-
-                                                $day = 1;
-                                                $cellCount = 0;
-
-                                                for ($i = 0; $i < $startDay; $i++) {
-                                                    echo "<td></td>";
-                                                    $cellCount++;
-                                                }
-
-                                                while ($day <= $totalDays) {
-                                                    $isToday = ($day == date('j') && $month == date('n') && $year == date('Y'));
-                                                    $class = $isToday ? 'today' : '';
-                                                    echo "<td class='$class'>$day</td>";
-                                                    $day++;
-                                                    $cellCount++;
-                                                    if ($cellCount % 7 == 0) {
-                                                        echo "</tr><tr>";
-                                                    }
-                                                }
-
-                                                while ($cellCount % 7 != 0) {
-                                                    echo "<td></td>";
-                                                    $cellCount++;
-                                                }
-
-                                                echo "</tr></table>";
-
-                                            ?>
+                                           
                                                 
                                         </div>
                                     </div>
