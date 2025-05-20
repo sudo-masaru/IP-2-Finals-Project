@@ -95,8 +95,11 @@
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['calendar']))
     {
-        $conn->close();
-        echo" <script> window.location.href=\"calendar.php?&id={$id}\"; </script> ";
+
+        /* passing current date to the header... to display of tasks? */ 
+
+        // $conn->close();
+        // echo" <script> window.location.href=\"calendar.php?&id={$id}\"; </script> ";
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['files']))
     {
@@ -133,6 +136,7 @@
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['getDate']))
     {
         echo "date: " . $_POST['getDate'];
+        header("");
     }
 
 ?>
@@ -552,10 +556,15 @@
 
                                                 ?>
                                             </form>
-
-                                           
                                                 
                                         </div>
+
+                                        <div class="DISPLAY-TASKS">
+
+                                                    
+
+                                        </div>
+
                                     </div>
 
                                 </div>

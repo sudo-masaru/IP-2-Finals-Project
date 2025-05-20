@@ -95,8 +95,12 @@
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['calendar']))
     {
-        $conn->close();
-        echo" <script> window.location.href=\"calendar.php?&id={$id}\"; </script> ";
+        // $conn->close();
+        // echo" <script> window.location.href=\"calendar.php?&id={$id}\"; </script> ";
+
+        /* passing current date to header... */
+         
+
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['files']))
     {
