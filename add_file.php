@@ -308,7 +308,7 @@
 
                 $fileExt = explode('.', $fileName);
                 $fileActualExt = strtolower(end($fileExt));
-                $destination = "cloud/" . basename($fileName);
+                $destination = "cloud/" . uniqid() . basename($fileName);
 
                 if($fileActualExt !== "pdf")
                 {
@@ -339,6 +339,7 @@
                     if(move_uploaded_file($fileTmpName, $destination))
                     {
                         $fileHash = hash('sha256', $destination);
+
 
                         // echo "file: ".$fileHash;
 

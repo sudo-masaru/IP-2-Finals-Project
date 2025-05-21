@@ -209,6 +209,64 @@
         }   
     
     }
+    else if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['export'])) {
+        $cloudID = mysqli_real_escape_string($conn, $_POST['export']);
+        $usrID = mysqli_real_escape_string($conn, $_GET['id']);
+
+        // Get stored file name and display name for the given file ID and user
+        $sql = "SELECT file, file_name, id, user_id FROM cloud WHERE id='$cloudID' AND user_id='$usrID' LIMIT 1";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+
+        if(!$row)
+        {
+            // echo "no file";
+                $conn->close();
+                echo "
+                <script>
+                    if (Notification.permission === \"granted\") {
+                        new Notification(\"Notice,\", {
+                            body: \"File not found.\",
+                            icon: \"icon.png\"
+                        });
+                        window.location.href=\"files.php?&id={$id}\";
+                        } else if (Notification.permission !== \"denied\") {
+                            Notification.requestPermission().then(permission => {
+                                if (permission === \"granted\") {
+                                    new Notification(\"Notice,\", {
+                                    body: \"File not found.\",
+                                    icon: \"icon.png\"
+                                });
+                            }
+                        });
+                    }
+                </script>";
+        }
+        else
+        {
+            // echo "file found";
+
+            $file = $row['file'];
+            $filename = $file;
+            if (file_exists($filename)) {
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename="'.basename($filename).'"');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($filename));
+                readfile($filename);
+                exit;
+            } else {
+                echo "File does not exist.";
+            }
+        }
+    }
+
+
+
+
 
 ?>
 <!DOCTYPE html>
