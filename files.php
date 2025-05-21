@@ -166,6 +166,49 @@
         $conn->close();
         header("Location: add_file.php?&id=".$id);
     }
+    else if($_SERVER['REQUEST_METHOD']==="POST" && isset($_POST['delete']))
+    {
+        $cloudID = $_POST['delete'];
+        // echo "cloud id: " . $cloudID;
+
+        if(isset($cloudID))
+        {
+            $sql = "DELETE FROM cloud WHERE id='$cloudID' AND user_id='$id'";
+
+            if($conn->query($sql) === TRUE) 
+            {
+            //   header("Location: my_files.php?message=File sucessfully deleted!&id=".$id);
+                echo "
+                <script>
+                    if (Notification.permission === \"granted\") {
+                        new Notification(\"Notice,\", {
+                            body: \"Successfuly deleted.\",
+                            icon: \"icon.png\"
+                        });
+                        window.location.href=\"files.php?&id={$id}\";
+                        } else if (Notification.permission !== \"denied\") {
+                            Notification.requestPermission().then(permission => {
+                                if (permission === \"granted\") {
+                                    new Notification(\"Notice,\", {
+                                    body: \"Successfuly deleted.\",
+                                    icon: \"icon.png\"
+                                });
+                            }
+                        });
+                    }
+                </script>";
+            } 
+            else 
+            {
+              echo "Error deleting record: " . $conn->error;
+            }
+        }
+        else
+        {
+            echo "<script> alert('No id found.') </script>";
+        }   
+    
+    }
 
 ?>
 <!DOCTYPE html>
@@ -428,7 +471,7 @@
                                         <!-- list -->
                                         
                                         
-                                                        <div class='card rounded-2 d-flex flex-row pt-3 pb-3'>
+                                                        <!-- <div class='card rounded-2 d-flex flex-row pt-3 pb-3'>
                                                             <div class='border-0 p-0 ps-3 d-flex justify-content-center align-items-center' style='width: 3rem;'>
                                                                 <i class="bi bi-filetype-pdf" style='font-size: 2rem;'></i>
                                                             </div>
@@ -436,23 +479,61 @@
                                                                     <span> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab illum harum voluptas maxime accusamus odio beatae quidem eaque, vero inventore ullam necessitatibus possimus aperiam. Voluptatibus et quas amet molestiae! Quia? </span>
                                                             </div>
                                                              <div class='border-0 w-25  p-0 d-flex flex-column flex-lg-row justify-content-center align-items-center flex-wrap' style='gap: 1rem;'>
-                                                                    <button type="submit" name="export-file" class="rounded-3 d-flex justify-content-center align-items-center" style="cursor: pointer; width: 2rem; height: 2rem; border: 1px solid #42B8EA; background-color: rgba(66, 184, 234, 0.1);"> 
+                                                                    <button type="submit" name="export" class="rounded-3 d-flex justify-content-center align-items-center" style="cursor: pointer; width: 2rem; height: 2rem; border: 1px solid #42B8EA; background-color: rgba(66, 184, 234, 0.1);"> 
                                                                         <i class="bi bi-cloud-arrow-down text-primary"></i>
                                                                     </button>
-
-
-
-                                                                    <button type='submit' name='delete-file' class='rounded-3 d-flex justify-content-center align-items-center' style='cursor: pointer; width: 2rem; height: 2rem; border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1);'> 
+                                                                    <button type='submit' name='delete' class='rounded-3 d-flex justify-content-center align-items-center' style='cursor: pointer; width: 2rem; height: 2rem; border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1);'> 
                                                                         <i class="bi bi-trash text-danger"></i>
                                                                     </button>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
                                         
 
                                       <!-- 
                                         TODO: 
                                         list  
                                       -->
+                                    <?php
+                                    
+                                            $usrID = mysqli_real_escape_string($conn, $_GET['id']);
+                                            if(isset($usrID))
+                                            {
+                                                $sql_query_tasks="SELECT id, user_id, file_name, DATE(created_at) AS created_date FROM cloud WHERE user_id='$usrID' AND created_at > '2025-01-01'";
+                                                $result_display = mysqli_query($conn, $sql_query_tasks);
+                                                
+                                                if($result_display->num_rows > 0)
+                                                {
+                                                    while($row = $result_display->fetch_assoc())
+                                                    {
+                                                        $FILENAME = $row['file_name'];
+                                                        $DATE = ['created_at'];
+                                                        $FILEID = $row['id'];
+
+                                                        echo"
+                                                        
+                                                            <div class='card rounded-2 d-flex flex-row pt-3 pb-3'>
+                                                                <div class='border-0 p-0 ps-3 d-flex justify-content-center align-items-center' style='width: 3rem;'>
+                                                                    <i class='bi bi-filetype-pdf' style='font-size: 2rem;'></i>
+                                                                </div>
+                                                                <div class='border-0 w-100 d-flex justify-content-start align-items-center p-0 ps-2' style='text-align: justify;'>
+                                                                        <span> $FILENAME </span>
+                                                                </div>
+                                                                <div class='border-0 w-25  p-0 d-flex flex-column flex-lg-row justify-content-center align-items-center flex-wrap' style='gap: 1rem;'>
+                                                                        <button type='submit' value='$FILEID' name='export' class='rounded-3 d-flex justify-content-center align-items-center' style='cursor: pointer; width: 2rem; height: 2rem; border: 1px solid #42B8EA; background-color: rgba(66, 184, 234, 0.1);'> 
+                                                                            <i class='bi bi-cloud-arrow-down text-primary'></i>
+                                                                        </button>
+                                                                        <button type='submit' value='$FILEID' name='delete' class='rounded-3 d-flex justify-content-center align-items-center' style='cursor: pointer; width: 2rem; height: 2rem; border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1);'> 
+                                                                            <i class='bi bi-trash text-danger'></i>
+                                                                        </button>
+                                                                </div>
+                                                            </div>
+
+                                                        ";
+                                                    }
+                                                }
+                                            }
+                                    
+                                    ?>
                                         
 
                             </form>

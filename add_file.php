@@ -78,7 +78,7 @@
                                 body: \"File name already exists.\",
                                 icon: \"icon.png\"
                             });
-                            window.location.href=\"add_file.php?&id={$id}\";
+                            window.location.href=\"add_file.php?&id={$USERID}\";
                             } else if (Notification.permission !== \"denied\") {
                                         Notification.requestPermission().then(permission => {
                                             if (permission === \"granted\") {
@@ -110,7 +110,7 @@
                                 body: \"File added sucessfully.\",
                                 icon: \"icon.png\"
                             });
-                            window.location.href=\"files.php?&id={$id}\";
+                            window.location.href=\"files.php?&id={$USERID}\";
                             } else if (Notification.permission !== \"denied\") {
                                         Notification.requestPermission().then(permission => {
                                             if (permission === \"granted\") {
