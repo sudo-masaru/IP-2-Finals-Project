@@ -56,59 +56,72 @@
 
         public function uploadFileToCloud($conn)
         {
-            $userid = mysqli_real_escape_string($conn, $_GET['id']);
-            if(isset($id))
+            //echo "hello world";
+            $USERID = mysqli_real_escape_string($this->conn, $_GET['id']);
+            if(isset($USERID))
             {
-                $sql = "SELECT id FROM users WHERE id='$userid'";
-                $result = mysqli_query($conn, $sql);
+                // echo "hello world";
+                $file_extension = $this->file_ext;
 
-                if(mysqli_num_rows($result) > 0)
+
+                $sql2 = "SELECT id, user_id, file_name FROM cloud WHERE file_name='".$this->file_name."' AND user_id='$USERID'";
+                $result2 = mysqli_query($this->conn, $sql2);
+
+                if(mysqli_num_rows($result2) > 0)
                 {
-                    while($row = $result->fetch_assoc())
-                    {
-                        $file_extension = $this->file_ext;
-
-                        $userID = $row['id'];
-
-                        $sql2 = "SELECT id, file_name FROM cloud WHERE file_name='".$this->file_name."' AND id='$userID'";
-                        $result2 = mysqli_query($conn, $sql2);
-
-                        if(mysqli_num_rows($result2) > 0)
-                        {
-                            $conn->close();
-                            header("Location: add_file.php?message=File+name+already+exists?&id=".$id);
-                        }
-                        else
-                        {
-                            $sql3 = "INSERT INTO `cloud` (cloudID, id, email, file, file_name , file_ext, file_size, file_size_unit, file_hash, created_at) VALUES (NULL, '$userID', '$email', '".$this->file."', '".$this->file_name."', '$file_extension', '".$this->file_size."', '".$this->file_size_unit."', '".$this->file_hash."', CURRENT_DATE())";
-                            $result3 = mysqli_query($conn, $sql3);
-
-                            if($result3 === false)
-                            {
-                                echo "<script> alert('Database query failed.') </script>";
-                            }
-                            $conn->close();
-                            echo "
-                                <script>
-                                    if (Notification.permission === \"granted\") {
-                                        new Notification(\"Notice,\", {
-                                            body: \"File added successfuly.\",
+                    // $conn->close();
+                    // header("Location: add_file.php?message=File+name+already+exists?&id=".$id);
+                    echo "
+                    <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Notice,\", {
+                                body: \"File name already exists.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"add_file.php?&id={$id}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                        Notification.requestPermission().then(permission => {
+                                            if (permission === \"granted\") {
+                                            new Notification(\"Notice\", {
+                                            body: \"File name already exists.\",
                                             icon: \"icon.png\"
-                                        });
-                                        window.location.href=\"home.php?&id={$this->id}\";
-                                        } else if (Notification.permission !== \"denied\") {
-                                                Notification.requestPermission().then(permission => {
-                                                    if (permission === \"granted\") {
-                                                        new Notification(\"Notice\", {
-                                                        body: \"File added successfuly.\",
-                                                        icon: \"icon.png\"
-                                                });
-                                            }
-                                        });
-                                    }
-                                </script>";
+                                    });
+                                }
+                            });
                         }
+                    </script>";
+                }
+                else
+                {
+                    $sql3 = "INSERT INTO `cloud` (id, user_id, file, file_name , file_ext, file_size, file_size_unit, file_hash, created_at) VALUES (NULL, '$USERID', '".$this->file."', '".$this->file_name."', '$file_extension', '".$this->file_size."', '".$this->file_size_unit."', '".$this->file_hash."', CURRENT_DATE)";
+                    // $sql3 = "INSERT INTO `cloud`(id, user_id, file, file_name, file_ext, file_size, file_size_unit, file_hash, created_at) VALUES (NULL,'','[value-3]','[value-4]','[value-5]','[value-6]','[value-7]','[value-8]',CURRENT_DATE)";
+                    $result3 = mysqli_query($this->conn, $sql3);
+
+                    if($result3 === false)
+                    {
+                        echo "<script> alert('Database query failed.') </script>";
                     }
+                    $this->conn->close();
+                    // header("Location: my_files.php?message=File+has+been+added+successfully!&id=".$userID);
+                    echo "
+                    <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Notice,\", {
+                                body: \"File added sucessfully.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"files.php?&id={$id}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                        Notification.requestPermission().then(permission => {
+                                            if (permission === \"granted\") {
+                                            new Notification(\"Notice\", {
+                                            body: \"File added sucessfully.\",
+                                            icon: \"icon.png\"
+                                    });
+                                }
+                            });
+                        }
+                    </script>";
                 }
             }
         }
@@ -299,11 +312,85 @@
 
                 if($fileActualExt !== "pdf")
                 {
-                    echo "file is not a pdf";
+                    $conn->close();
+                    echo "
+                    <script>
+                        if (Notification.permission === \"granted\") {
+                            new Notification(\"Notice,\", {
+                                body: \"File is not supported. Please upload a PDF.\",
+                                icon: \"icon.png\"
+                            });
+                            window.location.href=\"add_file.php?&id={$id}\";
+                            } else if (Notification.permission !== \"denied\") {
+                                        Notification.requestPermission().then(permission => {
+                                            if (permission === \"granted\") {
+                                            new Notification(\"Notice\", {
+                                            body: \"File is not supported. Please upload a PDF.\",
+                                            icon: \"icon.png\"
+                                    });
+                                }
+                            });
+                        }
+                    </script>";
                 }
                 else
                 {
-                    echo "file is a pdf";
+                    // echo "file is a pdf";
+                    if(move_uploaded_file($fileTmpName, $destination))
+                    {
+                        $fileHash = hash('sha256', $destination);
+
+                        // echo "file: ".$fileHash;
+
+                        if($fileSizeBytes < 1024)
+                        {
+                            $size = $fileSizeBytes;
+                            $unit = "bytes";
+                            $uploadtocloud = new uploadtocloud($conn, $destination, $file_name, $fileActualExt, $fileSizeBytes, $unit, $fileHash);
+                        }
+                        else if($fileSizeBytes < 1048576)
+                        {
+                            $size = round($fileSizeBytes / 1024, 2);
+                            $unit = "KB";
+                            $uploadtocloud = new uploadtocloud($conn, $destination, $file_name, $fileActualExt, $fileSizeBytes, $unit, $fileHash);
+                        }
+                        else if($fileSizeBytes < 1073741824)
+                        {
+                            $size = round($fileSizeBytes / 1048576, 2);
+                            $unit = "MB";
+                            $uploadtocloud = new uploadtocloud($conn, $destination, $file_name, $fileActualExt, $fileSizeBytes, $unit, $fileHash);
+                        }
+                        else
+                        {
+                            $size = round($fileSizeBytes / 1073741824, 2);
+                            $unit = "GB";
+                            $uploadtocloud = new uploadtocloud($conn, $destination, $file_name, $fileActualExt, $fileSizeBytes, $unit, $fileHash);
+                        }
+                    } 
+                    else 
+                    {
+                        // echo "File upload failed.";
+                        $conn->close();
+                        echo "
+                        <script>
+                            if (Notification.permission === \"granted\") {
+                                new Notification(\"Notice,\", {
+                                    body: \"File failed to upload.\",
+                                    icon: \"icon.png\"
+                                });
+                                window.location.href=\"add_file.php?&id={$id}\";
+                                } else if (Notification.permission !== \"denied\") {
+                                            Notification.requestPermission().then(permission => {
+                                                if (permission === \"granted\") {
+                                                new Notification(\"Notice\", {
+                                                body: \"File failed to upload.\",
+                                                icon: \"icon.png\"
+                                        });
+                                    }
+                                });
+                            }
+                        </script>";
+                    }
                 }
             }
         }
