@@ -619,6 +619,11 @@
                             <span> <b>Calendar</b> </span>
                         </button>
 
+                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="files" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                            <i class="bi bi-file-earmark-fill align-self-center"></i>
+                            <span> <b>Files</b> </span>
+                        </button>
+
 
                    </form>
                 </div>

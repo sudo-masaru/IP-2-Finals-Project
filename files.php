@@ -387,8 +387,8 @@
                         
                         <div class="d-flex flex-column border-0 ps-3 pe-3" style="gap: 1rem;">
                             
-                            <div class="card p-0 rounded-3 border d-flex justify-content-center align-items-center" style="height: 20rem; overflow: hidden; background-color: #F3FAFB;">
-                                <img src="assets/banner.jpeg" alt="..." style="width: 20rem height: 20rem;">
+                            <div class="card p-0 rounded-3 border d-flex justify-content-center align-items-center" style="height: 20rem; overflow: hidden; background-color: #ffffff;">
+                                <img src="assets/banner2.jpeg" alt="..." style="width: 20rem height: 20rem;">
                             </div>
 
                             <div class="card rounded-0 border-0 d-flex flex-row" style="height: 3rem;">
@@ -476,113 +476,11 @@
                                             </button>
                                         </div>  -->
 
-                                        <?php
+                                      <!-- 
+                                        TODO: 
+                                        list  
+                                      -->
                                         
-                                            $sql_query_tasks="SELECT id, user_id, title, priority, status, DATE(created_at) AS created_date FROM tasks WHERE user_id='$id' AND created_at > '2025-01-01'";
-                                            $result_display = mysqli_query($conn, $sql_query_tasks);
-                                            
-                                            if($result_display->num_rows > 0)
-                                            {
-                                                while($row = $result_display->fetch_assoc())
-                                                {
-                                                    $TASKID = $row['id'];
-                                                    $USERID = $row['user_id'];
-                                                    $TITLE = $row['title'];
-                                                    $DATE = $row['created_date'];
-                                                    $STATUS = $row['status'];
-                                                    $PRIORITY = $row['priority'];
-
-                                                    if($row['status']==="todo")
-                                                    {
-                                                        echo "
-                                                    
-                                                        <div class='LIST-BTN card rounded-2 d-flex pt-3 pb-3'>
-                                                            <button type='submit' name='view-task' value='$TASKID' class='pt-2 pb-2 ps-2 pe-2 list-card rounded-2 w-100 h-100 d-flex flex-row'>
-                                                                    <div class='border-0 h-100 d-flex justify-content-center align-items-center' style='width: 3rem;'>
-                                                                        <i class='bi bi-view-list'></i>
-                                                                    </div>
-                                                                    <div class='border-0 w-75 h-100 d-flex justify-content-start flex-column'>
-                                                                        <div class=' border-0 h-100 d-flex justify-content-start align-items-center' style='text-align: justify;'>
-                                                                                <span> <b> $TITLE </b> </span>
-                                                                        </div>
-                                                                        <div class='border-0 h-100 d-flex justify-content-start align-items-center'>
-                                                                                <span> $DATE </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class='d-flex w-25 border-0 justify-content-end align-items-center h-100 pe-3'>
-                                                                        <div class='border-secondary bg-secondary' style='width: 0.8rem; height: 0.8rem; border-radius: 50%;'></div>
-                                                                    </div>
-                                                            </button>
-                                                        </div>
-                                                        ";
-                                                    }
-                                                    else if($row['status']==="in-progress")
-                                                    {
-                                                        echo "
-                                                    
-                                                        <div class='LIST-BTN card rounded-2 d-flex pt-3 pb-3'>
-                                                            <button type='submit' name='view-task' value='$TASKID' class='pt-2 pb-2 ps-2 pe-2 list-card rounded-2 w-100 h-100 d-flex flex-row'>
-                                                                    <div class='border-0 h-100 d-flex justify-content-center align-items-center' style='width: 3rem;'>
-                                                                        <i class='bi bi-view-list'></i>
-                                                                    </div>
-                                                                    <div class='border-0 w-75 h-100 d-flex justify-content-start flex-column'>
-                                                                        <div class=' border-0 h-100 d-flex justify-content-start align-items-center' style='text-align: justify;'>
-                                                                                <span> <b> $TITLE </b> </span>
-                                                                        </div>
-                                                                        <div class='border-0 h-100 d-flex justify-content-start align-items-center'>
-                                                                                <span> $DATE </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class='d-flex w-25 border-0 justify-content-end align-items-center h-100 pe-3'>
-                                                                        <div class='border-warning bg-warning' style='width: 0.8rem; height: 0.8rem; border-radius: 50%;'></div>
-                                                                    </div>
-                                                            </button>
-                                                        </div>
-                                                        ";
-                                                    }
-                                                    else if($row['status']==="completed")
-                                                    {
-                                                        echo "
-                                                    
-                                                        <div class='LIST-BTN card rounded-2 d-flex pt-3 pb-3'>
-                                                            <button type='submit' name='view-task' value='$TASKID' class='pt-2 pb-2 ps-2 pe-2 list-card rounded-2 w-100 h-100 d-flex flex-row'>
-                                                                    <div class='border-0 h-100 d-flex justify-content-center align-items-center' style='width: 3rem;'>
-                                                                        <i class='bi bi-view-list'></i>
-                                                                    </div>
-                                                                    <div class='border-0 w-75 h-100 d-flex justify-content-start flex-column'>
-                                                                        <div class=' border-0 h-100 d-flex justify-content-start align-items-center' style='text-align: justify;'>
-                                                                                <span> <b> $TITLE </b> </span>
-                                                                        </div>
-                                                                        <div class='border-0 h-100 d-flex justify-content-start align-items-center'>
-                                                                                <span> $DATE </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class='d-flex w-25 border-0 justify-content-end align-items-center h-100 pe-3'>
-                                                                        <div class='border-success bg-success' style='width: 0.8rem; height: 0.8rem; border-radius: 50%;'></div>
-                                                                    </div>
-                                                            </button>
-                                                        </div>
-                                                        ";
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                // echo "No results.";
-                                                echo"
-                                                    <div class='card w-100 pt-5 pb-3 border-0 d-flex justify-content-center align-items-center'>
-                                                        
-                                                        No tasks! 
-                                                        <i class='bi bi-emoji-laughing text-secondary'></i>
-                                                        
-                                                    </div>
-                                                ";
-                                            }
-
-                                        ?>
-
-                                
-                                
 
                             </form>
 
@@ -604,7 +502,7 @@
                             <img src="assets/Logo.png" alt="..." width="60rem" height="55rem">
                         </div>
 
-                        <button type="submit" title="Dashboard"  value="<?php echo $id; ?>" name="tasks" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
+                        <button type="submit" title="Dashboard"  value="<?php echo $id; ?>" name="tasks" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
                             <i class="bi bi-card-checklist align-self-center"></i>
                             <span> <b>Tasks</b> </span>
                         </button>
@@ -614,7 +512,7 @@
                             <span> <b>Calendar</b> </span>
                         </button>
 
-                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="files" class="inactive sidebar-nav border-0 d-flex flex-column justify-content-center">
+                        <button type="submit" title="Users" value="<?php echo $id; ?>" name="files" class="active sidebar-nav border-0 d-flex flex-column justify-content-center">
                             <i class="bi bi-file-earmark-fill align-self-center"></i>
                             <span> <b>Files</b> </span>
                         </button>
