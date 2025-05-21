@@ -633,7 +633,7 @@
 
                             <br>
 
-                            <div class="DISPLAY-TASKS border w-100 p-0">
+                            <div class="DISPLAY-TASKS border-0 w-100 p-0">
 
                                 <form method="POST" class="w-100 h-100">
 
