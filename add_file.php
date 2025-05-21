@@ -23,6 +23,97 @@
             }
     }
 
+    class uploadtocloud
+    {
+        private $conn;
+        private $file;
+        private $file_name;
+        private $file_ext;
+        private $file_size;
+        private $file_size_unit;
+        private $file_hash;
+        
+        public function __construct($conn = "", $file="", $file_name="", $file_ext="", $file_size="", $file_size_unit="", $file_hash="")
+        {
+            $this->conn = $conn;
+            $this->file = $this->checkInputData($file);
+            $this->file_name = $this->checkInputData($file_name);
+            $this->file_ext = $this->checkInputData($file_ext);
+            $this->file_size = $this->checkInputData($file_size);
+            $this->file_size_unit = $this->checkInputData($file_size_unit);
+            $this->file_hash = $this->checkInputData($file_hash);
+           
+            $this->uploadFileToCloud($this->conn);
+        }
+    
+        public function checkInputData($data) 
+        {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        }
+
+        public function uploadFileToCloud($conn)
+        {
+            $userid = mysqli_real_escape_string($conn, $_GET['id']);
+            if(isset($id))
+            {
+                $sql = "SELECT id FROM users WHERE id='$userid'";
+                $result = mysqli_query($conn, $sql);
+
+                if(mysqli_num_rows($result) > 0)
+                {
+                    while($row = $result->fetch_assoc())
+                    {
+                        $file_extension = $this->file_ext;
+
+                        $userID = $row['id'];
+
+                        $sql2 = "SELECT id, file_name FROM cloud WHERE file_name='".$this->file_name."' AND id='$userID'";
+                        $result2 = mysqli_query($conn, $sql2);
+
+                        if(mysqli_num_rows($result2) > 0)
+                        {
+                            $conn->close();
+                            header("Location: add_file.php?message=File+name+already+exists?&id=".$id);
+                        }
+                        else
+                        {
+                            $sql3 = "INSERT INTO `cloud` (cloudID, id, email, file, file_name , file_ext, file_size, file_size_unit, file_hash, created_at) VALUES (NULL, '$userID', '$email', '".$this->file."', '".$this->file_name."', '$file_extension', '".$this->file_size."', '".$this->file_size_unit."', '".$this->file_hash."', CURRENT_DATE())";
+                            $result3 = mysqli_query($conn, $sql3);
+
+                            if($result3 === false)
+                            {
+                                echo "<script> alert('Database query failed.') </script>";
+                            }
+                            $conn->close();
+                            echo "
+                                <script>
+                                    if (Notification.permission === \"granted\") {
+                                        new Notification(\"Notice,\", {
+                                            body: \"File added successfuly.\",
+                                            icon: \"icon.png\"
+                                        });
+                                        window.location.href=\"home.php?&id={$this->id}\";
+                                        } else if (Notification.permission !== \"denied\") {
+                                                Notification.requestPermission().then(permission => {
+                                                    if (permission === \"granted\") {
+                                                        new Notification(\"Notice\", {
+                                                        body: \"File added successfuly.\",
+                                                        icon: \"icon.png\"
+                                                });
+                                            }
+                                        });
+                                    }
+                                </script>";
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['sign-out']))
     {
         // echo "hello world";
@@ -149,22 +240,96 @@
     //     $conn->close();
     //     echo" <script> window.location.href=\"user_view_task.php?&id={$id}&taskID={$taskID}\"; </script> ";
     // }
-    // else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['filter-by']))
-    // {
-    //     $filter_val = $_POST['filtered-option'];
-    //     $conn->close();
-    //     header("Location: filter_by.php?&id=".$id."&filter_val=".$filter_val);
-    // }
-    // else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['filter-date']))
-    // {
-    //     $date_val = $_POST['date_val'];
-    //     $conn->close();
-    //     header("Location: filter_date.php?&id=".$id."&date_val=".$date_val);
-    // }
-    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['add-file']))
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['filter-by']))
     {
+        $filter_val = $_POST['filtered-option'];
         $conn->close();
-        header("Location: add_file.php?&id=".$id);
+        header("Location: filter_by.php?&id=".$id."&filter_val=".$filter_val);
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['filter-date']))
+    {
+        $date_val = $_POST['date_val'];
+        $conn->close();
+        header("Location: filter_date.php?&id=".$id."&date_val=".$date_val);
+    }
+    else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['add-file']))
+    {   
+        if(!empty($_POST['file_name']))
+        {
+            // echo "hello world";
+            $file = $_FILES['document'];
+            $fileName = $_FILES['document']['name'];
+            $fileTmpName = $_FILES['document']['tmp_name'];
+            $fileSize = $_FILES['document']['size'];
+            $fileError = $_FILES['document']['error'];
+            $fileType = $_FILES['document']['type'];
+            $fileSizeBytes = $_FILES['document']['size'];
+
+            if(empty($fileName)) 
+            {
+                //echo "<script> alert('Please upload a file.') </script>";
+                $conn->close();
+                echo "
+                <script>
+                    if (Notification.permission === \"granted\") {
+                        new Notification(\"Notice,\", {
+                            body: \"Please add a file.\",
+                            icon: \"icon.png\"
+                        });
+                        window.location.href=\"add_file.php?&id={$id}\";
+                        } else if (Notification.permission !== \"denied\") {
+                                    Notification.requestPermission().then(permission => {
+                                        if (permission === \"granted\") {
+                                        new Notification(\"Notice\", {
+                                        body: \"Please add a file.\",
+                                        icon: \"icon.png\"
+                                });
+                            }
+                        });
+                    }
+                </script>";
+            } 
+            else 
+            {
+                $file_name = $_POST['file_name'];
+
+                $fileExt = explode('.', $fileName);
+                $fileActualExt = strtolower(end($fileExt));
+                $destination = "cloud/" . basename($fileName);
+
+                if($fileActualExt !== "pdf")
+                {
+                    echo "file is not a pdf";
+                }
+                else
+                {
+                    echo "file is a pdf";
+                }
+            }
+        }
+        else
+        {
+            $conn->close();
+            echo "
+            <script>
+                if (Notification.permission === \"granted\") {
+                    new Notification(\"Notice,\", {
+                        body: \"Please add a file name.\",
+                        icon: \"icon.png\"
+                    });
+                    window.location.href=\"add_file.php?&id={$id}\";
+                    } else if (Notification.permission !== \"denied\") {
+                                Notification.requestPermission().then(permission => {
+                                    if (permission === \"granted\") {
+                                    new Notification(\"Notice\", {
+                                    body: \"Please add a file name.\",
+                                    icon: \"icon.png\"
+                            });
+                        }
+                    });
+                }
+            </script>";
+        }
     }
 
 ?>
@@ -392,70 +557,41 @@
                         
                         <div class="d-flex flex-column border-0 ps-3 pe-3" style="gap: 1rem;">
                             
-                            <div class="card p-0 rounded-3 border d-flex justify-content-center align-items-center" style="height: 20rem; overflow: hidden; background-color: #ffffff;">
-                                <img src="assets/banner3.jpeg" alt="..." style="width: 20rem height: 20rem;">
-                            </div>
-
-                            <div class="card rounded-0 border-0 d-flex flex-row" style="height: 3rem;">
-                                <div class="w-100 h-100 d-flex justify-content-start align-items-center border-0">
-                                    <span> <b>FILES</b> </span>
-                                </div>
-                                <div class="w-100 h-100 d-flex justify-content-end align-items-center border-0">
-                                    <div class="border-0 pt-2 pb-2 pe-3 w-100 h-100 d-flex justify-content-end align-items-center">
-                                            <form method="POST">
-                                                <button type="submit" name="add-file" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
-                                                    <i class="bi bi-file-arrow-up-fill"></i>
-                                                    <span class="text-white btn-txt">New File</span>
-                                                </button>
-                                            </form>
-                                    </div> 
-                                </div>
-                            </div>
-                            <div class="card rounded-0 border-0 d-flex flex-row" style="height: 2rem;">
-                                <div class="w-100 border-0 h-100 d-flex justify-content-start align-items-center">
-                                   
-                                    <form method="POST" class="w-100 h-100 d-flex flex-row">
-                                        <button type="submit" name="search" class="border-0 h-100" style="background-color: #42B8EA;">
-                                            <i class="bi bi-search align-self-center text-white"></i>
-                                        </button>
-                                        <input type="text" name="search_value" class="h-100 w-100 border" placeholder="Search for...">
-                                    </form>
-                                </div>
-                            </div>
-
-                            <form method="POST" class="content-mobile card border-0 rounded-0 d-flex flex-column">
+                        <div class="CONTENT d-flex flex-column border-0 p-1 ps-3 pe-3">
+                            
+                            
+                            <!-- content -->
+                            <div class="card border p-2 ps-3 pe-3 pt-3 pb-3">
                                 
-                                        <!-- list -->
-                                        
-                                        
-                                                        <div class='card rounded-2 d-flex flex-row pt-3 pb-3'>
-                                                            <div class='border-0 p-0 ps-3 d-flex justify-content-center align-items-center' style='width: 3rem;'>
-                                                                <i class="bi bi-filetype-pdf" style='font-size: 2rem;'></i>
-                                                            </div>
-                                                             <div class='border-0 w-100 d-flex justify-content-start align-items-center p-0 ps-2' style='text-align: justify;'>
-                                                                    <span> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab illum harum voluptas maxime accusamus odio beatae quidem eaque, vero inventore ullam necessitatibus possimus aperiam. Voluptatibus et quas amet molestiae! Quia? </span>
-                                                            </div>
-                                                             <div class='border-0 w-25  p-0 d-flex flex-column flex-lg-row justify-content-center align-items-center flex-wrap' style='gap: 1rem;'>
-                                                                    <button type="submit" name="export-file" class="rounded-3 d-flex justify-content-center align-items-center" style="cursor: pointer; width: 2rem; height: 2rem; border: 1px solid #42B8EA; background-color: rgba(66, 184, 234, 0.1);"> 
-                                                                        <i class="bi bi-cloud-arrow-down text-primary"></i>
-                                                                    </button>
+                                <form method="POST" enctype="multipart/form-data" class="w-100">
+                                    <div class="header bg-white border-0 d-flex flex-row" style="height: 2rem;">
+                                        <div class="border-0 w-100 d-flex justify-content-start align-items-center">
+                                            <span> <b>ADD FILE</b> </span>
+                                        </div>
+                                        <div class="border-0 w-100 d-flex justify-content-end align-items-center">
+                                            <button type="submit" name="add-file" class="rounded-5 ps-3 pe-3 text-white" style="border: 1px solid #42B1F6; background-color: #42B1F6;">
+                                                save file
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-0 pt-3">
 
+                                        <div class="w-100 border-0 pb-3 d-flex justify-content-center align-items-center">
+                                            <input type="file" name="document" class="w-100 h-100 border-0">
+                                        </div>
 
+                                        <div class="w-100 border-0 pb-3 d-flex justify-content-start align-items-center">
+                                            <div class="border p-0 rounded-3 w-100" style="height: 3rem;">
+                                                <input type="text" name="file_name" placeholder="TITLE" class="rounded-3 w-100 h-100 border-0 ps-3">
+                                            </div>
+                                        </div>
 
-                                                                    <button type='submit' name='delete-file' class='rounded-3 d-flex justify-content-center align-items-center' style='cursor: pointer; width: 2rem; height: 2rem; border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1);'> 
-                                                                        <i class="bi bi-trash text-danger"></i>
-                                                                    </button>
-                                                            </div>
-                                                        </div>
-                                        
+                                    </div>
+                                </form>
 
-                                      <!-- 
-                                        TODO: 
-                                        list  
-                                      -->
-                                        
+                            </div>
 
-                            </form>
+                        </div>
 
                         </div>
 
