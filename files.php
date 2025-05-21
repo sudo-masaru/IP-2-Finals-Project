@@ -388,54 +388,32 @@
                         <div class="d-flex flex-column border-0 ps-3 pe-3" style="gap: 1rem;">
                             
                             <div class="card p-0 rounded-3 border d-flex justify-content-center align-items-center" style="height: 20rem; overflow: hidden; background-color: #ffffff;">
-                                <img src="assets/banner2.jpeg" alt="..." style="width: 20rem height: 20rem;">
+                                <img src="assets/banner3.jpeg" alt="..." style="width: 20rem height: 20rem;">
                             </div>
 
                             <div class="card rounded-0 border-0 d-flex flex-row" style="height: 3rem;">
                                 <div class="w-100 h-100 d-flex justify-content-start align-items-center border-0">
-                                    <span> <b>TASKS</b> </span>
+                                    <span> <b>FILES</b> </span>
                                 </div>
                                 <div class="w-100 h-100 d-flex justify-content-end align-items-center border-0">
                                     <div class="border-0 pt-2 pb-2 pe-3 w-100 h-100 d-flex justify-content-end align-items-center">
                                             <form method="POST">
-                                                <button type="submit" name="create-new-task" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
-                                                    <i class="bi bi-plus-circle"></i>
-                                                    <span class="text-white btn-txt">New Task</span>
+                                                <button type="submit" name="add-file" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #42B1F6; background-color: #42B1F6; color: #ffffff;">
+                                                    <i class="bi bi-file-arrow-up-fill"></i>
+                                                    <span class="text-white btn-txt">New File</span>
                                                 </button>
                                             </form>
                                     </div> 
                                 </div>
                             </div>
                             <div class="card rounded-0 border-0 d-flex flex-row" style="height: 2rem;">
-                                <div class="w-50 border-0 h-100 d-flex justify-content-start align-items-center">
-                                    <form method="POST" class="w-100 h-100">
-                                        <div class="d-flex flex-row justify-content-center align-items-center w-100 h-100">
-                                            <button type="submit" name="filter-by" class="border-0 h-100" style="background-color: #42B8EA;">
-                                                    <i class="bi bi-funnel-fill text-white"></i>
-                                            </button>
-                                            <select name="filtered-option" class="bg-white border w-100 h-100">
-                                                <!-- <option value="default"> Filter by </option> -->
-                                                <optgroup label="Status">
-                                                    <option value="todo">todo</option>
-                                                    <option value="in-progress">in-progress</option>
-                                                    <option value="completed">completed</option>
-                                                </optgroup>
-                                                <optgroup label="Priority">
-                                                    <option value="todo">low</option>
-                                                    <option value="in-progress">medium</option>
-                                                    <option value="completed">completed</option>
-                                                </optgroup>
-                                            </select>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="w-25 h-100 d-flex justify-content-start align-items-center border-0"></div>
-                                <div class="border-0 w-100 d-flex justify-content-start align-items-center">
+                                <div class="w-100 border-0 h-100 d-flex justify-content-start align-items-center">
+                                   
                                     <form method="POST" class="w-100 h-100 d-flex flex-row">
-                                        <button type="submit" name="filter-date" class="border-0 h-100" style="background-color: #42B8EA;">
-                                            <i class="bi bi-calendar-week align-self-center text-white"></i>
+                                        <button type="submit" name="search" class="border-0 h-100" style="background-color: #42B8EA;">
+                                            <i class="bi bi-search align-self-center text-white"></i>
                                         </button>
-                                        <input type="date" name="date_val" class="h-100 w-100 border">
+                                        <input type="text" name="search_value" class="h-100 w-100 border" placeholder="Search for...">
                                     </form>
                                 </div>
                             </div>
@@ -444,37 +422,27 @@
                                 
                                         <!-- list -->
                                         
-                                        <!-- <div class="card rounded-2 d-flex" style="height: 6rem;">
-                                            <button type="submit" class="list-card rounded-2 w-100 h-100 d-flex flex-row">
-                                                    <div class="border-0 h-100 d-flex justify-content-center align-items-center" style="width: 5rem;">
-                                                        <i class="bi bi-view-list"></i>
-                                                    </div>
-                                                    <div class="border-0 w-100 d-flex justify-content-start flex-column">
-                                                        <div class="border-0 w-100 h-100 d-flex justify-content-start align-items-center">
-                                                                <span> <b> Hello world </b> </span>
-                                                        </div>
-                                                        <div class="border-0 w-100 h-100 d-flex justify-content-start align-items-center">
-                                                                <span> May 14 </span>
-                                                        </div>
-                                                    </div>
-                                            </button>
-                                        </div> 
+                                        
+                                                        <div class='card rounded-2 d-flex flex-row pt-3 pb-3'>
+                                                            <div class='border-0 p-0 ps-3 d-flex justify-content-center align-items-center' style='width: 3rem;'>
+                                                                <i class="bi bi-filetype-pdf" style='font-size: 2rem;'></i>
+                                                            </div>
+                                                             <div class='border-0 w-100 d-flex justify-content-start align-items-center p-0 ps-2' style='text-align: justify;'>
+                                                                    <span> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab illum harum voluptas maxime accusamus odio beatae quidem eaque, vero inventore ullam necessitatibus possimus aperiam. Voluptatibus et quas amet molestiae! Quia? </span>
+                                                            </div>
+                                                             <div class='border-0 w-25  p-0 d-flex flex-column flex-lg-row justify-content-center align-items-center flex-wrap' style='gap: 1rem;'>
+                                                                    <button type="submit" name="export-file" class="rounded-3 d-flex justify-content-center align-items-center" style="cursor: pointer; width: 2rem; height: 2rem; border: 1px solid #42B8EA; background-color: rgba(66, 184, 234, 0.1);"> 
+                                                                        <i class="bi bi-cloud-arrow-down text-primary"></i>
+                                                                    </button>
 
-                                        <div class="card rounded-2 d-flex" style="height: 6rem;">
-                                            <button type="submit" class="list-card rounded-2 w-100 h-100 d-flex flex-row">
-                                                    <div class="border-0 h-100 d-flex justify-content-center align-items-center" style="width: 5rem;">
-                                                        <i class="bi bi-view-list"></i>
-                                                    </div>
-                                                    <div class="border-0 w-100 d-flex justify-content-start flex-column">
-                                                        <div class="border-0 w-100 h-100 d-flex justify-content-start align-items-center">
-                                                                <span> <b> Hello world </b> </span>
+
+
+                                                                    <button type='submit' name='delete-file' class='rounded-3 d-flex justify-content-center align-items-center' style='cursor: pointer; width: 2rem; height: 2rem; border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1);'> 
+                                                                        <i class="bi bi-trash text-danger"></i>
+                                                                    </button>
+                                                            </div>
                                                         </div>
-                                                        <div class="border-0 w-100 h-100 d-flex justify-content-start align-items-center">
-                                                                <span> May 14 </span>
-                                                        </div>
-                                                    </div>
-                                            </button>
-                                        </div>  -->
+                                        
 
                                       <!-- 
                                         TODO: 

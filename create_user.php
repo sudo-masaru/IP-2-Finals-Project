@@ -526,7 +526,8 @@
 
                                     <div class="border-0 d-flex flex-row justify-content-end pe-3">
                                         <button type="submit" name="users-table" value="<?php echo $id; ?>" class="p-1 ps-3 pe-3 rounded-4" style="border: 1px solid #FF0022; background-color: rgba(255, 0, 34, 0.1); color: #FF0022;">
-                                            <i class="bi bi-backspace-fill"></i>
+                                            <!-- <i class='bi bi-backspace-fill'></i> -->
+                                             <i class="bi bi-arrow-return-left"></i>
                                             <span style="color: #FF0022;">Go back</span>
                                         </button>
                                     </div>
