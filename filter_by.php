@@ -95,8 +95,39 @@
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['calendar']))
     {
-        $conn->close();
-        echo" <script> window.location.href=\"calendar.php?&id={$id}\"; </script> ";
+        $month = date("n");
+        $days = date("j");
+
+        if($month > 10)
+        {
+            if($days > 10)
+            {
+                $date = date("Y-n-j");
+                $conn->close();
+                echo" <script> window.location.href=\"calendar.php?&id={$id}&date={$date}\"; </script> ";
+            }
+            else
+            {
+                $date = date("Y-n-0j");
+                $conn->close();
+                echo" <script> window.location.href=\"calendar.php?&id={$id}&date={$date}\"; </script> ";
+            }
+        }
+        else
+        {
+            if($days > 10)
+            {
+                $date = date("Y-0n-j");
+                $conn->close();
+                echo" <script> window.location.href=\"calendar.php?&id={$id}&date={$date}\"; </script> ";
+            }
+            else
+            {
+                $date = date("Y-0n-0j");
+                $conn->close();
+                echo" <script> window.location.href=\"calendar.php?&id={$id}&date={$date}\"; </script> ";
+            }
+        }
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['files']))
     {
