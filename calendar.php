@@ -163,8 +163,46 @@
     }
     else if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['getDate']))
     {
-        echo "date: " . $_POST['getDate'];
-        header("");
+        $receivedDate = $_POST['getDate'];
+        list($year, $month, $day) = explode('/', $receivedDate);
+
+        // echo "Year: $year<br>";
+        // echo "Month: $month<br>";
+        // echo "Day: $day<br>";
+        // $month = date("n");
+        // $days = date("j");
+
+        if($month < 10 && $day < 10)
+        {
+            $date = $year."-"."0".$month."-"."0".$day;
+            $conn->close();
+            echo" <script> window.location.href=\"calendar.php?&id={$id}&date={$date}\"; </script> ";
+        }
+        else if($month > 10 && $day < 10)
+        {
+            $date = $year."-".$month."-"."0".$day;
+            $conn->close();
+            echo" <script> window.location.href=\"calendar.php?&id={$id}&date={$date}\"; </script> ";
+        }
+        else if($month < 10 && $day > 10)
+        {
+            $date = $year."-"."0".$month."-".$day;
+            $conn->close();
+            echo" <script> window.location.href=\"calendar.php?&id={$id}&date={$date}\"; </script> ";
+        }
+        else if($month < 10 && $day < 10)
+        {
+            $date = $year."-"."0".$month."-"."0".$day;
+            $conn->close();
+            echo" <script> window.location.href=\"calendar.php?&id={$id}&date={$date}\"; </script> ";
+        }
+        else if($month > 10 && $day > 10)
+        {
+            $date = $year."-".$month."-".$day;
+            $conn->close();
+            echo" <script> window.location.href=\"calendar.php?&id={$id}&date={$date}\"; </script> ";
+        }
+        
     }
 
 ?>
@@ -563,7 +601,7 @@
                                                         $isToday = ($day == date('j') && $month == date('n') && $year == date('Y'));
                                                         $class = $isToday ? 'today' : '';
 
-                                                        $getDate = $month . "/" . $day . "/" . $year;
+                                                        $getDate = $year . "/" . $month . "/" . $day;
                                                         // echo "get date: " . $getDate;
                                                         
                                                         echo "<td class='$class'><button type='submit' name='getDate' value='$getDate' class='w-100 h-100 border-0 bg-transparent'> $day </button></td>";
